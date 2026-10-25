@@ -69,7 +69,7 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
-- Documentation separation completed on `docs/separate-agent-guidance`, based on `docs/proposal-continuation-workflow` at `d9d0f7a`. The earlier proposal update was pushed on that branch and has not been merged into main. A fresh checkout of main therefore does not yet contain these changes; fetch and select the development branch until review and merge.
+- Reviewed and integrated `docs/proposal-continuation-workflow` and `docs/separate-agent-guidance` into `main` on 2026-10-25 using fast-forward merges. The latter includes the former; all changes through `5111413` are retained. Use current `main` when continuing on another laptop.
 - Planning gate AQ-W002 added; apply it to the next qualifying feature request before implementation. This workflow-only update does not change software scope or require proposal/PDF regeneration.
 - Proposal revision 0.5 retains software scope, diagrams, candidate definitions and implementation status. No application code, tests, CI, installer or release exists.
 - Exact next action: review proposal sections 4, 5 and 15 to select the first workflow, metric and supported universe; then choose a bounded implementation milestone. A compatibility/UI foundation can be scoped separately from financial behavior.
