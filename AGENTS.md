@@ -54,6 +54,10 @@ Before scaffolding, inspect installed .NET tooling and verify a supported stable
 
 If an authorized private master context is available, follow its synchronization instructions and serialize edits. A missing private master must not block public project work. Never publish private context as a workaround. Keep ignored handovers consistent with this tracked guidance where available.
 
+## Git naming
+
+Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `perf/`, `refactor/`, `test/` and `chore/`, followed by a concise kebab-case description. Use product/engineering commit messages, optionally with conventional prefixes such as `feat:`, `fix:` or `docs:`. Do not include tool/model names or AI attribution in branch names, commit messages or trailers. Preserve existing commit history unless the user explicitly authorizes rewriting it.
+
 ## Workflow decisions
 
 - AQ-D005, 2026-10-25, superseded in document placement: shared context and continuation instructions were initially placed in proposal revision 0.4, with the local PDF synchronized.
@@ -61,9 +65,11 @@ If an authorized private master context is available, follow its synchronization
 
 - AQ-W002, 2026-10-25, approved: prompt the user to switch to planning mode before implementing large, ambiguous or consequential changes; refine and accept the plan before implementation. Small, well-defined tasks and accepted plans proceed without repeated planning prompts.
 
+- AQ-W003, 2026-10-25, approved: use standard purpose-based Git branch names and product/engineering commit messages without tool branding or AI attribution. Rename existing development branches and push the replacement names without rewriting commits.
+
 ## Current handoff
 
-- Documentation separation completed on `codex/separate-agent-guidance`, based on `codex/proposal-continuation-workflow` at `d9d0f7a`. The earlier proposal update was pushed on that branch and has not been merged into main. A fresh checkout of main therefore does not yet contain these changes; fetch and select the development branch until review and merge.
+- Documentation separation completed on `docs/separate-agent-guidance`, based on `docs/proposal-continuation-workflow` at `d9d0f7a`. The earlier proposal update was pushed on that branch and has not been merged into main. A fresh checkout of main therefore does not yet contain these changes; fetch and select the development branch until review and merge.
 - Planning gate AQ-W002 added; apply it to the next qualifying feature request before implementation. This workflow-only update does not change software scope or require proposal/PDF regeneration.
 - Proposal revision 0.5 retains software scope, diagrams, candidate definitions and implementation status. No application code, tests, CI, installer or release exists.
 - Exact next action: review proposal sections 4, 5 and 15 to select the first workflow, metric and supported universe; then choose a bounded implementation milestone. A compatibility/UI foundation can be scoped separately from financial behavior.
