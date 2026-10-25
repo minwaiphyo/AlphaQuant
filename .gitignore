@@ -40,7 +40,6 @@ id_ed25519*
 .azure/
 
 # Local-only working notes and configuration
-AGENTS.md
 CLAUDE.md
 .agents/
 .claude/

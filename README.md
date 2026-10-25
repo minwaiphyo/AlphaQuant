@@ -14,3 +14,7 @@ Read the [project proposal](AlphaQuant_Proposal.md) for business scope, architec
 - Local processing and storage; start with one supported operating system.
 
 The precise analyses and release-one scope remain subject to scope review. Setup and run instructions will be added when an executable application exists.
+
+## Contributing
+
+Read [AGENTS.md](AGENTS.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
