@@ -1,6 +1,6 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.3  
+Document revision: 0.4
 Last updated: 2026-10-25 Asia/Singapore  
 Product status: planning, no application implemented  
 Working name: AlphaQuant  
@@ -235,11 +235,36 @@ Measure workflow completion, repeat usage where users consent, feedback resolved
 | Delivery and maintainability | Work in small releases; no calendar delivery promise until a vertical slice is measured. |
 | Name availability | AlphaQuant is a working name; check naming/trademark availability before public branding. |
 
-## 16 Development record maintenance
+## 16 Instructions for developers and agents
 
-Keep this proposal aligned with substantive product and engineering changes. Record approved decisions, scope, architecture, implementation progress, verification results, blockers and next steps. Distinguish proposed work from implemented and tested behavior. Preserve superseded decisions with a replacement reference.
+### Project context and authority
 
-Review current code, tests and Git status before continuing work. Use feature branches, cohesive commits and peer review. Update the current-state and release records at meaningful checkpoints. Do not put credentials, personal data or internal working notes in published documentation.
+This tracked proposal is the shared, self-contained continuation record for AlphaQuant across developers, agents, chats and laptops. Do not assume access to earlier conversations or another machine. Keep all substantive project context here: requirements, ideas, decisions and rationale, alternatives considered, scope, architecture, implementation progress, verification, known issues, blockers and exact next actions. A new contributor must be able to continue from a fresh checkout and this document without needing chat history.
+
+Record project-relevant discussion as concise, durable facts rather than conversation transcripts. Distinguish proposed ideas, approved requirements, rejected or deferred alternatives, superseded decisions, implemented behavior and verified results. A suggestion is not approval; a plan is not working software. Retain the reason for changed direction and link a superseded decision to its replacement. Keep credentials, personal information and private motivations out of public content.
+
+### Start of every task
+
+1. Read this proposal and README, then inspect relevant source, tests and recent commits. Start with sections 17 through 19 for the current state; consult earlier sections for definitions and constraints.
+2. Inspect Git status, branch and remotes. Fetch the configured remote and fast-forward the appropriate branch only when safe. Preserve local changes and reconcile divergence deliberately; never reset or rewrite history as a routine refresh.
+3. Compare documentation with actual files and verification evidence. Record discrepancies and resolve them before relying on stale claims. Missing context must remain an explicit open question rather than an invented requirement.
+4. Select one small milestone with observable acceptance criteria. Use a descriptive feature branch. Resolve routine engineering choices autonomously; seek clarification for material product or financial decisions, missing credentials or actions beyond existing authority.
+
+### During development and discussion
+
+Update this proposal whenever a substantive requirement, idea, decision, implementation result or blocker changes, including planning-only sessions. Save the context when the change is established and before handing off or ending a session; do not wait for a release. Keep the applicable detailed sections and the current-state summary aligned with the dated logs.
+
+For each material idea, record its purpose, status, rationale, affected scope and next validation step. Record rejected or deferred alternatives when their rationale will prevent repeated discussion. For implementation, record changed behavior, relevant files, the commit or branch when available, checks actually run and their results, limitations and unfinished work. Never reuse stale test results as current evidence.
+
+Keep UI, calculations, ingestion and persistence responsibilities clear. Implement only approved financial scope. Use reviewed fixtures, explicit periods and units, missing-data handling and source lineage as financial behavior is introduced. Run proportionate checks for each increment and preserve the architecture, data-flow and release diagrams as the design changes.
+
+### Completion and synchronization
+
+1. Update sections 17 through 19 with completed work, actual verification, remaining issues and one exact next action. Add dated decision records for changed direction; update detailed requirements and README when affected.
+2. Keep the local PDF edition synchronized with this proposal after substantive changes. Preserve any private-only prefix in its editable source, refresh the shared proposal content, regenerate the PDF and visually inspect every page. The local PDF and its source remain untracked; Git does not transfer them between laptops. A fresh checkout must still have complete shared project context in this tracked document. Report unavailable local files or failed regeneration explicitly.
+3. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
+4. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
+5. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
 
 ## 17 Current state and next action
 
@@ -256,6 +281,7 @@ Pending decisions: exact metrics, fiscal/coverage rules, Windows target, budget,
 | AQ-D001 2026-10-25 | Approved | Use C# desktop option; use a maintainable desktop application stack. Avalonia is the intended UI direction from the accepted option. | Architecture decision. |
 | AQ-D002 2026-10-25 | Approved | Develop in tested, documented releases, with basic functionality and a few basic analyses in v1. | Release policy. |
 | AQ-D003 2026-10-25 | Approved | Name project/repository AlphaQuant and create it under Projects; maintain a current product and engineering development record. | Project planning decision. |
+| AQ-D005 2026-10-25 | Approved | Keep complete shared project context and developer/agent continuation instructions in this tracked proposal; update substantive ideas and development changes promptly and synchronize the untracked local PDF. | Cross-device continuation workflow. |
 | AQ-D004 2026-10-25 | Proposed | Windows first, .NET 10, SQLite, toolkit, small annual US filing universe and candidate metrics. | Architecture defaults in this proposal; subject to scope review. |
 
 New record template: ID, date/timezone, approved/proposed/superseded status, decision, stated rationale, source, affected scope, replaced decision if any.
@@ -264,6 +290,7 @@ New record template: ID, date/timezone, approved/proposed/superseded status, dec
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-25 | Expanded the tracked continuation workflow and context-recording requirements; synchronized the local edition. Documentation only; no application tests apply. | Review initial workflow, metric and universe scope before implementation. |
 | 2026-10-25 | Maintained the architecture, ingestion and release documentation. Documentation only. | Application implementation and release gates remain outstanding. |
 | 2026-10-25 | Created planning repository, proposal, README and ignore rules. Reviewed official .NET, Avalonia, MVVM and SEC references. Documentation-only work; no application verification claimed. | Scope review, implementation spike and all release gates. |
 
