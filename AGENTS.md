@@ -15,6 +15,21 @@ Distinguish proposed, approved, deferred, rejected, superseded, implemented and 
 3. Compare documentation with actual files and verification evidence. Record discrepancies and resolve them before relying on stale claims. Missing context must remain an explicit open question rather than an invented requirement.
 4. Select one small milestone with observable acceptance criteria. Use a descriptive feature branch. Resolve routine engineering choices autonomously; seek clarification for material product or financial decisions, missing credentials or actions beyond existing authority.
 
+### Planning gate before implementation
+
+Assess each requested feature or change after the initial read-only inspection. Prompt the user to switch to planning mode before implementation when any of these apply:
+
+- The task is large or spans several interacting components with significant integration work.
+- The goal, scope, user behavior or acceptance criteria are ambiguous or materially incomplete.
+- Financial definitions, data-selection rules, architecture or other consequential design choices need refinement.
+- The change introduces substantial persistence, migrations, external ingestion, installation/distribution or recovery behavior whose failure cases need agreement.
+
+Explain briefly which uncertainty or complexity triggered the gate, and explicitly ask the user to switch to planning mode so the idea can be refined. Pause implementation until the user responds; do not scaffold, edit implementation files or install dependencies while waiting. Read-only investigation may continue to identify constraints and useful questions. Do not claim to have switched modes yourself; the active mode must be changed through the available user-facing controls.
+
+In planning mode, inspect the existing project, clarify material decisions, and produce a bounded plan covering scope and exclusions, assumptions, affected components, implementation steps, acceptance criteria, tests and relevant failure cases. Let the user refine the plan. Begin implementation only after the user accepts the scope and the session returns to an implementation-capable mode. If planning mode is unavailable, explain that and ask whether to conduct a planning-only discussion instead; do not silently bypass the gate. An explicit user instruction to proceed without planning overrides this default; record material assumptions and decisions.
+
+Skip this gate for small, well-defined work such as typos, focused documentation edits, simple UI adjustments and understood bug fixes. Do not repeat the prompt when the task is already in planning mode or is executing an accepted plan. If new material uncertainty or scope expansion arises during implementation, pause the affected work and revisit the gate. Store resulting software decisions in the proposal and workflow decisions here.
+
 ### During development and discussion
 
 Update `AlphaQuant_Proposal.md` whenever a substantive requirement, idea, decision, implementation result or blocker changes, including planning-only sessions. Record workflow-only changes here instead of in the software proposal. Save the context when the change is established and before handing off or ending a session; do not wait for a release. Keep the applicable detailed sections and the current-state summary aligned with the dated logs.
@@ -44,9 +59,12 @@ If an authorized private master context is available, follow its synchronization
 - AQ-D005, 2026-10-25, superseded in document placement: shared context and continuation instructions were initially placed in proposal revision 0.4, with the local PDF synchronized.
 - AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `AGENTS.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries and synchronize the untracked local PDF with software documentation changes.
 
+- AQ-W002, 2026-10-25, approved: prompt the user to switch to planning mode before implementing large, ambiguous or consequential changes; refine and accept the plan before implementation. Small, well-defined tasks and accepted plans proceed without repeated planning prompts.
+
 ## Current handoff
 
 - Documentation separation completed on `codex/separate-agent-guidance`, based on `codex/proposal-continuation-workflow` at `d9d0f7a`. The earlier proposal update was pushed on that branch and has not been merged into main. A fresh checkout of main therefore does not yet contain these changes; fetch and select the development branch until review and merge.
+- Planning gate AQ-W002 added; apply it to the next qualifying feature request before implementation. This workflow-only update does not change software scope or require proposal/PDF regeneration.
 - Proposal revision 0.5 retains software scope, diagrams, candidate definitions and implementation status. No application code, tests, CI, installer or release exists.
 - Exact next action: review proposal sections 4, 5 and 15 to select the first workflow, metric and supported universe; then choose a bounded implementation milestone. A compatibility/UI foundation can be scoped separately from financial behavior.
 - Check Git status and remote state for current save/commit/push status rather than relying on embedded hashes. Report pending checks or synchronization honestly.
