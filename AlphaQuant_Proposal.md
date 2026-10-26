@@ -1,21 +1,30 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.5
-Last updated: 2026-10-25 Asia/Singapore  
+Document revision: 0.6
+Last updated: 2026-10-26 Asia/Singapore  
 Product status: planning, no application implemented  
 Working name: AlphaQuant  
 
 ## 1 Purpose and document authority
 
-AlphaQuant is a proposed desktop stock screener for financial analysts and financially knowledgeable users. It will automate selected financial-data collection and make a small set of clearly defined analyses accessible through a usable GUI. The product is intended for production use, with traceable calculations, tested releases, and reliable desktop distribution.
+AlphaQuant is a proposed transparent desktop screening and valuation workspace for financial analysts and financially knowledgeable users who want to accelerate stock research without rebuilding Excel models from scratch. It will automate selected financial-data collection and make a small set of clearly defined analyses accessible through a usable GUI. Screening comes first; valuation is a later, separately approved phase (AQ-D007). The product is intended for production use, with traceable calculations, tested releases, and reliable desktop distribution.
 
 This is both the product proposal and the living development record. Read sections 16 through 19 for current progress. Approved project decisions, proposed implementation details, and verified implementation facts must remain distinct. A planned feature is not an implemented feature.
 
 ## 2 Business problem and target users
 
-The working problem hypothesis is that collecting filings, reconciling reporting periods, and constructing repeated screening calculations creates manual work and inconsistent spreadsheet workflows. Validate this with prospective users before promising time savings or broad differentiation.
+The working problem hypothesis is that collecting filings, reconciling reporting periods, and constructing repeated screening and valuation calculations creates manual work and inconsistent spreadsheet workflows. Validate this with prospective users before promising time savings or broad differentiation. Problems to test:
 
-Primary audience: analysts or users comfortable interpreting financial statements. Initial reach: a limited pilot group. Do not assume professional adoption, willingness to pay, or broad market coverage.
+- repeated manual extraction from annual reports and financial statements;
+- inconsistent handling of periods, units and filing structure;
+- slow preparation of screening workflows, and later valuation workflows;
+- spreadsheet errors and hidden assumptions;
+- inconsistent peer comparison;
+- no structured, auditable record of research.
+
+Primary audience: analysts or users comfortable interpreting financial statements, such as independent investors with a finance background, equity analysts, portfolio managers or investment associates, wealth-management and advisory professionals, and serious personal investors who keep watchlists and models. They are not assumed to be software developers and want speed, consistency and defensible analysis rather than a black-box trading engine. Initial reach: a limited pilot group. Do not assume professional adoption, willingness to pay, or broad market coverage.
+
+Proposed positioning (provisional, AQ-D006): AlphaQuant is a transparent desktop valuation and screening workspace for investors and analysts who want to accelerate stock research without rebuilding Excel models from scratch. It is a research and decision-support tool, not a trading system, recommendation engine or source of guaranteed returns.
 
 Proposed first workflow: select a small universe of companies, retrieve annual filing facts, inspect data quality and provenance, calculate a few comparable metrics, filter/sort results, and open the supporting filing. The exact workflow and metrics require scope approval before implementation.
 
@@ -24,6 +33,16 @@ The product should help users inspect evidence and assumptions. It does not prom
 ## 3 Value proposition and validation
 
 Desired benefits are a clear desktop GUI, less repeated manual collection, reproducible financial calculations, and inspectable source evidence. These are hypotheses to validate against spreadsheets and existing screeners, not claims of uniqueness.
+
+Candidate differentiators to test with users (hypotheses, not established advantages):
+
+- Analyst-first workflow for people who know finance and want to work faster, not casual retail trading.
+- Transparent, adjustable assumptions and explainable outputs. In v1 this means screening thresholds, peer/universe choice and metric definitions; adjustable growth, margin, discount-rate and terminal-value inputs belong to the later valuation phase.
+- Source-linked analysis tied to filing facts, periods and quality warnings.
+- A lighter local desktop workflow than institutional platforms. Verify this against real alternatives before claiming it.
+- Later: scenario-based analysis without duplicating spreadsheets.
+
+Compare against generic screeners, institutional platforms and spreadsheets in the first user interviews. Record what users already use and what they distrust.
 
 Before expanding scope, conduct a small number of workflow interviews and prototype sessions. Ask users to show a real recurring task, required metrics, current tools, common data failures, and a result they would trust. Record findings without sensitive employer or portfolio information.
 
@@ -35,7 +54,7 @@ Proposed pilot success criteria, to agree before recruitment:
 - At least one release improvement is driven by observed feedback.
 - A repeatable task is benchmarked against the previous workflow before claiming time savings.
 
-Business model is undecided. Begin with a limited pilot, not a payment platform. Budget for signing/distribution, data access, hosting only if needed, and maintenance. Review provider terms before redistribution or monetization. Public accessibility does not imply unrestricted redistribution rights.
+Business model is undecided. Begin with a limited pilot, not a payment platform. Options to evaluate later, none selected: one-time desktop license; a paid professional tier with the valuation phase; optional subscription for additional universes or premium data; optional support or data packages. Premium data implies data-provider licensing and cost, so model provider cost before pricing. Budget for signing/distribution, data access, hosting only if needed, and maintenance. Review provider terms before redistribution or monetization. Public accessibility does not imply unrestricted redistribution rights.
 
 ## 4 Approved direction and proposed boundaries
 
@@ -47,16 +66,30 @@ Business model is undecided. Begin with a limited pilot, not a payment platform.
 - Test and document each increment; keep the codebase structured, readable, maintainable, and easy to debug.
 - Build for real users, visual usability, robustness, and clear documentation.
 - Keep this proposal current as requirements, decisions and implementation evolve.
+- Use the screening-and-valuation workspace direction in section 2 as the working business proposal for now (AQ-D006, provisional; subject to user validation).
+- Valuation analysis (DCF, scenarios) is a later phase, not part of v1 (AQ-D007).
+- Plan on external data providers for financial metrics and documents, including SEC filings. Provider selection, terms and v1 usage remain open (AQ-D008).
+
+### Product principles
+
+- Show where each number comes from; separate raw filing data from calculated outputs.
+- Surface missing, stale or unsupported data; never silently force an unsupported accounting structure into a result.
+- Make assumptions and thresholds explicit and adjustable where a workflow uses them.
+- Avoid false precision. Make no prediction, guaranteed-return or buy/sell claims, and no opaque AI judgments.
+- Support research; do not automate trading.
 
 ### Proposed v1 scope for review
 
 - Windows x64 first; retain cross-platform boundaries without claiming other OS support.
 - A small, explicitly bounded universe of US domestic non-financial companies using annual US-GAAP filing facts.
-- Search/select companies, local watchlist, cancellable refresh, cached results, basic screening controls, and source-linked company detail.
+- Search/select companies, local watchlist, saved screening presets, cancellable refresh, cached results, basic screening controls (threshold rules, ranking, sorting), and source-linked company detail.
 - Three candidate metrics defined below. Their inclusion is not yet approved.
 - Local single-profile desktop use, without cloud accounts, shared portfolios, billing, or a hosted API.
+- SEC filings are the first source. Whether v1 also uses a provider for additional metrics is open (section 8).
 
-Out of v1: broad exchange coverage, real-time prices, price targets, backtesting, trading, recommendations, LLM analysis, bank/broker integrations, multi-user cloud collaboration, parameter simulations, and arbitrary custom formula execution.
+Candidates not yet placed in a release: per-company notes and recorded assumptions, and export of summaries to spreadsheet or PDF. Decide their release at scope review.
+
+Out of v1: valuation analysis (DCF builder, peer valuation comparison, valuation multiples, terminal-value inputs, sensitivity analysis and base/bull/bear scenarios), price-dependent analytics, broad exchange coverage, real-time prices, price targets, backtesting, trading, recommendations, LLM analysis, bank/broker integrations, multi-user cloud collaboration, parameter simulations, and arbitrary custom formula execution. Valuation is a planned later phase (section 11).
 
 ## 5 Candidate financial analyses and correctness rules
 
@@ -69,6 +102,16 @@ Validate these with prospective users before implementing them. They are example
 | Current ratio | Current assets / current liabilities | Same balance-sheet date, currency and scope; liabilities must be positive. Exclude issuers without comparable classified balance sheets. |
 
 Each metric must have a versioned definition, supported fact mappings, units, period selection rule, exceptional cases, and reviewed example fixtures. Record which taxonomy tags are accepted; do not select any tag containing a familiar word or blindly sum alternatives. Treat unsupported industry/accounting structures as unsupported rather than forcing a value.
+
+### Later valuation phase (candidate, not approved, not in v1)
+
+Intended capabilities, to be specified separately before any implementation: a simple DCF with adjustable assumptions, peer valuation comparison, valuation-multiple analysis, terminal-value inputs, sensitivity analysis and base/bull/bear/conservative scenarios. Prerequisites to resolve first:
+
+- Reviewed definitions: free cash flow, projection horizon, discount rate, terminal growth or exit multiple, net debt, share count and treatment of dilution.
+- Additional fact mappings, for example operating cash flow, capital expenditure, debt, cash and shares outstanding, each with units, period rules and exceptional cases.
+- A market-price and peer-data source, which depends on the provider decision (AQ-D008). Price-dependent results must record price source, date and licence terms.
+- Presentation rules: outputs are assumption-driven illustrative values, not price targets or recommendations. Show the assumptions, scenario and inputs beside every result.
+- Reviewed example models with independently checked results, and negative tests for invalid or inconsistent assumptions.
 
 Use C# decimal for financial values within its validated range; parse provider values without a floating-point round trip. Persist decimal values losslessly, for example as invariant strings with explicit units. Round for display only. Ratio outputs are deterministic functions of versioned inputs. Test zero/negative denominators, absent facts, overflow, restatements and inconsistent currency.
 
@@ -97,7 +140,10 @@ flowchart TD
     CORE --> PROVIDER["Provider adapter"]
     CORE --> STORE["SQLite storage and snapshot cache"]
     PROVIDER -->|HTTPS| SEC["SEC filings and structured facts"]
+    PROVIDER -.->|"HTTPS, proposed"| EXT["External metrics and market data provider (to be selected)"]
 ```
+
+The dashed provider is an approved direction (AQ-D008) with no selected vendor and no implementation. Core consumes provider data only through the adapter contract, so sources stay replaceable.
 
 
 Prefer three production projects and one test project initially:
@@ -122,6 +168,8 @@ All network and storage work must be asynchronous/cancellable or appropriately s
 ## 8 Data ingestion and provenance
 
 Use official SEC submissions and company-facts endpoints first. SEC JSON APIs require no API key, but identify the application and contact appropriately and comply with current automated-access policies. Confirm current rate limits before enabling bulk ingestion; use a conservative configurable limiter, Retry-After-aware backoff, and bounded retries. Never retry indefinitely or fan out requests per UI component.
+
+Data provider direction (AQ-D008, approved direction; vendor and v1 usage open): AlphaQuant is expected to draw on external data providers for financial metrics and market data as well as filing documents such as SEC filings. SEC remains the first, authoritative source for filing facts. Provider data must carry the same lineage as SEC data: source, retrieval time, period, unit and licence-relevant metadata, and must stay separate from raw filing evidence so differences between sources are visible. Before selecting a provider, review coverage, point-in-time and restatement handling, pricing, rate limits, and terms on caching, local storage, export and redistribution. Prefer user-supplied credentials or a compliant server-side service; a developer-owned key must never ship in an installer. Provider selection and any server-side component are separate decisions that need their own scope review, since they affect the local-only operating model.
 
 SEC company facts do not cover every custom taxonomy concept or make all company facts comparable. Build reviewed mappings and show unsupported results explicitly. Company identity uses CIK and source metadata rather than ticker alone. Fiscal years may differ, and reported durations must drive annual selection rather than calendar labels alone.
 
@@ -177,6 +225,7 @@ Release contents become binding only when their scope is approved. Do not implem
 | 0.2 alpha | Small company universe and candidate metrics | Approved definitions/mappings, filters, cache, cancellation, migrations and meaningful negative tests work. |
 | 0.3 beta | Installable pilot with a complete workflow | Clean-machine install/upgrade smoke test, readable UI, documentation, bounded diagnostics, known limitations and feedback channel. |
 | 1.0 | Basic screener and a few approved analyses for real users | Release gate below passes; release review completed; pilot issues triaged and no known critical correctness/security defect. |
+| Valuation phase (candidate, after 1.0) | DCF, peer valuation, multiples, scenarios and sensitivity analysis (AQ-D007) | Separate approved scope and definitions (section 5), provider decision (AQ-D008), reviewed example models, assumption display on every result, and no price-target or recommendation framing. |
 | 1.1 onward | Improvements justified by usage | Each feature has scope, tests, migration/compatibility assessment and release notes. |
 | Later exploration | Parameter simulations or broader data coverage | Separate domain requirements, model assumptions and validation. No claim that changing inputs predicts market price. |
 
@@ -234,6 +283,10 @@ Measure workflow completion, repeat usage where users consent, feedback resolved
 | Wrong or incomparable financial data | Version mappings, preserve provenance, show warnings and test reviewed examples; restrict coverage when necessary. |
 | Delivery and maintainability | Work in small releases; no calendar delivery promise until a vertical slice is measured. |
 | Name availability | AlphaQuant is a working name; check naming/trademark availability before public branding. |
+| Data provider not selected | Define required metrics and market data, compare vendors on coverage, cost, point-in-time handling and terms on caching, storage and redistribution; decide credential model and whether any server-side service is needed. |
+| Valuation framing and liability | Present outputs as assumption-driven illustrations, not price targets or advice. Review disclaimers and any regulatory implications for advisory or wealth-management users before offering the valuation phase. |
+| Unvalidated value claims | Treat time savings, lighter weight and differentiation as hypotheses until pilot interviews and benchmarks support them. |
+| Scope growth into valuation | Keep v1 to screening; admit valuation features only through a separate approved scope. |
 
 ## 16 Product record scope
 
@@ -241,11 +294,13 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
-As of 2026-10-25: local repository prepared with this proposal, README and .gitignore. No application projects, dependencies, tests, installers or financial calculations are implemented. The public source repository is https://github.com/minwaiphyo/AlphaQuant. No application deployment exists.
+As of 2026-10-26: local repository prepared with this proposal, README and .gitignore. No application projects, dependencies, tests, installers or financial calculations are implemented. The public source repository is https://github.com/minwaiphyo/AlphaQuant. No application deployment exists. The .NET SDK was not found on PATH on the development machine on 2026-10-26, so the stack remains unverified.
 
-Next action: scope review sections 4, 5 and 15, then choose the first metric and supported universe. A minimal C#/Avalonia compatibility/UI spike can proceed as a foundation task, but the proposed full metric set must not be treated as approved. Implementation has not started.
+Business direction (provisional, AQ-D006): a transparent screening and valuation workspace. v1 covers screening only; valuation (DCF, scenarios, peers, multiples, sensitivity) is a later phase (AQ-D007). External data providers are planned alongside SEC filings (AQ-D008); no vendor is selected.
 
-Pending decisions: exact metrics, fiscal/coverage rules, Windows target, budget, license and publication channel. Blockers for public release: all implementation and release gates remain outstanding.
+Next action: scope review sections 4, 5 and 15 with the user to choose the first metric and supported universe, and decide whether v1 uses a provider beyond SEC. Then define one small milestone. A minimal C#/Avalonia compatibility/UI spike needs the .NET SDK installed first and can proceed as a foundation task, but the proposed metric set is not approved. Implementation has not started.
+
+Pending decisions: exact metrics, fiscal/coverage rules, data provider and v1 provider usage, release for notes and export, Windows target, budget, license and publication channel. Blockers for public release: all implementation and release gates remain outstanding.
 
 ## 18 Decision log
 
@@ -255,6 +310,9 @@ Pending decisions: exact metrics, fiscal/coverage rules, Windows target, budget,
 | AQ-D002 2026-10-25 | Approved | Develop in tested, documented releases, with basic functionality and a few basic analyses in v1. | Release policy. |
 | AQ-D003 2026-10-25 | Approved | Name project/repository AlphaQuant and create it under Projects; maintain a current product and engineering development record. | Project planning decision. |
 | AQ-D004 2026-10-25 | Proposed | Windows first, .NET 10, SQLite, toolkit, small annual US filing universe and candidate metrics. | Architecture defaults in this proposal; subject to scope review. |
+| AQ-D006 2026-10-26 | Approved, provisional | Use the screening-and-valuation workspace proposal (positioning, audience, principles, differentiators as hypotheses, business-model options as undecided) as the working business proposal for now. Reason: it frames a practical, transparent analyst tool without prediction claims. Refine after user validation. | User review of the proposed business direction. |
+| AQ-D007 2026-10-26 | Approved | Valuation analysis (DCF, scenarios, peer valuation, multiples, sensitivity) is a later phase after 1.0, not v1. Reason: it needs additional fact mappings, price and peer data, and reviewed definitions; keeping v1 to screening bounds the first release. Specifics are candidates only. | User decision. |
+| AQ-D008 2026-10-26 | Approved direction; details open | Use external data providers for financial metrics and market data as well as filing documents such as SEC filings. Reason: price-dependent and peer analyses cannot rely on SEC filings alone. Vendor, terms, credential model, whether v1 needs a provider and any server-side component remain undecided. | User decision. |
 
 Decision records include status, rationale, affected software scope and references to superseded decisions.
 
@@ -262,6 +320,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-26 | Planning session. Adopted the screening-and-valuation business direction provisionally, deferred valuation to a post-1.0 phase, and recorded the external data-provider direction (AQ-D006 to AQ-D008). Updated revision 0.6 sections 1 to 5, 7, 8, 11, 15, 17 and 18 and the README. Documentation only; no application verification claimed. Checked that `dotnet` is not on PATH. Work on branch `docs/business-direction-valuation-staging`. | Choose first metric, universe and v1 provider usage; select a provider; verify .NET/Avalonia; first milestone. |
 | 2026-10-25 | Maintained the architecture, ingestion and release documentation. Documentation only. | Application implementation and release gates remain outstanding. |
 | 2026-10-25 | Created planning repository, proposal, README and ignore rules. Reviewed official .NET, Avalonia, MVVM and SEC references. Documentation-only work; no application verification claimed. | Scope review, implementation spike and all release gates. |
 
