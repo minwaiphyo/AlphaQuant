@@ -18,4 +18,9 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlphaQuant.Core\AlphaQuant.Core.csproj" />
+    <ProjectReference Include="..\AlphaQuant.Infrastructure\AlphaQuant.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

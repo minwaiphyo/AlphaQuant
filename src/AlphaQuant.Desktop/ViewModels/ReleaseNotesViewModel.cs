@@ -25,9 +25,10 @@ public partial class ReleaseNotesViewModel : ObservableObject
             "Unreleased",
             "2026-10-26",
             [
-                "Placeholder desktop window.",
-                "Navigation between the Home and Release Notes pages.",
-                "No financial functionality yet.",
+                "Placeholder desktop window with Home and Release Notes pages.",
+                "Search SEC-listed companies by ticker or name and view the latest annual revenue, net income and current assets and liabilities.",
+                "Settings page to enter the SEC contact email the SEC requires; it is stored locally and applies without a restart.",
+                "Revenue growth, net profit margin and current ratio use test definitions (version test-0). They are not approved metric definitions.",
             ]),
     ];
 

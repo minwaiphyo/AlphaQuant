@@ -9,6 +9,12 @@
         <TextBlock Text="{Binding Message}"
                    FontSize="24"
                    HorizontalAlignment="Center" />
+        <Button Content="Search Companies"
+                Command="{Binding SearchCompaniesCommand}"
+                HorizontalAlignment="Center" />
+        <Button Content="Settings"
+                Command="{Binding OpenSettingsCommand}"
+                HorizontalAlignment="Center" />
         <Button Content="View Release Notes"
                 Command="{Binding ViewReleaseNotesCommand}"
                 HorizontalAlignment="Center" />

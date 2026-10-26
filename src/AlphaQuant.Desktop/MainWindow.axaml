@@ -15,6 +15,15 @@
         <DataTemplate DataType="vm:ReleaseNotesViewModel">
             <views:ReleaseNotesView />
         </DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel">
+            <views:SettingsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:SearchViewModel">
+            <views:SearchView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:CompanyDetailViewModel">
+            <views:CompanyDetailView />
+        </DataTemplate>
     </Window.DataTemplates>
 
     <ContentControl Content="{Binding CurrentPage}" />

@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
+             x:Class="AlphaQuant.Desktop.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    <DockPanel Margin="24">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16">
+            <Button Content="Back" Command="{Binding BackCommand}" />
+            <TextBlock Text="Settings" FontSize="24" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <ScrollViewer Margin="0,16,0,0">
+            <StackPanel Spacing="12" MaxWidth="640" HorizontalAlignment="Left">
+                <TextBlock Text="SEC contact email" FontSize="18" FontWeight="SemiBold" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="The SEC requires programs that download its data to identify themselves. AlphaQuant sends this email address to the SEC in the User-Agent header of each request, so use an address you monitor." />
+
+                <TextBox Text="{Binding Contact, Mode=TwoWay}"
+                         PlaceholderText="name@example.com"
+                         AutomationProperties.Name="SEC contact email">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding SaveCommand}" />
+                    </TextBox.KeyBindings>
+                </TextBox>
+
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Content="Save" Command="{Binding SaveCommand}" />
+                    <Button Content="Clear saved contact" Command="{Binding ClearSavedCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="{Binding StatusMessage}"
+                           IsVisible="{Binding StatusMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                           TextWrapping="Wrap"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="{Binding SourceText}" TextWrapping="Wrap" />
+
+                <TextBlock TextWrapping="Wrap" Opacity="0.7">
+                    <Run Text="Stored only on this computer in " /><Run Text="{Binding SettingsFile}" />
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

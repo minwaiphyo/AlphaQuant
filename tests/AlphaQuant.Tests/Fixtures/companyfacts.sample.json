@@ -1,0 +1,58 @@
+{
+  "_note": "Synthetic test fixture shaped like https://data.sec.gov/api/xbrl/companyfacts/. Invented company and values; not SEC data.",
+  "cik": 1234567,
+  "entityName": "EXAMPLE CORP",
+  "facts": {
+    "dei": {
+      "EntityCommonStockSharesOutstanding": {
+        "units": {
+          "shares": [
+            { "end": "2025-10-15", "val": 1000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      }
+    },
+    "us-gaap": {
+      "RevenueFromContractWithCustomerExcludingAssessedTax": {
+        "label": "Revenue",
+        "units": {
+          "USD": [
+            { "start": "2023-10-01", "end": "2024-09-30", "val": 400000000000, "accn": "0000000001-24-000001", "fy": 2024, "fp": "FY", "form": "10-K", "filed": "2024-11-01" },
+            { "start": "2024-10-01", "end": "2025-09-30", "val": 500000000000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01", "frame": "CY2025" },
+            { "start": "2023-10-01", "end": "2024-09-30", "val": 400000000000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" },
+            { "start": "2025-10-01", "end": "2025-12-31", "val": 130000000000, "accn": "0000000001-26-000002", "fy": 2026, "fp": "Q1", "form": "10-Q", "filed": "2026-02-01" },
+            { "end": "not-a-date", "val": 1, "accn": "0000000001-26-000003", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      },
+      "ProfitLoss": {
+        "units": {
+          "USD": [
+            { "start": "2024-10-01", "end": "2025-09-30", "val": 50000000000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      },
+      "AssetsCurrent": {
+        "units": {
+          "USD": [
+            { "end": "2025-09-30", "val": 300000000000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      },
+      "LiabilitiesCurrent": {
+        "units": {
+          "USD": [
+            { "end": "2025-09-30", "val": 200000000000, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      },
+      "Goodwill": {
+        "units": {
+          "USD": [
+            { "end": "2025-09-30", "val": 1, "accn": "0000000001-25-000001", "fy": 2025, "fp": "FY", "form": "10-K", "filed": "2025-11-01" }
+          ]
+        }
+      }
+    }
+  }
+}

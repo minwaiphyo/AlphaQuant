@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
+             x:Class="AlphaQuant.Desktop.Views.SearchView"
+             x:DataType="vm:SearchViewModel">
+    <DockPanel Margin="24">
+        <StackPanel DockPanel.Dock="Top" Spacing="12">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Content="Back" Command="{Binding BackCommand}" />
+                <TextBlock Text="Search companies" FontSize="24" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <TextBox Text="{Binding Query, Mode=TwoWay}"
+                     PlaceholderText="Ticker or company name, for example AAPL or apple"
+                     AutomationProperties.Name="Search">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Enter" Command="{Binding OpenFirstCommand}" />
+                </TextBox.KeyBindings>
+            </TextBox>
+
+            <StackPanel Spacing="8"
+                        IsVisible="{Binding IsLoading}">
+                <TextBlock Text="Loading the SEC company list..." />
+                <ProgressBar IsIndeterminate="True" />
+            </StackPanel>
+
+            <Border IsVisible="{Binding SetupMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Setup needed" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding SetupMessage}" TextWrapping="Wrap" />
+                    <Button Content="Open Settings" Command="{Binding OpenSettingsCommand}" />
+                </StackPanel>
+            </Border>
+
+            <Border IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Could not load companies" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
+                    <Button Content="Retry" Command="{Binding LoadCommand}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{Binding DirectoryNote}"
+                       IsVisible="{Binding DirectoryNote, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       TextWrapping="Wrap" />
+            <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <ScrollViewer Margin="0,12,0,0">
+            <ItemsControl ItemsSource="{Binding Results}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:SearchResultItem">
+                        <Button Command="{Binding OpenCommand}"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Margin="0,0,0,4">
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <TextBlock Text="{Binding Ticker}" FontWeight="SemiBold" Width="80" />
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding CikText}" Opacity="0.7" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,9 @@
+{
+  "_note": "Synthetic test fixture shaped like https://www.sec.gov/files/company_tickers.json. Not a copy of SEC data.",
+  "0": { "cik_str": 320193, "ticker": "AAPL", "title": "Apple Inc." },
+  "1": { "cik_str": 789019, "ticker": "MSFT", "title": "MICROSOFT CORP" },
+  "2": { "cik_str": "1652044", "ticker": "GOOGL", "title": "Alphabet Inc." },
+  "3": { "cik_str": 0, "ticker": "ZERO", "title": "Invalid zero CIK" },
+  "4": { "ticker": "NOCIK", "title": "Missing CIK" },
+  "5": { "cik_str": 111, "ticker": "", "title": "Blank ticker" }
+}

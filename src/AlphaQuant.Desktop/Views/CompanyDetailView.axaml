@@ -1,0 +1,126 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
+             x:Class="AlphaQuant.Desktop.Views.CompanyDetailView"
+             x:DataType="vm:CompanyDetailViewModel">
+    <DockPanel Margin="24">
+        <StackPanel DockPanel.Dock="Top" Spacing="4">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Content="Back" Command="{Binding BackCommand}" />
+                <TextBlock Text="{Binding Title}" FontSize="24" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock Text="{Binding Subtitle}" Opacity="0.7" />
+        </StackPanel>
+
+        <ScrollViewer Margin="0,12,0,0">
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="8" IsVisible="{Binding IsLoading}">
+                    <TextBlock Text="Loading company facts from the SEC..." />
+                    <ProgressBar IsIndeterminate="True" />
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" HorizontalAlignment="Left" />
+                </StackPanel>
+
+                <Border IsVisible="{Binding SetupMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Setup needed" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SetupMessage}" TextWrapping="Wrap" />
+                        <Button Content="Open Settings" Command="{Binding OpenSettingsCommand}" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <Border IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Could not load this company" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
+                        <Button Content="Retry" Command="{Binding LoadCommand}" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Spacing="16" IsVisible="{Binding HasReport}">
+                    <TextBlock Text="Metric definitions are test definitions (version test-0), not approved v1 metrics. Facts come from SEC annual filings (10-K and 10-K/A) only."
+                               TextWrapping="Wrap" Opacity="0.8" />
+
+                    <Border IsVisible="{Binding UnsupportedReason, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Unsupported company" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding UnsupportedReason}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Spacing="6" IsVisible="{Binding HasFacts}">
+                        <TextBlock Text="Latest annual facts" FontSize="18" FontWeight="SemiBold" />
+                        <Grid ColumnDefinitions="2*,2*,2.5*,0.7*,1.2*,3*" Opacity="0.7">
+                            <TextBlock Grid.Column="0" Text="Fact" />
+                            <TextBlock Grid.Column="1" Text="Value" />
+                            <TextBlock Grid.Column="2" Text="Period" />
+                            <TextBlock Grid.Column="3" Text="Form" />
+                            <TextBlock Grid.Column="4" Text="Filed" />
+                            <TextBlock Grid.Column="5" Text="Source" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding Facts}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:FactRow">
+                                    <Grid ColumnDefinitions="2*,2*,2.5*,0.7*,1.2*,3*" Margin="0,4">
+                                        <TextBlock Grid.Column="0" Text="{Binding Label}" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Period}" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Column="3" Text="{Binding Form}" />
+                                        <TextBlock Grid.Column="4" Text="{Binding Filed}" />
+                                        <StackPanel Grid.Column="5" Spacing="2">
+                                            <TextBlock Text="{Binding Accession}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Tag}" Opacity="0.7" TextWrapping="Wrap" />
+                                            <Button Content="Open filing"
+                                                    Command="{Binding OpenFilingCommand}"
+                                                    HorizontalAlignment="Left" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Test metrics" FontSize="18" FontWeight="SemiBold" />
+                        <Grid ColumnDefinitions="2*,1.3*,1.3*,4*" Opacity="0.7">
+                            <TextBlock Grid.Column="0" Text="Metric" />
+                            <TextBlock Grid.Column="1" Text="Value" />
+                            <TextBlock Grid.Column="2" Text="Status" />
+                            <TextBlock Grid.Column="3" Text="Inputs or reason" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding Metrics}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:MetricRow">
+                                    <Grid ColumnDefinitions="2*,1.3*,1.3*,4*" Margin="0,4">
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Version}" Opacity="0.7" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="{Binding Value}" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Status}" />
+                                        <TextBlock Grid.Column="3" Text="{Binding Detail}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Spacing="4" IsVisible="{Binding HasWarnings}">
+                        <TextBlock Text="Data quality warnings" FontSize="18" FontWeight="SemiBold" />
+                        <ItemsControl ItemsSource="{Binding Warnings}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <TextBlock Text="{Binding StringFormat='Warning: {0}'}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding RetrievedText}" Opacity="0.7" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>
