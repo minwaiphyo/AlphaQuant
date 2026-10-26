@@ -1,8 +1,8 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.6
+Document revision: 0.7
 Last updated: 2026-10-26 Asia/Singapore  
-Product status: planning, no application implemented  
+Product status: early spike; SEC company search with unapproved test metrics, no release  
 Working name: AlphaQuant  
 
 ## 1 Purpose and document authority
@@ -182,6 +182,8 @@ Use official SEC submissions and company-facts endpoints first. SEC JSON APIs re
 
 Data provider direction (AQ-D008, approved direction; vendor open; not used in v1 per AQ-D009): AlphaQuant is expected to draw on external data providers for financial metrics and market data as well as filing documents such as SEC filings. SEC remains the first, authoritative source for filing facts. Provider data must carry the same lineage as SEC data: source, retrieval time, period, unit and licence-relevant metadata, and must stay separate from raw filing evidence so differences between sources are visible. Before selecting a provider, review coverage, point-in-time and restatement handling, pricing, rate limits, and terms on caching, local storage, export and redistribution. Prefer user-supplied credentials or a compliant server-side service; a developer-owned key must never ship in an installer. Provider selection and any server-side component are separate decisions that need their own scope review, since they affect the local-only operating model.
 
+Alternatives reviewed on 2026-10-26 and rejected as data sources for the product: Yahoo Finance (no official API since 2017; yfinance uses unofficial endpoints and describes the data as personal use only) and Koyfin (an end-user tool; its FAQ says no data is available via API). Open-source libraries and MCP servers do not change the licence of the underlying data, and MCP servers serve LLM agents, not this app's calculation layer.
+
 SEC company facts do not cover every custom taxonomy concept or make all company facts comparable. Build reviewed mappings and show unsupported results explicitly. Company identity uses CIK and source metadata rather than ticker alone. Fiscal years may differ, and reported durations must drive annual selection rather than calendar labels alone.
 
 ```mermaid
@@ -294,7 +296,8 @@ Measure workflow completion, repeat usage where users consent, feedback resolved
 | Wrong or incomparable financial data | Version mappings, preserve provenance, show warnings and test reviewed examples; restrict coverage when necessary. |
 | Delivery and maintainability | Work in small releases; no calendar delivery promise until a vertical slice is measured. |
 | Name availability | AlphaQuant is a working name; check naming/trademark availability before public branding. |
-| Data provider not selected | Define required metrics and market data, compare vendors on coverage, cost, point-in-time handling and terms on caching, storage and redistribution; decide credential model and whether any server-side service is needed. |
+| Data provider not selected | Define required metrics and market data, compare vendors on coverage, cost, point-in-time handling and terms on caching, storage and redistribution; decide credential model and whether any server-side service is needed. Candidates mentioned so far, none evaluated against their actual terms: Financial Modeling Prep, EODHD, Intrinio, Alpha Vantage, LLMQuant Data (pricing and terms unconfirmed). |
+| Independent finance and legal review (proposed) | Before metric definitions are approved or a pilot starts, have a qualified finance reviewer check definitions, mappings and reviewed fixtures, and review disclaimers and data-licence obligations. Agent-written checks do not replace this. Not yet agreed. |
 | Valuation framing and liability | Present outputs as assumption-driven illustrations, not price targets or advice. Review disclaimers and any regulatory implications for advisory or wealth-management users before offering the valuation phase. |
 | Unvalidated value claims | Treat time savings, lighter weight and differentiation as hypotheses until pilot interviews and benchmarks support them. |
 | Scope growth into valuation | Keep v1 to screening; admit valuation features only through a separate approved scope. |
@@ -315,7 +318,7 @@ Business direction (provisional, AQ-D006): a transparent screening and valuation
 
 Next action: review the test definitions in section 5 with the user to decide which metrics, tag mappings and period rules become approved v1 definitions, and record the outcome as decisions. Optionally record the observed live values for AAPL against the SEC `companyconcept` endpoint as reviewed fixtures.
 
-Pending decisions: exact metrics, fiscal/coverage rules, release for notes and export, Windows target, budget, license and publication channel. Blockers for public release: all implementation and release gates remain outstanding.
+Pending decisions: exact metrics, fiscal/coverage rules, who provides qualified finance review, release for notes and export, Windows target, budget, license and publication channel. Blockers for public release: all implementation and release gates remain outstanding.
 
 ## 18 Decision log
 
@@ -338,6 +341,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-26 | Handoff and research record. Reviewed data provider options (Yahoo Finance and Koyfin rejected; candidates listed in section 15) and a third-party agent-skill catalogue (LLMQuant/skills: not adopted, see AGENTS.md AQ-W004). Discussed skills useful for an enterprise-grade version; the user deferred writing any. Refreshed the handoff and revision 0.7. Documentation only; no code changed and no checks run for this entry. | Review test definitions; approve v1 metrics; arrange qualified finance review; CI. |
 | 2026-10-26 | Integration: the user reported running and checking the app against the live SEC; the agent did not observe the run and no values were reported. Branch `feat/sec-company-search` committed, pushed and fast-forward merged into `main`. Build and 128 tests were last run before this documentation-only change. | Review test definitions; approve v1 metrics; CI. |
 | 2026-10-26 | Settings page for the SEC contact on branch `feat/sec-company-search` (AQ-D011). `ContactSettings` stores the contact in `%LOCALAPPDATA%\AlphaQuant\settings.json` (atomic write, version 1, unreadable or incompatible files treated as nothing saved), falls back to `AQ_SEC_CONTACT`, validates the email and reports failed writes. `SecClient` now takes a contact provider read on every request. Checks run: `dotnet build AlphaQuant.slnx` (0 warnings, 0 errors); `dotnet test AlphaQuant.slnx` (128 passed, 0 failed, including new tests for settings precedence, clearing, invalid input, corrupt or future-version files, failed writes and a contact changed at runtime); UI Automation on the Settings page (invalid email rejected with no file, valid email saved to the versioned file, cleared, and Open Settings from search returned to search; the test settings file was removed afterwards). Not run: live SEC request, retry-after-save with a real contact, package audit, CI. | Live SEC check by the user, merge, review of test definitions. |
 | 2026-10-26 | SEC company search spike on branch `feat/sec-company-search` after a planning session (AQ-D010). Added Core, Infrastructure and Tests projects; a search page and company detail page. Checks run: `dotnet build AlphaQuant.slnx` (0 warnings, 0 errors); `dotnet test AlphaQuant.slnx` (107 passed, 0 failed; fake HTTP handler and synthetic fixtures, no live SEC); UI Automation run with `AQ_SEC_CONTACT` unset showing the setup message with no cache folder created and Back returning Home. An early test run exposed a User-Agent validation bug (the header value was rejected, which would have blocked every real request); fixed and covered by tests. Not run: any live SEC request, comparison of shown values with SEC data, package audit, CI. | Live SEC check, merge, review of test definitions. |
