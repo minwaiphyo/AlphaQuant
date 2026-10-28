@@ -1,7 +1,7 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.7
-Last updated: 2026-10-26 Asia/Singapore  
+Document revision: 0.8
+Last updated: 2026-10-28 Asia/Singapore
 Product status: early spike; SEC company search with unapproved test metrics, no release  
 Working name: AlphaQuant  
 
@@ -80,6 +80,8 @@ Business model is undecided. Begin with a limited pilot, not a payment platform.
 - Support research; do not automate trading.
 
 ### Proposed v1 scope for review
+
+[User_Stories.md](User_Stories.md) records the initial user stories US-01 through US-13 and their acceptance criteria, grouped into first working prototype, initial screener and usable pilot release. These are proposed scope for review, not approved release commitments or evidence of implementation. This proposal remains authoritative for requirements and decisions; metric definitions, supported fact mappings, period rules and release scope still require approval.
 
 - Windows x64 first; retain cross-platform boundaries without claiming other OS support.
 - A small, explicitly bounded universe of US domestic non-financial companies using annual US-GAAP filing facts.
@@ -308,6 +310,8 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Documentation update, 2026-10-28: revision 0.8 adds a reference to `User_Stories.md` (US-01 through US-13), copied unchanged from the supplied stories on branch `docs/initial-user-stories`. The stories are proposed scope; no financial definition or release commitment was approved and no application behavior changed. Content was verified against the supplied text; build and tests were not rerun for this documentation-only update. The local PDF and editable source were not found in this checkout, so PDF synchronization remains pending.
+
 As of 2026-10-26: `main` holds this proposal, README, .gitignore and a placeholder desktop app (Avalonia 12.1.4 on .NET 10, SDK 10.0.403 pinned in `global.json`, solution `AlphaQuant.slnx`) with Home and Release Notes pages. The SEC search spike below was merged into `main` from branch `feat/sec-company-search` on 2026-10-26. The public source repository is https://github.com/minwaiphyo/AlphaQuant. No application deployment exists. The .NET SDK was installed per-user on the development machine, since it was missing.
 
 SEC search spike (branch `feat/sec-company-search`): `src/AlphaQuant.Core` (models, ticker/name search, annual-fact selection, test metrics, filing links; no external dependencies), `src/AlphaQuant.Infrastructure` (SEC client with declared User-Agent, request pacing and bounded retries, parser, plain-file cache under `%LOCALAPPDATA%\AlphaQuant\cache\sec`) and `tests/AlphaQuant.Tests` (xUnit, saved synthetic fixtures, fake HTTP handler). The desktop app adds a search page and a company detail page showing the latest annual revenue (and prior year), net income, current assets and current liabilities with period, form, filing date, accession, tag and a filing link, plus three **test metrics** (revenue growth, net profit margin, current ratio, definition version `test-0`) and data-quality warnings. The metric definitions are test definitions, not approved v1 metrics (AQ-D010). The SEC contact email is entered on a Settings page and stored in `%LOCALAPPDATA%\AlphaQuant\settings.json`, with the `AQ_SEC_CONTACT` environment variable as a fallback when nothing is saved; it is read on every request, so changes apply without a restart (AQ-D011). No SQLite, watchlist, filters or installer exist.
@@ -324,6 +328,7 @@ Pending decisions: exact metrics, fiscal/coverage rules, who provides qualified 
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D012 2026-10-28 | Proposed | Record initial stories US-01 through US-13 in `User_Stories.md`, covering company selection, retrieval, metrics and provenance, screening, watchlists, offline review, accessibility, installation and feedback. Purpose: provide concrete user workflows and acceptance criteria for scope review. The groupings do not approve release contents or financial definitions. Next validation: review stories against the existing spike and approve metric definitions, mappings, period rules and bounded milestone scope. | User-supplied stories and request to save and reference them. |
 | AQ-D001 2026-10-25 | Approved | Use C# desktop option; use a maintainable desktop application stack. Avalonia is the intended UI direction from the accepted option. | Architecture decision. |
 | AQ-D002 2026-10-25 | Approved | Develop in tested, documented releases, with basic functionality and a few basic analyses in v1. | Release policy. |
 | AQ-D003 2026-10-25 | Approved | Name project/repository AlphaQuant and create it under Projects; maintain a current product and engineering development record. | Project planning decision. |
@@ -341,6 +346,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-28 | Documentation on branch `docs/initial-user-stories`: added `User_Stories.md` with the supplied 13 stories unchanged; verified an exact content match. Proposal revision 0.8 references the stories as proposed scope (AQ-D012); updated the shared handoff. No code changed; no build or tests run. Local PDF and editable source not found in this checkout; no PDF regenerated. | Review stories and approve metric definitions, mappings and period rules; synchronize the local PDF when its source is available. |
 | 2026-10-26 | Handoff and research record. Reviewed data provider options (Yahoo Finance and Koyfin rejected; candidates listed in section 15) and a third-party agent-skill catalogue (LLMQuant/skills: not adopted, see AGENTS.md AQ-W004). Discussed skills useful for an enterprise-grade version; the user deferred writing any. Refreshed the handoff and revision 0.7. Documentation only; no code changed and no checks run for this entry. | Review test definitions; approve v1 metrics; arrange qualified finance review; CI. |
 | 2026-10-26 | Integration: the user reported running and checking the app against the live SEC; the agent did not observe the run and no values were reported. Branch `feat/sec-company-search` committed, pushed and fast-forward merged into `main`. Build and 128 tests were last run before this documentation-only change. | Review test definitions; approve v1 metrics; CI. |
 | 2026-10-26 | Settings page for the SEC contact on branch `feat/sec-company-search` (AQ-D011). `ContactSettings` stores the contact in `%LOCALAPPDATA%\AlphaQuant\settings.json` (atomic write, version 1, unreadable or incompatible files treated as nothing saved), falls back to `AQ_SEC_CONTACT`, validates the email and reports failed writes. `SecClient` now takes a contact provider read on every request. Checks run: `dotnet build AlphaQuant.slnx` (0 warnings, 0 errors); `dotnet test AlphaQuant.slnx` (128 passed, 0 failed, including new tests for settings precedence, clearing, invalid input, corrupt or future-version files, failed writes and a contact changed at runtime); UI Automation on the Settings page (invalid email rejected with no file, valid email saved to the versioned file, cleared, and Open Settings from search returned to search; the test settings file was removed afterwards). Not run: live SEC request, retry-after-save with a real contact, package audit, CI. | Live SEC check by the user, merge, review of test definitions. |

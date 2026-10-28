@@ -75,6 +75,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
+Documentation update, 2026-10-28: branch `docs/initial-user-stories` adds `User_Stories.md` with US-01 through US-13 copied unchanged from the supplied text (exact content match verified). Proposal revision 0.8 references them as proposed scope (AQ-D012), without approving metric definitions or release contents. No application changes or new build/test results. The local PDF and editable source were not found in this checkout; synchronization remains pending. Exact next action remains review of section 5 metric definitions, mappings and period rules with the user, using the stories to bound the next milestone. Check Git for commit and push state.
+
 State as of 2026-10-26 (check Git for the current commit, push and merge state rather than relying on this text):
 
 - Software: an Avalonia 12.1.4 / .NET 10 desktop app with Home, Search Companies, company detail, Settings and Release Notes pages over `src/AlphaQuant.Core`, `src/AlphaQuant.Infrastructure` and `tests/AlphaQuant.Tests`. v1 is SEC-only (AQ-D009). The three metrics are unapproved test definitions (`test-0`, AQ-D010). The SEC contact email is entered in Settings and stored locally (AQ-D011). Build is clean and 128 tests pass. The user reported running a live SEC check themselves; the agent did not observe it and no values were recorded. There is no CI, SQLite, installer or release.
