@@ -1,8 +1,8 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.20
+Document revision: 0.21
 Last updated: 2026-10-28 Asia/Singapore
-Product status: early spike; SEC company search with unapproved test metrics, no release  
+Product status: SEC desktop spike plus implemented/tested OAuth-IEX-comparison backend; UI wiring/live setup pending, no release
 Working name: AlphaQuant  
 
 ## 1 Purpose and document authority
@@ -58,6 +58,8 @@ Business model is undecided. Begin with a limited pilot, not a payment platform.
 
 ## 4 Approved direction and proposed boundaries
 
+2026-10-28, AQ-D022: user selected browser OAuth, delegated financial-definition finalization and authorized implementation of the market-data/comparison backend while the teammate owns UI. Baseline [comparison-1](../requirements/Financial_Definitions.md) is finalized for implementation, not independently finance-certified. Core/Infrastructure now provide guarded annual/TTM/valuation outputs, a replaceable IEX provider and ComparisonBackend facade; a small ASP.NET OAuth broker keeps the application secret server-side. Tokens are memory-only; consent requests data scope for the paper account environment; no trading methods/scopes. No registered app or deployed broker exists. [Setup and UI integration guide](../development/Alpaca_OAuth_Setup.md) documents manual registration and a no-cost Render preview candidate. No hosting/account/purchase/deployment was performed. Earlier undecided authentication and baseline-definition statements are superseded where inconsistent with this decision.
+
 Current shared direction (2026-10-28, AQ-D014 to AQ-D021): compare US domestic non-financial US-GAAP/USD companies using five annual years where available, reviewed current TTM results and current-price valuation. Selected metric candidates: revenue growth, operating margin, operating cash flow, debt/cash, trailing P/E and EV/sales; formulas/mappings remain unapproved. SEC EDGAR supplies filing evidence; each user may connect an eligible free Alpaca Basic account for disclosed IEX streaming while comparison is open. Zero incremental pilot cost/no paid services. Keep the market-data adapter replaceable. Session-only secrets if API-key entry is selected; API-key versus OAuth authentication remains undecided. Complex/unverifiable valuation may be unavailable while valid fundamentals remain. No trading or automatic recommendations; DCF and historical valuation deferred. This current direction supersedes earlier all-valuation-later/SEC-only planning boundaries; current implementation remains the SEC spike.
 
 ### Agreed project direction
@@ -97,6 +99,8 @@ Candidates not yet placed in a release: per-company notes and recorded assumptio
 Deferred/out of the current comparison milestone: DCF, terminal-value/sensitivity and bear/base/bull models, historical valuation charts, broad exchange coverage, price targets, backtesting, trading, app-generated recommendations, LLM analysis, broker account/trade management, multi-user cloud collaboration, simulations and arbitrary formula execution. Per-user market-data access and current P/E/EV-sales candidates are included in planning; definitions and implementation remain pending.
 
 ## 5 Candidate financial analyses and correctness rules
+
+2026-10-28, AQ-D022: user selected browser OAuth, delegated financial-definition finalization and authorized implementation of the market-data/comparison backend while the teammate owns UI. Baseline [comparison-1](../requirements/Financial_Definitions.md) is finalized for implementation, not independently finance-certified. Core/Infrastructure now provide guarded annual/TTM/valuation outputs, a replaceable IEX provider and ComparisonBackend facade; a small ASP.NET OAuth broker keeps the application secret server-side. Tokens are memory-only; consent requests data scope for the paper account environment; no trading methods/scopes. No registered app or deployed broker exists. [Setup and UI integration guide](../development/Alpaca_OAuth_Setup.md) documents manual registration and a no-cost Render preview candidate. No hosting/account/purchase/deployment was performed. Earlier undecided authentication and baseline-definition statements are superseded where inconsistent with this decision.
 
 ### Analyst decision-support workflow (proposed, AQ-D013)
 
@@ -156,6 +160,21 @@ Show reporting start/end dates, filing date, form, units, accession/source URL, 
 Do not add Python, a web backend, containers, Redis, queues, or microservices without a concrete requirement. Do not claim reduced bundle size from the language choice alone: measure self-contained publish output and installed footprint.
 
 ## 7 Architecture and repository structure
+
+Current backend adds a token-exchange broker only; it does not relay quotes or financial data. It is implemented but not hosted. Existing Desktop wiring is unchanged.
+
+```mermaid
+flowchart LR
+  UI[Teammate UI - wiring pending] --> Backend[ComparisonBackend facade]
+  Backend --> SEC[SEC facts adapter]
+  Backend --> Core[Core comparison-1 analysis]
+  Backend --> IEX[Alpaca per-user IEX adapter]
+  Backend --> Browser[System browser OAuth]
+  Browser --> Broker[OAuth broker - deployment pending]
+  Broker --> Token[Alpaca token endpoint]
+  IEX --> Feed[Alpaca IEX stream]
+```
+
 
 ```mermaid
 flowchart TD
@@ -324,20 +343,19 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
-As of 2026-10-28, revision 0.20. Current shared direction (2026-10-28, AQ-D014 to AQ-D021): compare US domestic non-financial US-GAAP/USD companies using five annual years where available, reviewed current TTM results and current-price valuation. Selected metric candidates: revenue growth, operating margin, operating cash flow, debt/cash, trailing P/E and EV/sales; formulas/mappings remain unapproved. SEC EDGAR supplies filing evidence; each user may connect an eligible free Alpaca Basic account for disclosed IEX streaming while comparison is open. Zero incremental pilot cost/no paid services. Keep the market-data adapter replaceable. Session-only secrets if API-key entry is selected; API-key versus OAuth authentication remains undecided. Complex/unverifiable valuation may be unavailable while valid fundamentals remain. No trading or automatic recommendations; DCF and historical valuation deferred. This current direction supersedes earlier all-valuation-later/SEC-only planning boundaries; current implementation remains the SEC spike.
+As of 2026-10-28, revision 0.21. 2026-10-28, AQ-D022: user selected browser OAuth, delegated financial-definition finalization and authorized implementation of the market-data/comparison backend while the teammate owns UI. Baseline [comparison-1](../requirements/Financial_Definitions.md) is finalized for implementation, not independently finance-certified. Core/Infrastructure now provide guarded annual/TTM/valuation outputs, a replaceable IEX provider and ComparisonBackend facade; a small ASP.NET OAuth broker keeps the application secret server-side. Tokens are memory-only; consent requests data scope for the paper account environment; no trading methods/scopes. No registered app or deployed broker exists. [Setup and UI integration guide](../development/Alpaca_OAuth_Setup.md) documents manual registration and a no-cost Render preview candidate. No hosting/account/purchase/deployment was performed. Earlier undecided authentication and baseline-definition statements are superseded where inconsistent with this decision.
 
-Teammate UI starting point: [UI design brief](../development/UI_Design_Brief.md). It specifies confirmed versus proposed screens, financial panels, SEC contact and proposed Alpaca input fields, synthetic examples, state catalogue and conceptual UI/backend boundaries. User requested shared-context preparation and push; no UI or backend implementation performed in this change. The teammate owns UI flows; coordinate shared contracts before integration. Full references: [feature catalogue](../requirements/Financial_Analysis_Features.md), [comparison plan](../requirements/Comparison_Implementation_Plan.md), [provider feasibility review](../requirements/Provider_Feasibility_Review.md).
+Implemented files: Core MarketData, ComparisonModels/Analyzer/Valuation/Service; Infrastructure OAuthSession, OAuthBrokerService, AlpacaMarketDataProvider/MarketSocket, SystemBrowserLauncher and ComparisonBackend; new AlphaQuant.OAuthBroker host/Dockerfile; SecParser allowlist extended. Desktop sources are untouched so the UI teammate can integrate separately. Existing test-0 behavior remains for current screens. New data values retain source contributions, dates, status/reasons and version. Current quote age is reevaluated every five seconds.
 
-Actual implementation: Avalonia Desktop with Home, Search, company detail, SEC-contact Settings and Release Notes; Core/Infrastructure and xUnit tests. Current annual test-0 metrics are revenue growth, net margin and current ratio, not approved final definitions. No Alpaca integration, comparison grid, five-year/TTM engine, P/E or EV/sales, CI, SQLite watchlist, installer or release.
+Verification actually run on this laptop with SDK 10.0.403: solution build, zero warnings/errors; 170 tests passed with synthetic/fake transports including browser/broker/bearer/stream-to-two-company valuation; loopback HTTP broker smoke passed (health/no-store, challenge/pending, wrong verifier, denial, invalid input). No live SEC/Alpaca calls, real browser consent, Docker build/deployment, current class-level capital extraction or independent finance review. Valuations remain unavailable without explicit reviewed eligibility/EPS/split/capital evidence; absent facts never certify zero debt/other claims. No market-calendar/session detection is implemented. Local PDF edition was not refreshed for this increment.
 
-Last application evidence remains 2026-10-26: reported clean build and 128 passing synthetic/fake-handler tests plus limited UI checks, not rerun for these documentation changes. No authenticated provider evaluation or independent finance approval claimed. Current verification: 33 local documentation links, README-only root, unchanged stories and diff/privacy checks; local private source refreshed with its prefix retained, PDF regenerated and all 23 pages visually inspected. Private artifacts remain ignored. Earlier pending-PDF notes in dated records are historical, not current verification.
-
-Exact next action: teammate prototypes the connection and comparison/evidence states with synthetic data; jointly settle API-key versus OAuth flow and financial definitions before accepting one implementation increment. No real credentials, live requests or persistent secret storage for UI prototyping.
+Exact next action: UI teammate consumes ComparisonBackend using the setup guide and fake data. Separately register the OAuth application and configure a permitted zero-cost HTTPS preview broker, then conduct an authorized manual live check with credentials outside chat. App approval, rights, free-host quota/availability and real-filing reconciliation remain open; no paid fallback authorized. Backend implementation/test success does not equal a live usable pilot or release.
 
 ## 18 Decision log
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D022 2026-10-28 | Approved backend implementation direction; baseline finalized under delegation | Browser OAuth selected; user delegated financial definitions and authorized Alpaca adapter/comparison backend. comparison-1 formalizes conservative annual/TTM/EPS/EV rules and reviewed evidence guards. Server-only secret exchange required; prepare registration/free-preview steps without accounts/deployment. UI teammate retains ownership. No independent finance certification or live readiness claimed. | User implementation instruction and confirmation that no OAuth app/endpoint exists. |
 | AQ-D021 2026-10-28 | Approved retention/coverage; authentication undecided | Valuation/comparison only, no trading. Session-only credentials if API keys selected; no persistent vault initially. Complex/unverifiable structures may show unavailable valuation with reasons while preserving fundamentals. Clarify provider-key capability versus app behavior before selecting authentication. | User MCQ responses and clarification. |
 | AQ-D020 2026-10-28 | Approved; supersedes AQ-D019 | Permit users to connect their own eligible free Alpaca accounts. Keep zero-cost pilot, SEC/Alpaca selection, disclosed IEX streaming and replaceable adapter. Shared developer keys/redistribution gateway are not required or authorized. Connection security, eligibility, permitted app use and financial definitions remain to validate before implementation. | User explicitly relaxed account-free constraint. |
 | AQ-D019 2026-10-28 | Superseded by AQ-D020 | No provider-site visits, provider accounts or user Alpaca connection. Retain zero-cost constraint. Per-user account proposal fails desired UX; an authorized quote gateway is only a candidate, with rights and zero-cost operation unverified. No shared desktop secret. | User onboarding preference/question. |
@@ -365,6 +383,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-28 | feat/alpaca-oauth-comparison: implemented browser-OAuth client/server broker, IEX adapter, financial comparison-1 baseline and UI-independent ComparisonBackend facade. Extended parser and added synthetic/security/stream/end-to-end tests. Solution build 0 warnings/errors; 170 tests passed. Loopback broker HTTP smoke passed with no provider calls. No Desktop files changed. Documentation/setup instructions added; local PDF not refreshed. | Teammate screen wiring, OAuth registration/HTTPS preview deployment, eligibility/rights, real login/quotes/filing reconciliation and independent finance review. |
 | 2026-10-28 | Revision 0.20: consolidated current scope, added UI_Design_Brief.md for teammate-owned screens/fields/states and linked all planning records. Documentation only; financial definitions/authentication remain unapproved. No application build/tests or provider calls. Documentation checks passed (33 local links, root placement, story preservation and diff/privacy checks); local private source/PDF synchronized and all pages visually inspected. Private artifacts excluded from Git. | Prototype synthetic UI flow, agree shared contracts/authentication and approve financial definitions/first increment. |
 | 2026-10-28 | Clarified that provider credential permissions do not introduce trading features. Recorded session-only storage and limited verifiable valuation coverage; authentication remains undecided. Documentation-only, no application/live tests. PDF/source revision 0.19 pending. | Settle supported authentication and accept bounded plan. |
 | 2026-10-28 | Drafted bounded comparison plan after user requested proceeding with planning. Reviewed official Alpaca OAuth/stream docs and existing contracts/contact settings; secret-based exchange requires explicit design. No implementation or application/live tests. Documentation checks performed; PDF/source revision 0.18 pending. | Choose credential flow/storage, review valuation coverage and accept first bounded increment. |

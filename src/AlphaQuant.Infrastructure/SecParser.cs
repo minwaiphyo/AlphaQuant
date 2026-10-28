@@ -64,7 +64,7 @@ public static class SecParser
         {
             foreach (var concept in usGaap.EnumerateObject())
             {
-                if (!ConceptMap.All.Contains(concept.Name)
+                if (!ComparisonConcepts.All.Contains(concept.Name)
                     || concept.Value.ValueKind != JsonValueKind.Object
                     || !concept.Value.TryGetProperty("units", out var units)
                     || units.ValueKind != JsonValueKind.Object)

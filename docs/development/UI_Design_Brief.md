@@ -4,6 +4,14 @@ Updated: 2026-10-28. Audience: teammate owning UI design, navigation and interac
 
 **Start here for UI work.** This is a shared design brief, not evidence that the backend exists or that financial formulas/authentication have been approved. The [proposal](../product/AlphaQuant_Proposal.md) owns approval status; [feature catalogue](../requirements/Financial_Analysis_Features.md) describes the longer-term ideas; [implementation plan](../requirements/Comparison_Implementation_Plan.md) records proposed backend contracts and open decisions.
 
+## Backend update for UI integration (2026-10-28)
+
+Browser OAuth is now selected (AQ-D022), and the comparison-1 financial baseline was finalized under user delegation. Use **Connect with Alpaca**, Cancel, access-test status and Disconnect; no Alpaca API-key/secret/password fields for this adapter. Earlier API-key/OAuth alternatives below are historical mockup context only. Other future adapters may still have their own reviewed fields.
+
+The UI-independent backend now exists: `ComparisonBackend` supplies browser authorization, IEX access testing and two-to-five-company snapshots. Annual/TTM analysis and guarded P/E/EV-sales are implemented and fake-provider tested. The Desktop project was intentionally untouched; screens are not yet wired. Start integration at [Alpaca OAuth setup and C# composition guide](Alpaca_OAuth_Setup.md), using [financial definition comparison-1](../requirements/Financial_Definitions.md). No registered OAuth app or deployed broker exists yet, so real Connect must show a configuration-required state until the public broker origin is supplied.
+
+Production OAuth needs the server-held client secret; never ask users to paste it. Tokens are session-only and data-scope consent uses the paper account environment without implementing any trading. Free Render preview hosting is documented as a candidate, not a deployed/guaranteed service. Retain source/age and missing-evidence states. Capital/split/scope reviews are explicit inputs; do not invent them to make valuation cells populate. Session calendar detection is not implemented—use time/age and an unknown-session label where appropriate.
+
 ## Agreed direction
 
 - Research, financial comparisons and valuation only; no trading, account balances, orders or automatic buy/sell recommendations.
@@ -11,7 +19,7 @@ Updated: 2026-10-28. Audience: teammate owning UI design, navigation and interac
 - SEC EDGAR remains the filing-evidence source. Users choose a market-data provider from a menu of supported options and connect their own account. Keep a free usage route; optional user-owned paid subscriptions may be supported without making payment mandatory. No in-app purchases or required paid hosting. Alpaca Basic IEX is the first planned adapter; additional providers are not selected or implemented.
 - Stream while comparison is open when supported by the active provider and the user's entitlement. Show actual feed coverage, real-time/delayed/EOD status, event time, price age and connection state. IEX is not the consolidated US market. Do not silently substitute delayed data for the selected real-time workflow.
 - TTM (trailing 12 months) results separate from annual history. Current valuation only; historical valuation charts, DCF and forecasts are later.
-- Credentials remain in memory for the session if API-key input is chosen; no Remember checkbox, plaintext settings or persistent secret store in this scope.
+- Alpaca uses browser OAuth; its tokens remain in memory for the session. No API-key/password fields, Remember checkbox, plaintext settings or persistent token store for this adapter.
 - Complex/unverifiable capital structures may show unavailable valuation with a reason; retain valid fundamentals for those companies.
 - User owns the investment conclusion. The app supplies evidence and comparisons.
 
@@ -19,7 +27,7 @@ Updated: 2026-10-28. Audience: teammate owning UI design, navigation and interac
 
 Avalonia Desktop already has Home, Search Companies, company detail, Settings (SEC contact only) and Release Notes. Current details show latest annual facts and three test-0 metrics (revenue growth, net margin and current ratio). Those metric definitions are unapproved spike behavior; they are not the agreed final comparison set.
 
-There is no Alpaca connection, comparison table, five-year history, TTM engine, P/E or EV/sales implementation. Do not label a prototype's connection or calculations as live/verified.
+The new backend implements Alpaca browser-OAuth preparation, an IEX adapter, five-period annual history, TTM and guarded P/E/EV-sales. There is no production comparison screen wiring or live-provider verification yet. Do not label synthetic data live.
 
 Existing navigation owner: src/AlphaQuant.Desktop/ViewModels/MainWindowViewModel.cs. Views live in src/AlphaQuant.Desktop/Views; behavior in ViewModels. For design-only work a standalone HTML/React prototype is acceptable as a proposed workflow, but no prototype framework or new application dependencies have been selected. Coordinate before modifying production view models or shared contracts.
 
@@ -86,25 +94,15 @@ Only one market-price provider is active at a time in this design scope. When ac
 
 Show **Alpaca** as the provider and **Basic / IEX** as the initial expected feed; reflect verified entitlements instead of assuming every account has the same plan. Show limited-venue text, connection/access summary and Connect/Test, Cancel, Activate, Disconnect and Clear controls according to state. Keep UI commands provider-neutral.
 
-**Authentication route remains undecided.** API-key and OAuth concepts below are alternatives for mockups, not two implemented methods or approved production flows.
+Use **Connect with Alpaca** to open the system browser, with Cancel during authorization. If the broker origin is not configured, show a configuration-required message; never ask for the application's client secret. On return, test access for the selected symbols before activating IEX. Authorization success, an available sample trade and an acknowledged stream subscription are separate states.
 
-| Proposed API-key control | Behavior for design mocks |
-|---|---|
-| API Key ID | User-owned key identifier; mock only with clearly synthetic placeholders |
-| API Secret Key | Masked input, explicit reveal/hide if designed; never show in errors, logs, screenshots or metric panels |
-| Session notice | Used for this session only; re-enter after app restart |
-| Connect | Validate required inputs locally, then show connecting/authentication state through a fake service |
-| Cancel | Cancel attempt and return to disconnected state |
-| Disconnect | Stop stream, clear in-memory credentials and mark old prices disconnected; retain selected companies and financial evidence |
-| Clear | Remove entered values without making a request |
+No Alpaca API-key/secret/password, funding/deposit, live-trading selector or order controls. No paid-upgrade flow. Consent is data-scope and uses the paper account environment; AlphaQuant executes no simulated or real orders. Disconnect clears the in-memory session and stops the feed; closing comparison only cancels that stream. Do not imply Disconnect revokes provider authorization.
 
-No Alpaca password, funding/deposit input, in-app paid-upgrade/purchase flow, live-trading selector or order controls. A paper-account-key option was proposed to reduce live-account credential exposure, but the user has **not selected that authentication route**. Provider keys can have broader permissions than the app implements; do not claim imported keys are read-only. Do not claim paper-only enforcement before backend verification.
-
-OAuth alternative: Connect with Alpaca opens the external system browser for provider login/consent. Data-only permission and secret-safe desktop authorization are pending validation; never create an in-app Alpaca password form or embed an application client secret. The teammate can prototype browser return/cancel states without choosing the backend mechanism.
+See [Alpaca OAuth setup](Alpaca_OAuth_Setup.md) for the current composition contract and server/registration steps. Other future adapters may provide reviewed credential fields, but no additional authentication route is implemented for Alpaca.
 
 ## Financial comparison content
 
-These are selected candidates for refinement, not finance-approved definitions. Design labels and source panels now; use fake numbers and injectable results, not production formulas in UI code.
+The comparison-1 baseline is now finalized for implementation under user delegation; it is not independently finance-certified. Use the implemented backend results and source panels, with fake providers during UI development. Do not duplicate production formulas in UI code.
 
 | Group | Display | Context required |
 |---|---|---|
@@ -173,4 +171,4 @@ The UI consumes these results and commands. It must not implement SEC mappings, 
 6. Demonstrate free versus optional paid provider choices, planned-provider labels, a successful access test, successful authentication with denied/unknown data access, and a failed provider switch without losing SEC evidence.
 7. Review UI/backend contracts together before integrating production files. A prototype does not approve financial definitions or guarantee provider eligibility.
 
-Exact next shared action: prototype the provider menu, dynamic setup, access-test/activation/switching states and metric evidence panels; review the Alpaca API-key-versus-OAuth choice before accepting a bounded implementation increment. DCF, automatic ratings, persistent research and additional metrics remain candidates in the feature catalogue.
+Exact next shared action: integrate the backend facade into the teammate-owned provider menu/browser-connect and comparison/evidence screens using fake services first, then complete manual OAuth deployment/registration before an authorized live evaluation. DCF, automatic ratings, persistent research and additional metrics remain candidates in the feature catalogue.

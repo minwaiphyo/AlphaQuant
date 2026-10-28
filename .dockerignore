@@ -1,0 +1,14 @@
+.git
+.local
+docs/local
+**/bin
+**/obj
+**/*.user
+.env*
+**/secrets.json
+**/.env*
+**/appsettings.*.Local.json
+**/appsettings.Development.json
+**/*.pfx
+**/*.pem
+**/*.key
