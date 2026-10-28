@@ -65,3 +65,6 @@ PROJECT_PROMPTS*
 .local/
 *LOCAL*
 *local*.pdf
+
+# Private local document editions
+docs/local/

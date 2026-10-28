@@ -4,7 +4,7 @@ A planned transparent desktop screening and valuation workspace for financially 
 
 **Status:** early spike. The app can search SEC-listed companies and show test metrics, but the metric definitions are not approved and there is no installer or release yet.
 
-Read the [project proposal](AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
+Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 
 ## Initial direction
 
@@ -40,4 +40,15 @@ The tests use synthetic fixtures and never contact the SEC. Verified on Windows 
 
 ## Contributing
 
-Read [AGENTS.md](AGENTS.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
+Read [developer and agent guidance](docs/development/Agent_Guidance.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
+
+## Documentation
+
+| Category | Document | Purpose |
+|---|---|---|
+| Product | [Project proposal](docs/product/AlphaQuant_Proposal.md) | Authoritative scope, architecture, decisions and progress |
+| Requirements | [Initial user stories](docs/requirements/User_Stories.md) | Proposed workflows and acceptance criteria |
+| Requirements | [Financial analysis features](docs/requirements/Financial_Analysis_Features.md) | Proposed analyst capabilities, dependencies and delivery stages |
+| Development | [Developer and agent guidance](docs/development/Agent_Guidance.md) | Workflow rules and current handoff; read before working |
+
+Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.

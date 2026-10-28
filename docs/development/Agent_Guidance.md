@@ -4,13 +4,13 @@
 
 This tracked file is the entry point for developers and agents across chats and laptops. Read it before working; do not assume previous chat history is available. Keep shared workflow instructions, continuation context and workflow decisions here. Keep this file concise and update its current handoff after substantive work.
 
-`AlphaQuant_Proposal.md` owns software requirements, proposed ideas, product and technical decisions with rationale, architecture, implementation status, known issues, verification and releases. `README.md` gives the user-facing overview and, when implemented, setup and usage. Read proposal sections 17 through 19 for the latest software state, then the relevant detailed sections. Do not duplicate changing software specifications here.
+`docs/product/AlphaQuant_Proposal.md` owns software requirements, proposed ideas, product and technical decisions with rationale, architecture, implementation status, known issues, verification and releases. `README.md` gives the user-facing overview and, when implemented, setup and usage. Read proposal sections 17 through 19 for the latest software state, then the relevant detailed sections. Do not duplicate changing software specifications here.
 
 Distinguish proposed, approved, deferred, rejected, superseded, implemented and verified states. Preserve reasons and replacement references. Record durable facts rather than transcripts. Public files must exclude secrets, personal information and private motivations. Private files and earlier chats are not prerequisites for shared project work.
 
 ### Start of every task
 
-1. Read `AlphaQuant_Proposal.md` and `README.md`, then inspect relevant source, tests and recent commits. Start with sections 17 through 19 for the current state; consult earlier sections for definitions and constraints.
+1. Read `docs/product/AlphaQuant_Proposal.md` and `README.md`, then inspect relevant source, tests and recent commits. Start with sections 17 through 19 for the current state; consult earlier sections for definitions and constraints.
 2. Inspect Git status, branch and remotes. Fetch the configured remote and fast-forward the appropriate branch only when safe. Preserve local changes and reconcile divergence deliberately; never reset or rewrite history as a routine refresh.
 3. Compare documentation with actual files and verification evidence. Record discrepancies and resolve them before relying on stale claims. Missing context must remain an explicit open question rather than an invented requirement.
 4. Select one small milestone with observable acceptance criteria. Use a descriptive feature branch. Resolve routine engineering choices autonomously; seek clarification for material product or financial decisions, missing credentials or actions beyond existing authority.
@@ -32,7 +32,7 @@ Skip this gate for small, well-defined work such as typos, focused documentation
 
 ### During development and discussion
 
-Update `AlphaQuant_Proposal.md` whenever a substantive requirement, idea, decision, implementation result or blocker changes, including planning-only sessions. Record workflow-only changes here instead of in the software proposal. Save the context when the change is established and before handing off or ending a session; do not wait for a release. Keep the applicable detailed sections and the current-state summary aligned with the dated logs.
+Update `docs/product/AlphaQuant_Proposal.md` whenever a substantive requirement, idea, decision, implementation result or blocker changes, including planning-only sessions. Record workflow-only changes here instead of in the software proposal. Save the context when the change is established and before handing off or ending a session; do not wait for a release. Keep the applicable detailed sections and the current-state summary aligned with the dated logs.
 
 For each material idea, record its purpose, status, rationale, affected scope and next validation step. Record rejected or deferred alternatives when their rationale will prevent repeated discussion. For implementation, record changed behavior, relevant files, the commit or branch when available, checks actually run and their results, limitations and unfinished work. Never reuse stale test results as current evidence.
 
@@ -41,7 +41,7 @@ Keep UI, calculations, ingestion and persistence responsibilities clear. Impleme
 ### Completion and synchronization
 
 1. Update sections 17 through 19 with completed work, actual verification, remaining issues and one exact next action. Add dated decision records for changed direction; update detailed requirements and README when affected.
-2. Keep the local PDF edition synchronized with `AlphaQuant_Proposal.md` after substantive changes. Preserve any private-only prefix in its editable source, refresh the shared proposal content, regenerate the PDF and visually inspect every page. The local PDF and its source remain untracked; Git does not transfer them between laptops. A fresh checkout must still have complete shared project context in the tracked proposal and this guidance. Report unavailable local files or failed regeneration explicitly.
+2. Keep the local PDF edition synchronized with `docs/product/AlphaQuant_Proposal.md` after substantive changes. Preserve any private-only prefix in its editable source, refresh the shared proposal content, regenerate the PDF and visually inspect every page. The local PDF and its source remain untracked; Git does not transfer them between laptops. A fresh checkout must still have complete shared project context in the tracked proposal and this guidance. Report unavailable local files or failed regeneration explicitly.
 3. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
 4. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
 5. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
@@ -65,7 +65,7 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 ## Workflow decisions
 
 - AQ-D005, 2026-10-25, superseded in document placement: shared context and continuation instructions were initially placed in proposal revision 0.4, with the local PDF synchronized.
-- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `AGENTS.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries and synchronize the untracked local PDF with software documentation changes.
+- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `docs/development/Agent_Guidance.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries and synchronize the untracked local PDF with software documentation changes.
 
 - AQ-W002, 2026-10-25, approved: prompt the user to switch to planning mode before implementing large, ambiguous or consequential changes; refine and accept the plan before implementation. Small, well-defined tasks and accepted plans proceed without repeated planning prompts.
 
@@ -74,6 +74,10 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 - AQ-W004, 2026-10-26, decided: do not vendor third-party agent-skill catalogues (for example LLMQuant/skills) into this repository. They target research workflows and a hosted data source, which conflicts with the SEC-only v1 decision (AQ-D009) and the no-recommendation principle, and unreviewed instructions loaded by every agent are a supply-chain risk. Project-specific skills (metric definition review, SEC data quirks, Avalonia and testing conventions) were considered and deferred by the user; revisit when agents repeatedly repeat the same project-specific mistakes.
 
 ## Current handoff
+
+2026-10-28 documentation reorganization: README is the only documentation file at the root. Read this guide via README; it is no longer automatically discovered as root AGENTS.md. AQ-W005: user-approved classification puts the proposal in docs/product, stories and feature catalogue in docs/requirements, and this guidance in docs/development. This supersedes AQ-W001 placement only; ownership and privacy rules remain. Feature catalogue FA-01 through FA-07 is proposed, not implementation approval. Next action: approve a bounded peer-comparison milestone. No application changes/build/tests. Documentation links, story preservation, root placement and diff checks passed. Local PDF/source synchronized and visually inspected; ignored local artifacts remain excluded. Check Git for commit/push state.
+
+Discussion, 2026-10-28: proposal revision 0.9 records analyst comparison/decision-support candidates (AQ-D013). No implementation authorized or new financial definitions approved. Next discussion: bound peer-comparison scope and clarify user-authored versus app-generated buy/hold/sell conclusions. No build/tests run; local PDF synchronization remains pending. Check Git for save/commit/push state.
 
 Documentation update, 2026-10-28: branch `docs/initial-user-stories` adds `User_Stories.md` with US-01 through US-13 copied unchanged from the supplied text (exact content match verified). Proposal revision 0.8 references them as proposed scope (AQ-D012), without approving metric definitions or release contents. No application changes or new build/test results. The local PDF and editable source were not found in this checkout; synchronization remains pending. Exact next action remains review of section 5 metric definitions, mappings and period rules with the user, using the stories to bound the next milestone. Check Git for commit and push state.
 

@@ -1,6 +1,6 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.8
+Document revision: 0.10
 Last updated: 2026-10-28 Asia/Singapore
 Product status: early spike; SEC company search with unapproved test metrics, no release  
 Working name: AlphaQuant  
@@ -81,7 +81,7 @@ Business model is undecided. Begin with a limited pilot, not a payment platform.
 
 ### Proposed v1 scope for review
 
-[User_Stories.md](User_Stories.md) records the initial user stories US-01 through US-13 and their acceptance criteria, grouped into first working prototype, initial screener and usable pilot release. These are proposed scope for review, not approved release commitments or evidence of implementation. This proposal remains authoritative for requirements and decisions; metric definitions, supported fact mappings, period rules and release scope still require approval.
+[User_Stories.md](../requirements/User_Stories.md) records the initial user stories US-01 through US-13 and their acceptance criteria, grouped into first working prototype, initial screener and usable pilot release. These are proposed scope for review, not approved release commitments or evidence of implementation. This proposal remains authoritative for requirements and decisions; metric definitions, supported fact mappings, period rules and release scope still require approval.
 
 - Windows x64 first; retain cross-platform boundaries without claiming other OS support.
 - A small, explicitly bounded universe of US domestic non-financial companies using annual US-GAAP filing facts.
@@ -95,6 +95,14 @@ Candidates not yet placed in a release: per-company notes and recorded assumptio
 Out of v1: valuation analysis (DCF builder, peer valuation comparison, valuation multiples, terminal-value inputs, sensitivity analysis and base/bull/bear scenarios), price-dependent analytics, broad exchange coverage, real-time prices, price targets, backtesting, trading, recommendations, LLM analysis, bank/broker integrations, multi-user cloud collaboration, parameter simulations, and arbitrary custom formula execution. Valuation is a planned later phase (section 11).
 
 ## 5 Candidate financial analyses and correctness rules
+
+### Analyst decision-support workflow (proposed, AQ-D013)
+
+See the [financial analysis feature catalogue](../requirements/Financial_Analysis_Features.md) for feature IDs, dependencies, acceptance directions and proposed delivery stages.
+
+Purpose: help users compare stocks and form their own buy/hold/sell thesis, rather than stop at retrieving company facts. Candidates: user-selected comparable peers; side-by-side multi-year growth, profitability, capital efficiency, cash conversion, leverage and dilution; transparent screening; later price-dependent peer multiples and assumption-driven valuation ranges with bear/base/bull scenarios; qualitative thesis, catalysts, risks and invalidation conditions; saved research and change monitoring. Explain why peers and accounting periods are comparable, and retain sources, definitions and missing-data reasons. Financial-sector and other specialist models need separate scope.
+
+Status: discussion candidates only, not approved metrics, release commitments or an automated recommendation service. Distinguish user-authored conclusions from model outputs. Screening remains v1 and valuation remains later under AQ-D007/AQ-D009; price-dependent analysis needs a separately selected market-data provider. Suggested sequence: peer comparison and financial-quality review, then valuation/scenarios, then thesis monitoring. Next validation: agree the target analyst, investment horizon, supported universe and bounded comparison workflow; separately clarify whether the desired output is user decision support or app-generated recommendations before implementation.
 
 Validate these with prospective users before implementing them. They are examples that avoid requiring live price data.
 
@@ -169,12 +177,14 @@ src/
 tests/
   AlphaQuant.Tests/         Unit, provider, persistence and view-model tests
     Fixtures/              Small source-attributed synthetic/redacted test inputs
-docs/                      Product architecture and release documentation as needed
-AlphaQuant_Proposal.md
+docs/
+  product/                 Proposal, architecture, decisions and progress
+  requirements/            User stories and financial-analysis feature catalogue
+  development/             Developer/agent guidance and continuation context
 README.md
 ```
 
-This is a target layout. As of 2026-10-26 the Desktop, Core, Infrastructure and Tests projects exist as an SEC search spike; SQLite persistence, migrations and a `docs/` folder do not. Core must not depend on Avalonia or SQLite. Infrastructure implements the narrow contracts the workflows actually need. Desktop composes the application. Add projects only when independent responsibilities justify them; no generic repository framework or dependency injection container is required for its own sake.
+This is a target layout. As of 2026-10-26 the Desktop, Core, Infrastructure and Tests projects exist as an SEC search spike; SQLite persistence and migrations do not. The documentation folders were added on 2026-10-28. Core must not depend on Avalonia or SQLite. Infrastructure implements the narrow contracts the workflows actually need. Desktop composes the application. Add projects only when independent responsibilities justify them; no generic repository framework or dependency injection container is required for its own sake.
 
 All network and storage work must be asynchronous/cancellable or appropriately scheduled off the UI thread. Use bounded concurrency and progress reporting; a refresh must not freeze the interface. Avoid Task.Run around naturally asynchronous HTTP. Prefer a single coordinated local write path to prevent unnecessary SQLite contention.
 
@@ -310,6 +320,10 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Documentation update, 2026-10-28: revision 0.10 adds the proposed financial-analysis feature catalogue and classifies documents under docs/product, docs/requirements and docs/development. README is the only root documentation file. The feature catalogue is not implementation approval; v1 remains SEC-only screening. Next action: review FA-01 and approve a bounded comparison milestone and financial definitions. Documentation checks only; no application changes or new build/test evidence. The local PDF source was found, refreshed while retaining its private prefix, and regenerated in ignored docs/local; all 20 pages were visually inspected. Markdown links, unchanged story content, root document placement, ignore rules and whitespace were checked; no application build/tests run.
+
+Discussion update, 2026-10-28: revision 0.9 records proposed analyst comparison and decision-support capabilities in section 5 (AQ-D013). No implementation or financial definitions approved; existing v1 exclusions remain. Next discussion: agree the bounded peer-comparison workflow and clarify user-authored versus app-generated buy/hold/sell conclusions. No build/tests run for this documentation change. The local PDF has not been refreshed for this revision; source availability and synchronization remain pending.
+
 Documentation update, 2026-10-28: revision 0.8 adds a reference to `User_Stories.md` (US-01 through US-13), copied unchanged from the supplied stories on branch `docs/initial-user-stories`. The stories are proposed scope; no financial definition or release commitment was approved and no application behavior changed. Content was verified against the supplied text; build and tests were not rerun for this documentation-only update. The local PDF and editable source were not found in this checkout, so PDF synchronization remains pending.
 
 As of 2026-10-26: `main` holds this proposal, README, .gitignore and a placeholder desktop app (Avalonia 12.1.4 on .NET 10, SDK 10.0.403 pinned in `global.json`, solution `AlphaQuant.slnx`) with Home and Release Notes pages. The SEC search spike below was merged into `main` from branch `feat/sec-company-search` on 2026-10-26. The public source repository is https://github.com/minwaiphyo/AlphaQuant. No application deployment exists. The .NET SDK was installed per-user on the development machine, since it was missing.
@@ -328,6 +342,7 @@ Pending decisions: exact metrics, fiscal/coverage rules, who provides qualified 
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D013 2026-10-28 | Proposed | Explore a stock-comparison and analyst decision-support workflow: financial quality, valuation/scenarios in a later phase, and a user-authored thesis with risks and monitoring. Purpose: support the user's investment judgment beyond data retrieval. No automated recommendation policy, metrics or release scope approved. See section 5 for prerequisites and next validation. | User request for analyst-oriented functionality ideas. |
 | AQ-D012 2026-10-28 | Proposed | Record initial stories US-01 through US-13 in `User_Stories.md`, covering company selection, retrieval, metrics and provenance, screening, watchlists, offline review, accessibility, installation and feedback. Purpose: provide concrete user workflows and acceptance criteria for scope review. The groupings do not approve release contents or financial definitions. Next validation: review stories against the existing spike and approve metric definitions, mappings, period rules and bounded milestone scope. | User-supplied stories and request to save and reference them. |
 | AQ-D001 2026-10-25 | Approved | Use C# desktop option; use a maintainable desktop application stack. Avalonia is the intended UI direction from the accepted option. | Architecture decision. |
 | AQ-D002 2026-10-25 | Approved | Develop in tested, documented releases, with basic functionality and a few basic analyses in v1. | Release policy. |
@@ -346,6 +361,8 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-10-28 | Revision 0.10 on docs/analyst-workflow-candidates: added financial-analysis catalogue FA-01 to FA-07, classified documents, moved developer guidance and updated links/layout. Documentation checks passed; user stories unchanged; no application build/tests. Local private PDF/source refreshed and all pages visually inspected; private artifacts excluded from Git. | Approve bounded peer-comparison scope and financial definitions before implementation. |
+| 2026-10-28 | Recorded analyst workflow candidates in revision 0.9, section 5 and AQ-D013. Discussion/documentation only; no application changes or build/test run. Reference: CFA Institute, Equity Valuation: Applications and Processes (2026 reading). Local PDF regeneration pending; no editable source verified. | Agree bounded comparison scope, investment horizon and decision-output policy; synchronize local PDF. |
 | 2026-10-28 | Documentation on branch `docs/initial-user-stories`: added `User_Stories.md` with the supplied 13 stories unchanged; verified an exact content match. Proposal revision 0.8 references the stories as proposed scope (AQ-D012); updated the shared handoff. No code changed; no build or tests run. Local PDF and editable source not found in this checkout; no PDF regenerated. | Review stories and approve metric definitions, mappings and period rules; synchronize the local PDF when its source is available. |
 | 2026-10-26 | Handoff and research record. Reviewed data provider options (Yahoo Finance and Koyfin rejected; candidates listed in section 15) and a third-party agent-skill catalogue (LLMQuant/skills: not adopted, see AGENTS.md AQ-W004). Discussed skills useful for an enterprise-grade version; the user deferred writing any. Refreshed the handoff and revision 0.7. Documentation only; no code changed and no checks run for this entry. | Review test definitions; approve v1 metrics; arrange qualified finance review; CI. |
 | 2026-10-26 | Integration: the user reported running and checking the app against the live SEC; the agent did not observe the run and no values were reported. Branch `feat/sec-company-search` committed, pushed and fast-forward merged into `main`. Build and 128 tests were last run before this documentation-only change. | Review test definitions; approve v1 metrics; CI. |
