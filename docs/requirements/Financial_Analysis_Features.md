@@ -1,6 +1,6 @@
 # Financial Analysis Features
 
-Status: proposed feature catalogue for review, not approved implementation or release scope.  
+Status: proposed feature catalogue for review, not approved implementation or release scope.
 Updated: 2026-10-28
 
 ## Purpose and authority
