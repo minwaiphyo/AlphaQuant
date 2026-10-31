@@ -2,6 +2,7 @@ using AlphaQuant.Core;
 using AlphaQuant.Desktop.Services;
 using AlphaQuant.Infrastructure;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AlphaQuant.Desktop.ViewModels;
 
@@ -14,6 +15,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ReleaseNotesViewModel _releaseNotes;
     private readonly SearchViewModel _search;
     private readonly SettingsViewModel _settings;
+    public ComparisonViewModel Comparison { get; }
     private CompanyDetailViewModel? _detail;
     private ObservableObject? _settingsReturnPage;
 
@@ -32,13 +34,52 @@ public partial class MainWindowViewModel : ObservableObject
         _releaseNotes = new ReleaseNotesViewModel(ShowHome);
         _search = new SearchViewModel(directory, ShowCompany, ShowHome, OpenSettingsFromSearch);
         _settings = new SettingsViewModel(contactSettings, CloseSettings);
+        Comparison = new ComparisonViewModel(facts, linkOpener, ShowSearch, OpenSettingsFromComparison, ShowComparisonCompany);
+        _search.Workspace = Comparison;
+        _search.CompareAction = ShowComparison;
+        Comparison.SelectionChangedEvent += _search.UpdateSelection;
         _currentPage = _home;
     }
 
-    private void ShowHome() => CurrentPage = _home;
+    public bool IsHome => CurrentPage == _home;
+    public bool IsSearch => CurrentPage == _search || CurrentPage == _detail;
+    public bool IsComparison => CurrentPage == Comparison;
+    public bool IsSettings => CurrentPage == _settings;
+    public bool IsReleaseNotes => CurrentPage == _releaseNotes;
+    public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : "Release notes";
 
+    partial void OnCurrentPageChanging(ObservableObject value)
+    {
+        if (CurrentPage == Comparison && value != Comparison) Comparison.CancelLoading();
+        if (CurrentPage == _search && value != _search) _search.CancelLoading();
+        if (CurrentPage == _detail && value != _detail) _detail?.CancelLoading();
+    }
+    partial void OnCurrentPageChanged(ObservableObject value)
+    {
+        foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(PageTitle) }) OnPropertyChanged(name);
+    }
+    [RelayCommand] private void ShowHome() => CurrentPage = _home;
+    [RelayCommand]
+    private void ShowComparison()
+    {
+        if (!Comparison.CanCompare) { CurrentPage = Comparison; return; }
+        CurrentPage = Comparison;
+        _ = Comparison.EnsureLoadedAsync();
+    }
+    [RelayCommand] private void NavigateSettings() { if (!IsSettings) OpenSettings(CurrentPage); }
+    private void OpenSettingsFromComparison() => OpenSettings(Comparison);
+    private void ShowComparisonCompany(CompanyRef company, CompanyReport? report)
+    {
+        _detail = new CompanyDetailViewModel(company, _facts, _linkOpener, ShowComparison, OpenSettingsFromDetail);
+        CurrentPage = _detail;
+        if (report is not null) _detail.ShowReport(report);
+        else _ = _detail.LoadAsync();
+    }
+
+    [RelayCommand]
     private void ShowReleaseNotes() => CurrentPage = _releaseNotes;
 
+    [RelayCommand]
     private void ShowSearch()
     {
         _detail?.CancelLoading();
@@ -81,7 +122,11 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentPage = target;
 
         // Retry whatever setup was blocking, now that the contact may have changed.
-        if (ReferenceEquals(target, _search))
+        if (ReferenceEquals(target, Comparison))
+        {
+            _ = Comparison.LoadAsync(false, contactOnly: true);
+        }
+        else if (ReferenceEquals(target, _search))
         {
             _ = _search.EnsureLoadedAsync();
         }

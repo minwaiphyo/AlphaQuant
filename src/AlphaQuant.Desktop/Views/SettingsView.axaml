@@ -1,43 +1,68 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
-             x:Class="AlphaQuant.Desktop.Views.SettingsView"
-             x:DataType="vm:SettingsViewModel">
-    <DockPanel Margin="24">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16">
-            <Button Content="Back" Command="{Binding BackCommand}" />
-            <TextBlock Text="Settings" FontSize="24" VerticalAlignment="Center" />
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.SettingsView" x:DataType="vm:SettingsViewModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Spacing="22">
+      <TextBlock Text="Workspace / Data connections" Classes="muted small"/>
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="7">
+          <TextBlock Text="KEEP YOUR SOURCES CLEAR" Classes="eyebrow"/>
+          <TextBlock Text="Data connections" Classes="h1"/>
         </StackPanel>
-
-        <ScrollViewer Margin="0,16,0,0">
-            <StackPanel Spacing="12" MaxWidth="640" HorizontalAlignment="Left">
-                <TextBlock Text="SEC contact email" FontSize="18" FontWeight="SemiBold" />
-                <TextBlock TextWrapping="Wrap"
-                           Text="The SEC requires programs that download its data to identify themselves. AlphaQuant sends this email address to the SEC in the User-Agent header of each request, so use an address you monitor." />
-
-                <TextBox Text="{Binding Contact, Mode=TwoWay}"
-                         PlaceholderText="name@example.com"
-                         AutomationProperties.Name="SEC contact email">
-                    <TextBox.KeyBindings>
-                        <KeyBinding Gesture="Enter" Command="{Binding SaveCommand}" />
-                    </TextBox.KeyBindings>
-                </TextBox>
-
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Content="Save" Command="{Binding SaveCommand}" />
-                    <Button Content="Clear saved contact" Command="{Binding ClearSavedCommand}" />
+        <Button Grid.Column="1" Content="← Return to research" Command="{Binding BackCommand}" VerticalAlignment="Center"/>
+      </Grid>
+      <TextBlock Text="SEC filing evidence and market prices have separate connections. Your research stays in place while you manage setup." Classes="muted"/>
+      <Grid ColumnDefinitions="1.1*,*" ColumnSpacing="22">
+        <Border Classes="panel">
+          <StackPanel Spacing="16">
+            <TextBlock Text="SEC EDGAR" Classes="h2"/>
+            <TextBlock Text="FILING EVIDENCE" Classes="eyebrow"/>
+            <TextBlock Text="The SEC requires automated requests to identify themselves. Use a contact email you monitor; AlphaQuant sends it in the User-Agent header of each SEC request." Classes="muted"/>
+            <TextBlock Text="SEC contact email" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding Contact, Mode=TwoWay}" PlaceholderText="name@example.com" AutomationProperties.Name="SEC contact email">
+              <TextBox.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{Binding SaveCommand}"/>
+              </TextBox.KeyBindings>
+            </TextBox>
+            <WrapPanel>
+              <Button Content="Save" Classes="primary" Command="{Binding SaveCommand}" Margin="0,0,8,8"/>
+              <Button Content="Clear saved contact" Command="{Binding ClearSavedCommand}" Margin="0,0,0,8"/>
+            </WrapPanel>
+            <TextBlock Text="{Binding StatusMessage}" FontWeight="SemiBold" TextWrapping="Wrap" IsVisible="{Binding StatusMessage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Border Classes="notice">
+              <TextBlock Text="{Binding SourceText}" TextWrapping="Wrap"/>
+            </Border>
+            <TextBlock Text="Stored only on this computer:" Classes="muted small"/>
+            <TextBlock Text="{Binding SettingsFile}" Classes="muted small"/>
+            <TextBlock Text="This contact is separate from provider authentication. Missing or invalid contact blocks SEC requests." Classes="muted small"/>
+          </StackPanel>
+        </Border>
+        <StackPanel Grid.Column="1" Spacing="16">
+          <Border Classes="panel">
+            <StackPanel Spacing="13">
+              <TextBlock Text="Market-data providers" Classes="h2"/>
+              <TextBlock Text="PLANNED · NO ACTIVE CONNECTION" Classes="eyebrow"/>
+              <TextBlock Text="Bring your own eligible account when adapters are available. No in-app purchase or paid upgrade." Classes="muted"/>
+              <Border Classes="notice">
+                <StackPanel Spacing="7">
+                  <TextBlock Text="Alpaca" FontSize="17" FontWeight="SemiBold"/>
+                  <TextBlock Text="First planned adapter · Integration unavailable" Classes="warning small"/>
+                  <TextBlock Text="Basic / IEX is the initial free evaluation route. IEX has limited venue coverage; it is not the consolidated US market. Account access and permitted use need verification." Classes="muted small"/>
+                  <TextBlock Text="Authentication method pending: API key or browser authorization. No credentials are collected here." Classes="muted small"/>
                 </StackPanel>
-
-                <TextBlock Text="{Binding StatusMessage}"
-                           IsVisible="{Binding StatusMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                           TextWrapping="Wrap"
-                           FontWeight="SemiBold" />
-                <TextBlock Text="{Binding SourceText}" TextWrapping="Wrap" />
-
-                <TextBlock TextWrapping="Wrap" Opacity="0.7">
-                    <Run Text="Stored only on this computer in " /><Run Text="{Binding SettingsFile}" />
-                </TextBlock>
+              </Border>
+              <Border BorderBrush="{DynamicResource AqLine}" BorderThickness="1" CornerRadius="6" Padding="16">
+                <StackPanel Spacing="7">
+                  <TextBlock Text="Additional providers" FontWeight="SemiBold"/>
+                  <TextBlock Text="Planned · No additional vendor selected" Classes="warning small"/>
+                  <TextBlock Text="Future supported options may use free accounts or optional subscriptions users already own. No access or pricing is guaranteed." Classes="muted small"/>
+                </StackPanel>
+              </Border>
             </StackPanel>
-        </ScrollViewer>
-    </DockPanel>
+          </Border>
+          <Border Classes="notice">
+            <TextBlock Text="Financial results remain usable without a price connection. Prices, P/E and EV/sales stay unavailable until their supporting services are implemented." TextWrapping="Wrap"/>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
 </UserControl>

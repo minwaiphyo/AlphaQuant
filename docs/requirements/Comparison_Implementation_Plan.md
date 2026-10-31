@@ -66,7 +66,7 @@ Proposed cash policy excludes restricted cash and marketable securities unless s
 
 Run proportionate dotnet build/test commands from README after implementation when SDK is available; no current run claimed. Financial tests include currency/scope mismatch, overlapping periods, negative earnings, missing claim evidence, diluted versus outstanding shares, post-filing split mismatch and amendments. Stream tests include 401/403, 429/backoff, connection cap, stale/out-of-order data, malformed frames, corrections and cancellation. Credential tests avoid actual user vault/data unless explicitly planned and cleaned up. Preserve prior usable financial snapshots; no destructive cache reset as error recovery. Secret-store failure means session-only or explicit failure, never plaintext fallback. Errors show recovery actions without credentials.
 
-No application files, dependencies, credential stores or runtime settings changed during this planning work. No live access or actual finance review claimed. Local PDF synchronization is tracked separately.
+No application files, dependencies, credential stores or runtime settings changed during this planning work. No live access or actual finance review claimed.
 
 ## Approval needed before implementation
 
