@@ -1,7 +1,12 @@
 # Financial Analysis Features
 
-Status: proposed feature catalogue for review, not approved implementation or release scope.
+Current scope: SEC + per-user free Alpaca Basic IEX; zero-cost pilot; replaceable adapter; session-only credentials if API-key input is chosen. Authentication route and financial definitions remain undecided. Complex/unverifiable valuations may be unavailable. No trading. See [UI design brief](../development/UI_Design_Brief.md) and proposal revision 0.20 for current status. Older provider/budget/account-free statements below are dated review context, superseded where inconsistent with AQ-D018/AQ-D020/AQ-D021.
+
 Updated: 2026-10-28
+
+## Latest scope selection
+
+AQ-D014 (2026-10-28) brings fundamental and current-price valuation comparison into the first useful milestone and provider evaluation forward. Coverage: US domestic non-financial US-GAAP/USD issuers; five annual years where available, with clear gaps and comparability warnings. Selected candidates for definition review: revenue growth, operating margin, operating cash flow and debt/cash balances. Output: evidence supporting user-authored conclusions. Earlier phase labels below are superseded where they exclude all price-aware comparison; DCF/scenarios remain deferred. Provider, valuation measures, budget and implementation acceptance criteria remain open.
 
 ## Purpose and authority
 

@@ -12,8 +12,8 @@ Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business sc
 - Incremental, tested and documented releases.
 - Source-linked financial data and explicit calculation definitions.
 - Local processing and storage; start with one supported operating system.
-- Version 1 focuses on screening. Valuation analysis (such as DCF and scenarios) is a planned later phase.
-- SEC filings plus external data providers are the planned data sources; no provider is selected yet.
+- The next milestone direction combines fundamental comparison with current-price valuation; market-data providers will be evaluated now (AQ-D014). Definitions and implementation scope still need planning approval. DCF and scenarios remain later-phase candidates.
+- Selected direction: SEC EDGAR filing data plus Alpaca Basic IEX prices, using a replaceable market-data adapter. Pilot total incremental cost must be zero; no paid subscriptions. Users may connect their own eligible free Alpaca accounts (AQ-D020); integration, connection security and permitted app use remain pending.
 
 The precise analyses and release-one scope remain subject to scope review.
 
@@ -42,6 +42,10 @@ The tests use synthetic fixtures and never contact the SEC. Verified on Windows 
 
 Read [developer and agent guidance](docs/development/Agent_Guidance.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
 
+## UI design collaboration
+
+Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed analyses, proposed Alpaca connection fields, screens, fake-data examples and loading/error states. UI design can proceed with synthetic data; provider authentication and exact financial formulas remain pending. The UI teammate owns flows; coordinate shared contracts before production integration.
+
 ## Documentation
 
 | Category | Document | Purpose |
@@ -52,3 +56,9 @@ Read [developer and agent guidance](docs/development/Agent_Guidance.md) for deve
 | Development | [Developer and agent guidance](docs/development/Agent_Guidance.md) | Workflow rules and current handoff; read before working |
 
 Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.
+
+Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Alpaca integration and zero-cost pilot permissions remain pending.
+
+[Stage A provider and financial feasibility findings](docs/requirements/Provider_Feasibility_Review.md) record the conditional recommendation and unresolved pilot rights.
+
+[Connection and comparison implementation plan](docs/requirements/Comparison_Implementation_Plan.md) is a draft for scope review, not implemented behavior.
