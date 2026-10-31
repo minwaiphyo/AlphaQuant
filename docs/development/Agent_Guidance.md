@@ -41,10 +41,9 @@ Keep UI, calculations, ingestion and persistence responsibilities clear. Impleme
 ### Completion and synchronization
 
 1. Update sections 17 through 19 with completed work, actual verification, remaining issues and one exact next action. Add dated decision records for changed direction; update detailed requirements and README when affected.
-2. Keep the local PDF edition synchronized with `docs/product/AlphaQuant_Proposal.md` after substantive changes. Preserve any private-only prefix in its editable source, refresh the shared proposal content, regenerate the PDF and visually inspect every page. The local PDF and its source remain untracked; Git does not transfer them between laptops. A fresh checkout must still have complete shared project context in the tracked proposal and this guidance. Report unavailable local files or failed regeneration explicitly.
-3. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
-4. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
-5. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
+2. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
+3. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
+4. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
 
 ## Collaboration and environment
 
@@ -64,8 +63,10 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Workflow decisions
 
+- 2026-10-31: user removed local PDF synchronization from the documentation workflow. Maintain the tracked Markdown documents directly.
+
 - AQ-D005, 2026-10-25, superseded in document placement: shared context and continuation instructions were initially placed in proposal revision 0.4, with the local PDF synchronized.
-- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `docs/development/Agent_Guidance.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries and synchronize the untracked local PDF with software documentation changes.
+- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `docs/development/Agent_Guidance.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries.
 
 - AQ-W002, 2026-10-25, approved: prompt the user to switch to planning mode before implementing large, ambiguous or consequential changes; refine and accept the plan before implementation. Small, well-defined tasks and accepted plans proceed without repeated planning prompts.
 
@@ -75,9 +76,9 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
-- 2026-10-28: proposal revision 0.20 and planning work are prepared on docs/price-aware-comparison-scope for user-authorized push. Check Git for actual commit/push state. Start UI work at [UI_Design_Brief.md](UI_Design_Brief.md), then proposal sections 17-19; older software snapshots live in dated records.
-- User-selected direction: SEC + per-user free Alpaca Basic IEX, zero incremental pilot cost, replaceable market-data adapter, five annual years plus reviewed TTM and current P/E/EV-sales candidates. No trading or app-generated recommendations. Per-user accounts supersede account-free AQ-D019.
-- Session-only secrets and unavailable valuation for complex/unverifiable structures are approved. Authentication (API-key versus OAuth), exact financial mappings/definitions, eligibility/permitted use and implementation plan remain pending. API-key fields are proposed mockups, not an accepted integration. Do not persist secrets or claim imported keys are intrinsically read-only.
-- Teammate owns UI flows; prototype synthetic data without live providers or real credentials. Coordinate backend/view-model contracts before editing shared integration files. No subagents or teammate messages authorized by this handoff.
-- Existing app remains the SEC annual test-0 spike. No new application build/tests/live calls for the documentation changes; prior 128-test record is historical. Preserve root README-only document organization; full guidance lives here and is linked from README rather than automatically loaded as root AGENTS.md.
-- Exact next action: teammate prototypes data-connection/comparison/evidence states; jointly settle authentication and financial definitions before one accepted implementation increment. Local PDF/source refreshed for revision 0.20 with private prefix retained; regenerated PDF visually inspected on every page and kept ignored. Public documentation link/structure, unchanged-story and diff/privacy checks passed.
+- 2026-10-31: accepted native app UI plan executed on `feat/desktop-research-ui` (AQ-D022, proposal 0.21). User explicitly rejected a standalone prototype and chose existing real SEC annual data; implement no production synthetic-data mode. New shell/themes, peer selection, comparison, numeric filters/sorting, evidence panel and restyled existing screens live in Desktop. Core/Infrastructure calculations and source interfaces remain unchanged. New backend capabilities and provider connections are explicitly unavailable.
+- User initially requested uncommitted changes for manual verification, then explicitly authorized committing and pushing `feat/desktop-research-ui`. That authorization supersedes the earlier hold. Tests rerun before commit: 144 passed. Check Git for the exact commit and remote synchronization state. Exact next action: review the published branch before any merge; merge/release is not authorized.
+- Current checks: solution build clean (0 warnings/errors), 144 tests pass (128 existing + 16 new), native window fixture-only checks at 1440×900/1000×800 in light/dark. Optional build-statistics logging is bypassed using `-p:UsedAvaloniaProducts=` because its log lies outside permitted write paths. Native screenshots and harness under ignored `artifacts/ui-check`; these use fake sources and isolated settings, never real SEC/Alpaca or the user's settings. No live data verification claimed.
+- Session-only peers/themes/filter state; existing SEC contact storage remains working. Authentication, expanded financial definitions, five-year/TTM/valuation and provider eligibility remain pending. Do not collect provider credentials or relabel existing net margin/current assets/current liabilities as operating margin/cash/debt. No subagents or teammate messages authorized.
+- Wednesday's navy/teal screener design was used as a visual reference from local Git history; deleted prototype branches/files were not restored to the deliverable. No browser prototype or UI framework added. Preserve root README-only documentation organization.
+- Shared project context remains complete in tracked Markdown.

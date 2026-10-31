@@ -2,7 +2,7 @@
 
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
-**Status:** early spike. The app can search SEC-listed companies and show test metrics, but the metric definitions are not approved and there is no installer or release yet.
+**Status:** early spike with a native research workspace. Search SEC-listed companies, select two to five peers, compare supported annual facts/test metrics and inspect filing evidence. Metric definitions remain unapproved; there is no installer or release yet.
 
 Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 
@@ -28,7 +28,13 @@ dotnet run --project src/AlphaQuant.Desktop
 
 The SEC requires programs that download its data to identify themselves, so the app needs a working contact email. Open **Settings**, enter your email and press **Save**. It applies to the next request without a restart, is sent to the SEC in the User-Agent header, and is stored only on your computer in `%LOCALAPPDATA%\AlphaQuant\settings.json` (never in the repository). If nothing is saved, the `AQ_SEC_CONTACT` environment variable is used instead. With neither, the app shows a setup message and makes no SEC requests.
 
-Then choose **Search Companies**, type a ticker or name (for example `AAPL`), and select a result to see the latest annual revenue, net income, current assets and current liabilities with their SEC filing, plus revenue growth, net profit margin and current ratio. Those three metrics use test definitions (version `test-0`) and are not approved metrics. Downloaded SEC data is cached under `%LOCALAPPDATA%\AlphaQuant\cache\sec`.
+Choose **Choose companies**, search a ticker or name, and use **Add +** to select two to five peers. **Details** retains the single-company filing view. **Compare companies** opens a company-row grid with **Test metrics** (revenue growth, net profit margin, current ratio) and **Reported facts** (revenue, net income with its reported scope, current assets and current liabilities). These are existing annual test definitions (`test-0`), not approved metrics.
+
+Use **+ Add filter** to apply numeric conditions; all conditions must match. Remove individual chips or clear filters. Sorting works through the column headers or sort selector; missing values stay last. Click a value for its inputs, periods, warnings and actual SEC filing links. Escape closes the evidence panel and restores focus. Fiscal reporting periods can differ between companies.
+
+Selections, search, filters, sorting and loaded reports stay in memory while navigating, including returns from **Data connections**. **Reload data** uses the existing cache policy and retries failures; it does not force a fresh download. Cancel or a failed reload retains previous usable snapshots with explicit status. Downloaded SEC data is cached under `%LOCALAPPDATA%\AlphaQuant\cache\sec`.
+
+Appearance follows the system by default; choose Light or Dark in the header. Appearance and peer-workspace state are session-only. TTM, five-year history, new financial metrics, market-provider authentication, live prices and valuation remain unavailable. Alpaca and additional provider options are labelled planned; the app does not collect provider credentials.
 
 ## Test
 
@@ -44,7 +50,7 @@ Read [developer and agent guidance](docs/development/Agent_Guidance.md) for deve
 
 ## UI design collaboration
 
-Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed analyses, proposed Alpaca connection fields, screens, fake-data examples and loading/error states. UI design can proceed with synthetic data; provider authentication and exact financial formulas remain pending. The UI teammate owns flows; coordinate shared contracts before production integration.
+The [UI design brief](docs/development/UI_Design_Brief.md) records the broader target. The accepted native UI increment (AQ-D022) uses the existing real SEC data path and existing test metrics; it does not add a production demo mode. Provider authentication and expanded financial definitions remain pending.
 
 ## Documentation
 

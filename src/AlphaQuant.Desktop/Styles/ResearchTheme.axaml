@@ -1,0 +1,139 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="AqBackground">#F5F7FA</SolidColorBrush>
+          <SolidColorBrush x:Key="AqSurface">#FFFFFF</SolidColorBrush>
+          <SolidColorBrush x:Key="AqSubtle">#F8FAFC</SolidColorBrush>
+          <SolidColorBrush x:Key="AqText">#192B3C</SolidColorBrush>
+          <SolidColorBrush x:Key="AqMuted">#5F6F80</SolidColorBrush>
+          <SolidColorBrush x:Key="AqLine">#E1E7ED</SolidColorBrush>
+          <SolidColorBrush x:Key="AqAccent">#087B75</SolidColorBrush>
+          <SolidColorBrush x:Key="AqTint">#E9F6F3</SolidColorBrush>
+          <SolidColorBrush x:Key="AqOnAccent">#FFFFFF</SolidColorBrush>
+          <SolidColorBrush x:Key="AqWarning">#895519</SolidColorBrush>
+          <SolidColorBrush x:Key="AqWarningBackground">#FFF4DF</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="AqBackground">#0E1824</SolidColorBrush>
+          <SolidColorBrush x:Key="AqSurface">#152231</SolidColorBrush>
+          <SolidColorBrush x:Key="AqSubtle">#192938</SolidColorBrush>
+          <SolidColorBrush x:Key="AqText">#E0EAF3</SolidColorBrush>
+          <SolidColorBrush x:Key="AqMuted">#A0B0C1</SolidColorBrush>
+          <SolidColorBrush x:Key="AqLine">#2C3D4E</SolidColorBrush>
+          <SolidColorBrush x:Key="AqAccent">#68D5C4</SolidColorBrush>
+          <SolidColorBrush x:Key="AqTint">#193B3B</SolidColorBrush>
+          <SolidColorBrush x:Key="AqOnAccent">#102329</SolidColorBrush>
+          <SolidColorBrush x:Key="AqWarning">#F0C37B</SolidColorBrush>
+          <SolidColorBrush x:Key="AqWarningBackground">#3B3022</SolidColorBrush>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource AqBackground}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqText}"/>
+    <Setter Property="FontFamily" Value="avares://Avalonia.Fonts.Inter/Assets#Inter"/>
+    <Setter Property="FontSize" Value="13"/>
+  </Style>
+  <Style Selector="TextBlock.h1">
+    <Setter Property="FontSize" Value="30"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style Selector="TextBlock.h2">
+    <Setter Property="FontSize" Value="19"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style Selector="TextBlock.eyebrow">
+    <Setter Property="FontSize" Value="10"/>
+    <Setter Property="LetterSpacing" Value="1.6"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqAccent}"/>
+  </Style>
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground" Value="{DynamicResource AqMuted}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="TextBlock.small">
+    <Setter Property="FontSize" Value="11"/>
+  </Style>
+  <Style Selector="TextBlock.warning">
+    <Setter Property="Foreground" Value="{DynamicResource AqWarning}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="Border.panel">
+    <Setter Property="Background" Value="{DynamicResource AqSurface}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource AqLine}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="9"/>
+    <Setter Property="Padding" Value="22"/>
+  </Style>
+  <Style Selector="Border.notice">
+    <Setter Property="Background" Value="{DynamicResource AqTint}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="16"/>
+  </Style>
+  <Style Selector="Button">
+    <Setter Property="Background" Value="{DynamicResource AqSurface}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqText}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource AqLine}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="13,9"/>
+    <Setter Property="MinHeight" Value="36"/>
+  </Style>
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{DynamicResource AqAccent}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqOnAccent}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style Selector="Button.nav">
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="#BDCBD9"/>
+    <Setter Property="Padding" Value="14,13"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+  <Style Selector="Button.nav.active">
+    <Setter Property="Background" Value="#274054"/>
+    <Setter Property="Foreground" Value="#80DFCD"/>
+  </Style>
+  <Style Selector="Button.nav:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#274054"/>
+    <Setter Property="Foreground" Value="#E0EAF3"/>
+  </Style>
+  <Style Selector="Button.metric">
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="FontFeatures" Value="tnum"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqAccent}"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+    <Setter Property="Padding" Value="0,6"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style Selector="TextBox">
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="MinHeight" Value="38"/>
+  </Style>
+  <Style Selector="ComboBox">
+    <Setter Property="Background" Value="{DynamicResource AqSurface}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource AqLine}"/>
+    <Setter Property="CornerRadius" Value="5"/>
+  </Style>
+  <Style Selector="Button.view-tab.active">
+    <Setter Property="Background" Value="{DynamicResource AqTint}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqAccent}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource AqAccent}"/>
+  </Style>
+  <Style Selector="Button.column-header">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="MinHeight" Value="20"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="FontSize" Value="10"/>
+    <Setter Property="Foreground" Value="{DynamicResource AqMuted}"/>
+  </Style>
+</Styles>

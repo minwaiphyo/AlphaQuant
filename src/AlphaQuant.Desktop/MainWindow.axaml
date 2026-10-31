@@ -1,30 +1,67 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
-        xmlns:views="using:AlphaQuant.Desktop.Views"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="AlphaQuant.Desktop.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Title="AlphaQuant">
-    <Window.DataTemplates>
-        <DataTemplate DataType="vm:HomeViewModel">
-            <views:HomeView />
-        </DataTemplate>
-        <DataTemplate DataType="vm:ReleaseNotesViewModel">
-            <views:ReleaseNotesView />
-        </DataTemplate>
-        <DataTemplate DataType="vm:SettingsViewModel">
-            <views:SettingsView />
-        </DataTemplate>
-        <DataTemplate DataType="vm:SearchViewModel">
-            <views:SearchView />
-        </DataTemplate>
-        <DataTemplate DataType="vm:CompanyDetailViewModel">
-            <views:CompanyDetailView />
-        </DataTemplate>
-    </Window.DataTemplates>
-
-    <ContentControl Content="{Binding CurrentPage}" />
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:views="using:AlphaQuant.Desktop.Views" x:Class="AlphaQuant.Desktop.MainWindow" x:DataType="vm:MainWindowViewModel" Title="AlphaQuant" Width="1440" Height="900" MinWidth="900" MinHeight="720">
+  <Window.DataTemplates>
+    <DataTemplate DataType="vm:HomeViewModel">
+      <views:HomeView/>
+    </DataTemplate>
+    <DataTemplate DataType="vm:SearchViewModel">
+      <views:SearchView/>
+    </DataTemplate>
+    <DataTemplate DataType="vm:CompanyDetailViewModel">
+      <views:CompanyDetailView/>
+    </DataTemplate>
+    <DataTemplate DataType="vm:SettingsViewModel">
+      <views:SettingsView/>
+    </DataTemplate>
+    <DataTemplate DataType="vm:ReleaseNotesViewModel">
+      <views:ReleaseNotesView/>
+    </DataTemplate>
+    <DataTemplate DataType="vm:ComparisonViewModel">
+      <views:ComparisonView/>
+    </DataTemplate>
+  </Window.DataTemplates>
+  <Grid RowDefinitions="72,*,42" ColumnDefinitions="196,*">
+    <Border Grid.ColumnSpan="2" Background="{DynamicResource AqSurface}" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="26,0">
+        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+          <Border Background="{DynamicResource AqAccent}" CornerRadius="8" Width="34" Height="34">
+            <TextBlock Text="α" FontSize="29" Foreground="{DynamicResource AqOnAccent}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <TextBlock Text="AlphaQuant" FontSize="21" FontWeight="SemiBold" VerticalAlignment="Center"/>
+        </StackPanel>
+        <TextBlock Grid.Column="1" Text="{Binding PageTitle}" Classes="muted small" Margin="30,0" VerticalAlignment="Center"/>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <TextBlock Text="Appearance" Classes="muted small" VerticalAlignment="Center"/>
+          <ComboBox x:Name="AppearanceSelector" SelectedIndex="0" SelectionChanged="AppearanceChanged" AutomationProperties.Name="Appearance" MinWidth="100">
+            <ComboBoxItem Content="System"/>
+            <ComboBoxItem Content="Light"/>
+            <ComboBoxItem Content="Dark"/>
+          </ComboBox>
+        </StackPanel>
+      </Grid>
+    </Border>
+    <Border Grid.Row="1" Grid.RowSpan="2" Background="#13283D">
+      <DockPanel Margin="14,30,14,24">
+        <StackPanel DockPanel.Dock="Bottom" Spacing="7" Margin="10,20,0,0">
+          <TextBlock Text="●  Local research workspace" Foreground="#80DFCD" FontSize="10"/>
+          <TextBlock Text="SEC filing evidence" Foreground="#A5B7C8" FontSize="10" Margin="12,0,0,0"/>
+        </StackPanel>
+        <StackPanel Spacing="5">
+          <TextBlock Text="WORKSPACE" Foreground="#9BACBF" FontSize="10" LetterSpacing="1.6" Margin="14,0,0,16"/>
+          <Button Content="⌂   Overview" Classes="nav" Classes.active="{Binding IsHome}" Command="{Binding ShowHomeCommand}"/>
+          <Button Content="⊞   Choose companies" Classes="nav" Classes.active="{Binding IsSearch}" Command="{Binding ShowSearchCommand}"/>
+          <Button Content="⇄   Comparison" Classes="nav" Classes.active="{Binding IsComparison}" Command="{Binding ShowComparisonCommand}"/>
+          <TextBlock Text="PREFERENCES" Foreground="#9BACBF" FontSize="10" LetterSpacing="1.6" Margin="14,30,0,12"/>
+          <Button Content="⚙   Data connections" Classes="nav" Classes.active="{Binding IsSettings}" Command="{Binding NavigateSettingsCommand}"/>
+          <Button Content="○   Release notes" Classes="nav" Classes.active="{Binding IsReleaseNotes}" Command="{Binding ShowReleaseNotesCommand}"/>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentPage}" Margin="28,24,28,16"/>
+    <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource AqSurface}" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,1,0,0" Padding="28,0">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="●  SEC annual data · Test definitions (test-0)" Classes="muted small" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Text="Research tool · No live market feed" Classes="muted small" VerticalAlignment="Center"/>
+      </Grid>
+    </Border>
+  </Grid>
 </Window>
