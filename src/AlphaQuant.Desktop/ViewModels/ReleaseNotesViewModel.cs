@@ -23,8 +23,11 @@ public partial class ReleaseNotesViewModel : ObservableObject
     [
         new ReleaseNoteEntry(
             "Unreleased",
-            "2026-10-31",
+            "2026-11-01",
             [
+                "Financial analysis now consumes comparison-1 annual/TTM results with source evidence and peer summaries.",
+                "Browser OAuth, symbol access testing, session-only reviewed valuation inputs and optional IEX streaming are integrated; registration and live verification remain pending.",
+                "Self-contained Windows preview packaging and CI are available; binaries remain unsigned.",
                 "Native research workspace with system/light/dark appearance and persistent navigation.",
                 "Select two to five peers, compare annual results, add numeric filters, sort, and inspect source evidence.",
                 "Search SEC-listed companies by ticker or name and view the latest annual revenue, net income and current assets and liabilities.",

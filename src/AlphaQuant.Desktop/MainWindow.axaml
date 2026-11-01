@@ -1,5 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:views="using:AlphaQuant.Desktop.Views" x:Class="AlphaQuant.Desktop.MainWindow" x:DataType="vm:MainWindowViewModel" Title="AlphaQuant" Width="1440" Height="900" MinWidth="900" MinHeight="720">
   <Window.DataTemplates>
+    <DataTemplate DataType="vm:FinancialAnalysisViewModel">
+      <views:FinancialAnalysisView/>
+    </DataTemplate>
     <DataTemplate DataType="vm:HomeViewModel">
       <views:HomeView/>
     </DataTemplate>
@@ -50,6 +53,7 @@
           <Button Content="⌂   Overview" Classes="nav" Classes.active="{Binding IsHome}" Command="{Binding ShowHomeCommand}"/>
           <Button Content="⊞   Choose companies" Classes="nav" Classes.active="{Binding IsSearch}" Command="{Binding ShowSearchCommand}"/>
           <Button Content="⇄   Comparison" Classes="nav" Classes.active="{Binding IsComparison}" Command="{Binding ShowComparisonCommand}"/>
+          <Button Content="Financial analysis" Classes="nav" Command="{Binding ShowAnalysisCommand}"/>
           <TextBlock Text="PREFERENCES" Foreground="#9BACBF" FontSize="10" LetterSpacing="1.6" Margin="14,30,0,12"/>
           <Button Content="⚙   Data connections" Classes="nav" Classes.active="{Binding IsSettings}" Command="{Binding NavigateSettingsCommand}"/>
           <Button Content="○   Release notes" Classes="nav" Classes.active="{Binding IsReleaseNotes}" Command="{Binding ShowReleaseNotesCommand}"/>
@@ -59,8 +63,8 @@
     <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentPage}" Margin="28,24,28,16"/>
     <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource AqSurface}" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,1,0,0" Padding="28,0">
       <Grid ColumnDefinitions="*,Auto">
-        <TextBlock Text="●  SEC annual data · Test definitions (test-0)" Classes="muted small" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="1" Text="Research tool · No live market feed" Classes="muted small" VerticalAlignment="Center"/>
+        <TextBlock Text="●  SEC filing evidence · Inspect metric definition" Classes="muted small" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Text="Research tool · Per-user market access" Classes="muted small" VerticalAlignment="Center"/>
       </Grid>
     </Border>
   </Grid>

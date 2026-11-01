@@ -9,6 +9,7 @@ public partial class SettingsViewModel : ObservableObject
 {
     private readonly ContactSettings _settings;
     private readonly Action _back;
+    public MarketConnectionViewModel? Market { get; set; }
 
     public SettingsViewModel(ContactSettings settings, Action back)
     {

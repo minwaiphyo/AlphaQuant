@@ -2,7 +2,7 @@
 
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
-**Status:** Native SEC research UI plus an implemented browser-OAuth/IEX/comparison backend. The backend is verified with synthetic/fake-provider tests; The UI supports two-to-five-company annual test-0 comparisons, numeric filters/sorting, evidence panels and system/light/dark themes. The comparison-1 backend is not wired to these screens yet. OAuth registration, hosting and live validation are pending. No installer or release.
+**Status:** Integrated Windows preview candidate: SEC company selection, annual test-0 workspace and comparison-1 peer summaries/history/TTM/source evidence. Browser OAuth and IEX streaming are wired with session-only tokens and explicit access tests. Reviewed valuation inputs can be loaded for the session; missing or invalid evidence remains unavailable. OAuth registration/HTTPS deployment, trusted distribution and live verification are still required for a connected pilot.
 
 Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 
@@ -57,7 +57,7 @@ Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed
 
 Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.
 
-Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Backend integration exists; deployed OAuth setup, UI wiring and permitted pilot access remain pending.
+Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Backend integration exists; deployed OAuth setup, live acceptance and permitted pilot access remain pending.
 
 [Stage A provider and financial feasibility findings](docs/requirements/Provider_Feasibility_Review.md) record the conditional recommendation and unresolved pilot rights.
 
@@ -72,3 +72,7 @@ See [registration, no-cost preview hosting and UI composition](docs/development/
 Verified on 2026-10-28 using SDK 10.0.403: solution build succeeded with zero warnings/errors; 170 tests passed without live SEC/Alpaca calls. Loopback broker HTTP smoke checks passed. Docker deployment, real browser consent, real IEX prices, real-filing/independent finance review and end-user screen integration remain unverified.
 
 The native UI milestone is tracked as AQ-D023. Browser OAuth and the comparison-1 baseline remain AQ-D022. See PR #16 for UI review; backend PR #17 is merged. Current combined verification: 186 synthetic/fake-provider tests pass; full solution builds without warnings or errors. No live provider or rendered-UI validation was performed during reconciliation.
+
+## First preview
+
+Read [First preview setup, limitations and reviewed evidence schema](docs/development/First_Preview.md). Build a self-contained Windows ZIP with powershell -File tools/Publish-Preview.ps1. No SDK is needed on the receiving PC; the unsigned build may still be blocked by Windows policy. Do not disable security controls. Set the public AQ_OAUTH_BROKER_ORIGIN environment variable before launch to enable browser connection after the operator has registered/deployed the broker.

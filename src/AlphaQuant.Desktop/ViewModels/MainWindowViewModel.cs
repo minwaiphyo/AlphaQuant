@@ -16,6 +16,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly SearchViewModel _search;
     private readonly SettingsViewModel _settings;
     public ComparisonViewModel Comparison { get; }
+    public FinancialAnalysisViewModel? Analysis { get; }
+    public MarketConnectionViewModel? Market { get; }
     private CompanyDetailViewModel? _detail;
     private ObservableObject? _settingsReturnPage;
 
@@ -26,7 +28,7 @@ public partial class MainWindowViewModel : ObservableObject
         ICompanyDirectory directory,
         ICompanyFactsSource facts,
         ContactSettings contactSettings,
-        ILinkOpener linkOpener)
+        ILinkOpener linkOpener, IResearchBackend? research = null, ReviewedEvidenceStore? evidence = null)
     {
         _facts = facts;
         _linkOpener = linkOpener;
@@ -35,6 +37,13 @@ public partial class MainWindowViewModel : ObservableObject
         _search = new SearchViewModel(directory, ShowCompany, ShowHome, OpenSettingsFromSearch);
         _settings = new SettingsViewModel(contactSettings, CloseSettings);
         Comparison = new ComparisonViewModel(facts, linkOpener, ShowSearch, OpenSettingsFromComparison, ShowComparisonCompany);
+        if (research is not null)
+        {
+            Analysis = new FinancialAnalysisViewModel(research, linkOpener, ShowComparison, () => OpenSettings(Analysis!));
+            Market = new MarketConnectionViewModel(research, () => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Ticker)), evidence);
+            Market.Disconnected += Analysis.StopWatching;
+            _settings.Market = Market;
+        }
         _search.Workspace = Comparison;
         _search.CompareAction = ShowComparison;
         Comparison.SelectionChangedEvent += _search.UpdateSelection;
@@ -43,7 +52,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool IsHome => CurrentPage == _home;
     public bool IsSearch => CurrentPage == _search || CurrentPage == _detail;
-    public bool IsComparison => CurrentPage == Comparison;
+    public bool IsComparison => CurrentPage == Comparison || (Analysis is not null && CurrentPage == Analysis);
     public bool IsSettings => CurrentPage == _settings;
     public bool IsReleaseNotes => CurrentPage == _releaseNotes;
     public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : "Release notes";
@@ -51,6 +60,8 @@ public partial class MainWindowViewModel : ObservableObject
     partial void OnCurrentPageChanging(ObservableObject value)
     {
         if (CurrentPage == Comparison && value != Comparison) Comparison.CancelLoading();
+        if (CurrentPage == _settings && value != _settings) Market?.CancelCommand.Execute(null);
+        if (Analysis is not null && CurrentPage == Analysis && value != Analysis) Analysis.StopWatching();
         if (CurrentPage == _search && value != _search) _search.CancelLoading();
         if (CurrentPage == _detail && value != _detail) _detail?.CancelLoading();
     }
@@ -59,6 +70,15 @@ public partial class MainWindowViewModel : ObservableObject
         foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(PageTitle) }) OnPropertyChanged(name);
     }
     [RelayCommand] private void ShowHome() => CurrentPage = _home;
+    [RelayCommand]
+    private void ShowAnalysis()
+    {
+        if (Analysis is null) return;
+        Comparison.CancelLoading();
+        CurrentPage = Analysis;
+        _ = Analysis.LoadAsync(System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Company)));
+    }
+    public void Shutdown() { Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); }
     [RelayCommand]
     private void ShowComparison()
     {
@@ -122,7 +142,8 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentPage = target;
 
         // Retry whatever setup was blocking, now that the contact may have changed.
-        if (ReferenceEquals(target, Comparison))
+        if (Analysis is not null && ReferenceEquals(target, Analysis)) ShowAnalysis();
+        else if (ReferenceEquals(target, Comparison))
         {
             _ = Comparison.LoadAsync(false, contactOnly: true);
         }
