@@ -46,7 +46,7 @@
                   <TextBlock Text="Alpaca" FontSize="17" FontWeight="SemiBold"/>
                   <TextBlock Text="First planned adapter · Integration unavailable" Classes="warning small"/>
                   <TextBlock Text="Basic / IEX is the initial free evaluation route. IEX has limited venue coverage; it is not the consolidated US market. Account access and permitted use need verification." Classes="muted small"/>
-                  <TextBlock Text="Authentication method pending: API key or browser authorization. No credentials are collected here." Classes="muted small"/>
+                  <TextBlock Text="Browser OAuth selected. Connection setup is pending UI integration and OAuth broker configuration; no credentials are collected here." Classes="muted small"/>
                 </StackPanel>
               </Border>
               <Border BorderBrush="{DynamicResource AqLine}" BorderThickness="1" CornerRadius="6" Padding="16">

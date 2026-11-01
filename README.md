@@ -2,7 +2,7 @@
 
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
-**Status:** early spike with a native research workspace. Search SEC-listed companies, select two to five peers, compare supported annual facts/test metrics and inspect filing evidence. Metric definitions remain unapproved; there is no installer or release yet.
+**Status:** Native SEC research UI plus an implemented browser-OAuth/IEX/comparison backend. The backend is verified with synthetic/fake-provider tests; The UI supports two-to-five-company annual test-0 comparisons, numeric filters/sorting, evidence panels and system/light/dark themes. The comparison-1 backend is not wired to these screens yet. OAuth registration, hosting and live validation are pending. No installer or release.
 
 Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 
@@ -12,8 +12,8 @@ Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business sc
 - Incremental, tested and documented releases.
 - Source-linked financial data and explicit calculation definitions.
 - Local processing and storage; start with one supported operating system.
-- The next milestone direction combines fundamental comparison with current-price valuation; market-data providers will be evaluated now (AQ-D014). Definitions and implementation scope still need planning approval. DCF and scenarios remain later-phase candidates.
-- Selected direction: SEC EDGAR filing data plus Alpaca Basic IEX prices, using a replaceable market-data adapter. Pilot total incremental cost must be zero; no paid subscriptions. Users may connect their own eligible free Alpaca accounts (AQ-D020); integration, connection security and permitted app use remain pending.
+- First comparison backend combines fundamental history/current TTM with guarded P/E and EV/sales under the finalized comparison-1 baseline. DCF/scenarios remain deferred.
+- Selected direction: SEC EDGAR filing data plus Alpaca Basic IEX prices, using a replaceable market-data adapter. Pilot total incremental cost must be zero; no paid subscriptions. Users connect their own eligible free Alpaca accounts through browser OAuth (AQ-D022); a small server-side token broker protects the application secret. Registration/deployment/permitted use and live checks remain pending.
 
 The precise analyses and release-one scope remain subject to scope review.
 
@@ -28,13 +28,7 @@ dotnet run --project src/AlphaQuant.Desktop
 
 The SEC requires programs that download its data to identify themselves, so the app needs a working contact email. Open **Settings**, enter your email and press **Save**. It applies to the next request without a restart, is sent to the SEC in the User-Agent header, and is stored only on your computer in `%LOCALAPPDATA%\AlphaQuant\settings.json` (never in the repository). If nothing is saved, the `AQ_SEC_CONTACT` environment variable is used instead. With neither, the app shows a setup message and makes no SEC requests.
 
-Choose **Choose companies**, search a ticker or name, and use **Add +** to select two to five peers. **Details** retains the single-company filing view. **Compare companies** opens a company-row grid with **Test metrics** (revenue growth, net profit margin, current ratio) and **Reported facts** (revenue, net income with its reported scope, current assets and current liabilities). These are existing annual test definitions (`test-0`), not approved metrics.
-
-Use **+ Add filter** to apply numeric conditions; all conditions must match. Remove individual chips or clear filters. Sorting works through the column headers or sort selector; missing values stay last. Click a value for its inputs, periods, warnings and actual SEC filing links. Escape closes the evidence panel and restores focus. Fiscal reporting periods can differ between companies.
-
-Selections, search, filters, sorting and loaded reports stay in memory while navigating, including returns from **Data connections**. **Reload data** uses the existing cache policy and retries failures; it does not force a fresh download. Cancel or a failed reload retains previous usable snapshots with explicit status. Downloaded SEC data is cached under `%LOCALAPPDATA%\AlphaQuant\cache\sec`.
-
-Appearance follows the system by default; choose Light or Dark in the header. Appearance and peer-workspace state are session-only. TTM, five-year history, new financial metrics, market-provider authentication, live prices and valuation remain unavailable. Alpaca and additional provider options are labelled planned; the app does not collect provider credentials.
+Then choose **Search Companies**, type a ticker or name (for example `AAPL`), and select a result to see the latest annual revenue, net income, current assets and current liabilities with their SEC filing, plus revenue growth, net profit margin and current ratio. Those three metrics use test definitions (version `test-0`) and are not approved metrics. Downloaded SEC data is cached under `%LOCALAPPDATA%\AlphaQuant\cache\sec`.
 
 ## Test
 
@@ -50,7 +44,7 @@ Read [developer and agent guidance](docs/development/Agent_Guidance.md) for deve
 
 ## UI design collaboration
 
-The [UI design brief](docs/development/UI_Design_Brief.md) records the broader target. The accepted native UI increment (AQ-D022) uses the existing real SEC data path and existing test metrics; it does not add a production demo mode. Provider authentication and expanded financial definitions remain pending.
+Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed analyses, browser-OAuth connection flow, screens, fake-data examples and loading/error states. UI integration can use the implemented ComparisonBackend facade with synthetic data; browser OAuth is selected and comparison-1 is finalized for implementation. Live setup and external finance review remain pending. The UI teammate owns flows; coordinate shared contracts before production integration.
 
 ## Documentation
 
@@ -63,8 +57,18 @@ The [UI design brief](docs/development/UI_Design_Brief.md) records the broader t
 
 Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.
 
-Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Alpaca integration and zero-cost pilot permissions remain pending.
+Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Backend integration exists; deployed OAuth setup, UI wiring and permitted pilot access remain pending.
 
 [Stage A provider and financial feasibility findings](docs/requirements/Provider_Feasibility_Review.md) record the conditional recommendation and unresolved pilot rights.
 
-[Connection and comparison implementation plan](docs/requirements/Comparison_Implementation_Plan.md) is a draft for scope review, not implemented behavior.
+[Connection/comparison plan](docs/requirements/Comparison_Implementation_Plan.md) retains the planning history; current implemented contracts and pending work are in the [OAuth/UI setup guide](docs/development/Alpaca_OAuth_Setup.md) and [comparison-1 definitions](docs/requirements/Financial_Definitions.md).
+
+## New comparison backend
+
+`ComparisonBackend` (Infrastructure) combines an injected SEC fact source, browser OAuth, access testing, one IEX stream and two-to-five-company snapshots. The UI teammate can consume it without changing provider/calculation logic in views. No Desktop source files were changed for this backend increment. Historical cash facts can display directly; debt, P/E and EV/sales require the explicit review evidence described in the definitions.
+
+See [registration, no-cost preview hosting and UI composition](docs/development/Alpaca_OAuth_Setup.md). Nothing has been deployed. The broker runs with server-side configuration using `dotnet run --project src/AlphaQuant.OAuthBroker`; running the Desktop alone does not expose the new flow yet.
+
+Verified on 2026-10-28 using SDK 10.0.403: solution build succeeded with zero warnings/errors; 170 tests passed without live SEC/Alpaca calls. Loopback broker HTTP smoke checks passed. Docker deployment, real browser consent, real IEX prices, real-filing/independent finance review and end-user screen integration remain unverified.
+
+The native UI milestone is tracked as AQ-D023. Browser OAuth and the comparison-1 baseline remain AQ-D022. See PR #16 for UI review; backend PR #17 is merged. Current combined verification: 186 synthetic/fake-provider tests pass; full solution builds without warnings or errors. No live provider or rendered-UI validation was performed during reconciliation.

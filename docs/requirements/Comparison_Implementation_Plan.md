@@ -1,5 +1,10 @@
 # SEC and Alpaca Comparison: Bounded Implementation Plan
 
+## Implementation update, 2026-10-28
+
+User authorized backend implementation, selected browser OAuth and delegated financial-definition finalization (AQ-D022). Core/Infrastructure contracts, annual/TTM/valuation engine, IEX access/stream adapter, browser client and server token broker now exist, with a fake end-to-end two-company test. See [OAuth/UI composition guide](../development/Alpaca_OAuth_Setup.md) and [comparison-1 baseline](Financial_Definitions.md). 169 tests passed and solution build is clean; no real OAuth registration/deployment/provider access or independent finance review occurred. Desktop/UI files were not changed; teammate integration remains pending. Earlier undecided authentication/formula labels below are historical where superseded.
+
+
 ## Latest accepted scope and clarification
 
 AQ-D021 (2026-10-28): user confirms AlphaQuant is strictly valuation/comparison, with no trading. Session-only credential retention is approved if API-key entry is selected; no optional persistent secret storage in the initial scope. Initial valuation may exclude complex/unverifiable capital structures with explicit unavailable reasons while preserving supported fundamentals. Authentication approach is not selected: user requested clarification about credential capabilities. Paper trading refers to simulated orders that a provider credential might authorize, not an app feature; AlphaQuant must implement no order-placement/cancel/modify capability. Next action: clarify least-privilege supported authentication without treating API keys as read-only or adding trading scope.
@@ -68,7 +73,7 @@ Run proportionate dotnet build/test commands from README after implementation wh
 
 No application files, dependencies, credential stores or runtime settings changed during this planning work. No live access or actual finance review claimed.
 
-## Approval needed before implementation
+## Historical approval checklist (superseded by AQ-D022)
 
 Choose the supported connection route; session-only retention and initial complex-structure valuation exclusions are already agreed. Agree financial definitions; approve the bounded first increment rather than implicitly approve the entire roadmap. Provider eligibility/live evaluation remains a separate prerequisite, not a paid fallback. One coherent first increment recommended: contract/financial-fixture review, then the accepted annual/TTM foundation.
 
@@ -81,4 +86,4 @@ Choose the supported connection route; session-only retention and initial comple
 
 These references describe provider capabilities, not approval of AlphaQuant pilot permissions or a guarantee that the proposed desktop flow is supported without further validation.
 
-UI companion: [teammate design brief](../development/UI_Design_Brief.md). Fields and conceptual contracts are mockup guidance, not compiled/approved integration interfaces.
+Current integration: browser OAuth and comparison-1 are implemented under AQ-D022. Use the compiled ComparisonBackend facade and [OAuth setup guide](../development/Alpaca_OAuth_Setup.md); the native UI milestone AQ-D023 still uses annual test-0 data until integration. Provider eligibility and live setup remain pending. UI companion: [teammate design brief](../development/UI_Design_Brief.md).

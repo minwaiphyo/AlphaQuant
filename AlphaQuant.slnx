@@ -3,6 +3,7 @@
     <Project Path="src/AlphaQuant.Core/AlphaQuant.Core.csproj" />
     <Project Path="src/AlphaQuant.Desktop/AlphaQuant.Desktop.csproj" />
     <Project Path="src/AlphaQuant.Infrastructure/AlphaQuant.Infrastructure.csproj" />
+    <Project Path="src/AlphaQuant.OAuthBroker/AlphaQuant.OAuthBroker.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AlphaQuant.Tests/AlphaQuant.Tests.csproj" />
