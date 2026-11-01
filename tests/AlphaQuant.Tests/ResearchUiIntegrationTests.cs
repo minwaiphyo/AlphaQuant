@@ -52,6 +52,15 @@ public class ResearchUiIntegrationTests
     }
 
     [Fact]
+    public async Task FirstLoadFailureHasOneUnavailableCellPerValuationInSummary()
+    {
+        var vm = new FinancialAnalysisViewModel(new Backend { Watch = _ => Once(Snapshot(failure: true)) }, new Links(), () => {}, () => {});
+        await vm.LoadAsync(Selection);
+        Assert.Equal(2, vm.Companies[0].Summary.Count);
+        Assert.Equal(2, vm.Companies[0].Summary.Select(m => m.Name).Distinct().Count());
+    }
+
+    [Fact]
     public async Task FailedRefreshRetainsFinancialsAndNeverPreviousPrices()
     {
         var backend = new Backend { Watch = _ => Once(Snapshot(price: true)) };

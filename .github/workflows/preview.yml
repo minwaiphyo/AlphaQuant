@@ -2,7 +2,7 @@ name: Verify and package preview
 on:
   pull_request:
   push:
-    branches: [main, 'codex/first-version-integration']
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

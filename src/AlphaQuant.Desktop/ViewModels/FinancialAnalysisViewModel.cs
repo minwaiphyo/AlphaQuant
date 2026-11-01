@@ -15,8 +15,10 @@ namespace AlphaQuant.Desktop.ViewModels;
 public sealed record ResearchMetric(string Name, string Value, string Period, string Reason, IRelayCommand InspectCommand);
 public sealed record ResearchCompany(string Name, string Status, string Price, string Warnings, IReadOnlyList<ResearchMetric> Metrics)
 {
-    public IReadOnlyList<ResearchMetric> Summary => Metrics.Take(4).Concat(Metrics.Where(m => m.Period.StartsWith("TTM", StringComparison.Ordinal)
-        || m.Period == "Current valuation" || m.Period.StartsWith("Balance sheet", StringComparison.Ordinal))).ToArray();
+    public IReadOnlyList<ResearchMetric> Summary => Metrics.Where(m => m.Period.StartsWith("Annual", StringComparison.Ordinal)).Take(4)
+        .Concat(Metrics.Where(m => m.Period.StartsWith("TTM", StringComparison.Ordinal)
+        || m.Period == "Current valuation" || m.Period.StartsWith("Balance sheet", StringComparison.Ordinal)
+        || m.Period.StartsWith("Reviewed balance sheet", StringComparison.Ordinal))).ToArray();
 }
 
 public partial class FinancialAnalysisViewModel : ObservableObject
@@ -137,7 +139,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
             Detail = $"{period}\n{value.Reason}\n" + string.Join("\n", value.Inputs.Select(i => $"{i.Multiplier:+0.####;-0.####;0} × {i.Fact.Concept}: {i.Fact.Value} {i.Fact.Unit}"))
                 + "\n" + string.Join("\n", value.EvidenceReferences)
                 + (value.Name is "Trailing P/E" or "EV / TTM sales" ? ValuationEvidence(row.Valuation) : string.Empty),
-            Retrieved = $"Financial snapshot {row.FactsRetrievedAt:yyyy-MM-dd HH:mm} UTC",
+            Retrieved = $"Financial snapshot {row.FactsRetrievedAt:yyyy-MM-dd HH:mm} UTC. Evidence captured {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss} UTC; this panel is a static snapshot and may be superseded by updates.",
             Warnings = string.Join("\n", row.Fundamentals?.Warnings ?? []),
             Facts = value.Inputs.Select(i => new EvidenceFact(new AnnualFact(i.Fact.Concept, i.Fact.Concept, i.Fact.Value,
                 i.Fact.Unit, i.Fact.Start, i.Fact.End, i.Fact.Form, i.Fact.Filed, i.Fact.Accession), row.Company.Cik, _links)).ToArray()
