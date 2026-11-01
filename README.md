@@ -63,16 +63,12 @@ Provider selection planning: [price-aware comparison and provider evaluation](do
 
 [Connection/comparison plan](docs/requirements/Comparison_Implementation_Plan.md) retains the planning history; current implemented contracts and pending work are in the [OAuth/UI setup guide](docs/development/Alpaca_OAuth_Setup.md) and [comparison-1 definitions](docs/requirements/Financial_Definitions.md).
 
-## New comparison backend
+## Integrated preview
 
-`ComparisonBackend` (Infrastructure) combines an injected SEC fact source, browser OAuth, access testing, one IEX stream and two-to-five-company snapshots. The UI teammate can consume it without changing provider/calculation logic in views. No Desktop source files were changed for this backend increment. Historical cash facts can display directly; debt, P/E and EV/sales require the explicit review evidence described in the definitions.
+The native UI (AQ-D023) and browser-OAuth/comparison-1 backend (AQ-D022) are merged and integrated through PR #18. Financial analysis consumes ComparisonBackend for peer summaries, annual/TTM history, price status, source evidence and guarded valuation. The existing annual test-0 workspace remains separately labelled. Data connections supports browser OAuth, access tests and session-only reviewed equity/capital inputs. No trading or token persistence is implemented.
 
-See [registration, no-cost preview hosting and UI composition](docs/development/Alpaca_OAuth_Setup.md). Nothing has been deployed. The broker runs with server-side configuration using `dotnet run --project src/AlphaQuant.OAuthBroker`; running the Desktop alone does not expose the new flow yet.
+Read [First preview setup, limitations and reviewed evidence schema](docs/development/First_Preview.md). Build a self-contained Windows ZIP with `powershell -File tools/Publish-Preview.ps1`. No SDK is needed on the receiving PC; the unsigned build may still be blocked by Windows policy. Do not disable security controls. Set the public `AQ_OAUTH_BROKER_ORIGIN` environment variable before launch after the operator has registered/deployed the broker.
 
-Verified on 2026-10-28 using SDK 10.0.403: solution build succeeded with zero warnings/errors; 170 tests passed without live SEC/Alpaca calls. Loopback broker HTTP smoke checks passed. Docker deployment, real browser consent, real IEX prices, real-filing/independent finance review and end-user screen integration remain unverified.
+Delivery evidence (2026-11-01): 203 synthetic/fake-provider tests pass; the full Release build and [Windows CI/package run](https://github.com/minwaiphyo/AlphaQuant/actions/runs/41314939340) passed. The downloaded CI ZIP checksum was verified and its executable started on this laptop. Synthetic native analysis/evidence/Settings checks used isolated data; no live SEC/Alpaca acceptance is claimed. A draft v0.1.0-preview.3 package is retained in GitHub Releases, pending external setup and distribution gates.
 
-The native UI milestone is tracked as AQ-D023. Browser OAuth and the comparison-1 baseline remain AQ-D022. See PR #16 for UI review; backend PR #17 is merged. Current combined verification: 186 synthetic/fake-provider tests pass; full solution builds without warnings or errors. No live provider or rendered-UI validation was performed during reconciliation.
-
-## First preview
-
-Read [First preview setup, limitations and reviewed evidence schema](docs/development/First_Preview.md). Build a self-contained Windows ZIP with powershell -File tools/Publish-Preview.ps1. No SDK is needed on the receiving PC; the unsigned build may still be blocked by Windows policy. Do not disable security controls. Set the public AQ_OAUTH_BROKER_ORIGIN environment variable before launch to enable browser connection after the operator has registered/deployed the broker.
+Before a connected pilot: complete [Alpaca registration and zero-cost HTTPS broker setup](docs/development/Alpaca_OAuth_Setup.md), confirm eligibility/permitted use, reconcile real financial data and establish trusted distribution. Nothing has been deployed to a live OAuth host. Imported review assertions are not finance certification; missing or incompatible inputs remain unavailable.
