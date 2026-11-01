@@ -72,7 +72,7 @@ Use provider cards or a selector. Each option shows provider name, supported dat
 
 | Menu option in the prototype | Status and behavior |
 |---|---|
-| Alpaca | First planned working integration; Basic/IEX is the initial evaluation route. Today it is still a mock connection, not implemented. |
+| Alpaca | First planned working integration; Basic/IEX is the initial evaluation route. The backend adapter is implemented; Desktop connection wiring and live setup remain pending. |
 | Additional provider examples | Clearly labelled Planned or illustrative placeholders; no real connection button until an adapter is implemented and reviewed. No other vendor is approved by this brief. |
 
 Future supported paid options let users bring subscriptions they already own. AlphaQuant does not purchase/upgrade accounts, share provider credentials or promise a paid plan has particular rights. Provider eligibility and permitted use are checked individually. Free-tier entitlement is not proof of redistribution permission.
@@ -147,7 +147,7 @@ A fictitious single-class issuer: revenue FY 1,200 million; current 9M YTD 1,000
 | Cancelled/failed refresh | Previous usable snapshot remains; retry available |
 | Different periods/restatement | Visible warning and inspectable dates/source selection |
 
-Use text/icons alongside colour, keyboard-reachable controls, readable scaling and sensible focus after errors/dialog return. A 60-second old-price threshold is a backend-plan proposal, not an approved rule; design for a generic age/status supplied by the service.
+Use text/icons alongside colour, keyboard-reachable controls, readable scaling and sensible focus after errors/dialog return. The comparison-1 backend applies a 60-second freshness threshold; display the age/status supplied by the service.
 
 ## Proposed UI/backend boundary (conceptual, not compiled contracts)
 
