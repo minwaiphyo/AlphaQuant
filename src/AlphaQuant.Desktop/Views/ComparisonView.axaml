@@ -1,0 +1,211 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.ComparisonView" x:DataType="vm:ComparisonViewModel" KeyDown="OnKeyDown">
+  <Grid RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <StackPanel Spacing="6">
+      <TextBlock Text="Workspace / Comparison" Classes="muted small" IsVisible="False"/>
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="6">
+          <TextBlock Text="FUNDAMENTALS, WITH EVIDENCE" Classes="eyebrow"/>
+          <TextBlock Text="Company comparison" Classes="h1"/>
+        </StackPanel>
+        <Button x:Name="EditCompaniesButton" Grid.Column="1" Content="Edit companies" Command="{Binding ChooseCompaniesCommand}" VerticalAlignment="Center"/>
+      </Grid>
+      <TextBlock Text="Compare your selected peers. Reporting periods may differ; inspect the evidence before drawing conclusions." Classes="muted"/>
+    </StackPanel>
+    <StackPanel Grid.Row="1" Spacing="10">
+      <Border Classes="notice" Padding="14,10">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+          <StackPanel Spacing="3">
+            <TextBlock Text="No active market-data provider" FontWeight="SemiBold"/>
+            <TextBlock Text="Annual fundamentals remain available. Price feeds and valuation are not implemented yet." Classes="muted small"/>
+          </StackPanel>
+          <Button Grid.Column="1" Content="Data connections" Command="{Binding OpenSettingsCommand}"/>
+        </Grid>
+      </Border>
+      <Border Classes="panel" Padding="14">
+        <StackPanel Spacing="10">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="YOUR FILTERS · ALL CONDITIONS MUST MATCH" Classes="eyebrow" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+              <Button Content="+ Add filter" Command="{Binding OpenFilterEditorCommand}"/>
+              <Button Content="Clear filters" Command="{Binding ClearFiltersCommand}"/>
+            </StackPanel>
+          </Grid>
+          <WrapPanel IsVisible="{Binding IsFilterEditorOpen}">
+            <ComboBox ItemsSource="{Binding Metrics}" SelectedItem="{Binding SelectedMetric}" Width="240" Margin="0,0,8,8" AutomationProperties.Name="Filter metric">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:MetricChoice">
+                  <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator}" Width="145" Margin="0,0,8,8" AutomationProperties.Name="Filter condition">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:FilterOperator">
+                  <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox Text="{Binding Threshold}" PlaceholderText="e.g. 10" Width="100" Margin="0,0,8,8" AutomationProperties.Name="Filter threshold">
+              <TextBox.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{Binding AddFilterCommand}"/>
+              </TextBox.KeyBindings>
+            </TextBox>
+            <Button Content="Apply filter" Command="{Binding AddFilterCommand}" Classes="primary" Margin="0,0,8,8"/>
+            <Button Content="Cancel" Command="{Binding CancelFilterCommand}" Margin="0,0,0,8"/>
+          </WrapPanel>
+          <TextBlock Text="{Binding FilterError}" Classes="warning small" IsVisible="{Binding FilterError, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+          <ItemsControl ItemsSource="{Binding Filters}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel/>
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:ScreenFilter">
+                <Button Content="{Binding Label}" Command="{Binding RemoveCommand}" Background="{DynamicResource AqTint}" Margin="0,0,8,4" ToolTip.Tip="Remove filter"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+    <Grid Grid.Row="2" ColumnDefinitions="*,0" x:Name="WorkspaceGrid" ColumnSpacing="16">
+      <Border Classes="panel" Padding="0">
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+          <WrapPanel Margin="16,10,16,0">
+            <Button Content="Test metrics" Classes="view-tab" Classes.active="{Binding !ShowFacts}" Command="{Binding ShowMetricsCommand}" Margin="0,0,8,8"/>
+            <Button Content="Reported facts" Classes="view-tab" Classes.active="{Binding ShowFacts}" Command="{Binding ShowReportedFactsCommand}" Margin="0,0,8,8"/>
+            <Button Content="TTM · unavailable" IsEnabled="False" ToolTip.Tip="Trailing-period analysis is not available yet." Margin="0,0,12,8"/>
+            <Button Content="Reload data" Command="{Binding ReloadCommand}" Margin="0,0,8,8"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsLoading}" Margin="0,0,8,8"/>
+          </WrapPanel>
+          <StackPanel Grid.Row="1" Spacing="8" Margin="16,0,16,10">
+            <WrapPanel>
+              <TextBlock Text="{Binding ResultsText}" FontWeight="SemiBold" Margin="0,8,18,8"/>
+              <TextBlock Text="Sort" Classes="muted small" Margin="0,8,8,8"/>
+              <ComboBox ItemsSource="{Binding SortChoices}" SelectedItem="{Binding SelectedSort}" Width="190" Margin="0,0,8,6" AutomationProperties.Name="Sort comparison">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:SortChoice">
+                    <TextBlock Text="{Binding Label}"/>
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+              <CheckBox Content="Descending" IsChecked="{Binding Descending}" Margin="0,0,0,6"/>
+            </WrapPanel>
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="3"/>
+            <TextBlock Text="{Binding Progress}" Classes="muted small" IsVisible="{Binding IsLoading}"/>
+            <Button Content="SEC setup needed · Open Settings" Command="{Binding OpenSettingsCommand}" IsVisible="{Binding HasSetupIssue}" HorizontalAlignment="Left"/>
+          </StackPanel>
+          <Grid Grid.Row="2">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsVisible="{Binding !IsEmpty}" AutomationProperties.Name="Comparison results">
+              <StackPanel>
+                <Border Background="{DynamicResource AqSubtle}" Padding="16,12" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,1">
+                  <StackPanel Orientation="Horizontal">
+                    <Button Content="COMPANY ↕" Width="220" Classes="column-header" Command="{Binding SortCompanyCommand}"/>
+                    <ItemsControl ItemsSource="{Binding Headers}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ComparisonHeader">
+                          <Button Content="{Binding Label}" Command="{Binding SortCommand}" Width="170" Classes="column-header"/>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="PERIOD / DATA STATUS" Width="200" Classes="muted small"/>
+                  </StackPanel>
+                </Border>
+                <ItemsControl ItemsSource="{Binding Rows}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ComparisonRow">
+                      <Border Padding="16,12" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                          <StackPanel Width="220" Spacing="4">
+                            <TextBlock Text="{Binding Peer.Ticker}" Foreground="{DynamicResource AqAccent}" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Peer.Name}" TextWrapping="Wrap" Margin="0,0,12,0"/>
+                            <TextBlock Text="{Binding Peer.Identity}" Classes="muted small"/>
+                            <Button Content="Company details →" Command="{Binding OpenCompanyCommand}" Classes="metric" MinHeight="22" Padding="0"/>
+                          </StackPanel>
+                          <ItemsControl ItemsSource="{Binding Cells}">
+                            <ItemsControl.ItemsPanel>
+                              <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                              </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:ComparisonCell">
+                                <StackPanel Width="170" Spacing="3" Margin="0">
+                                  <Button Content="{Binding DisplayValue}" Command="{Binding InspectCommand}" Click="InspectClicked" Classes="metric" AutomationProperties.Name="{Binding Label}"/>
+                                  <TextBlock Text="{Binding Status}" Classes="muted small" TextWrapping="Wrap" Margin="0,0,14,0"/>
+                                </StackPanel>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                          <StackPanel Width="200" Spacing="6">
+                            <TextBlock Text="{Binding Period}" Classes="muted small"/>
+                            <TextBlock Text="{Binding Status}" Classes="muted small"/>
+                          </StackPanel>
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </ScrollViewer>
+            <StackPanel IsVisible="{Binding IsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12" Margin="20">
+              <TextBlock Text="No companies to display" Classes="h2" HorizontalAlignment="Center"/>
+              <TextBlock Text="Choose two to five peers, or remove filters to see your selected companies." Classes="muted" MaxWidth="350" TextAlignment="Center"/>
+              <Button Content="Choose companies" Command="{Binding ChooseCompaniesCommand}" Classes="primary" HorizontalAlignment="Center"/>
+            </StackPanel>
+          </Grid>
+          <Border Grid.Row="3" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,1,0,0" Padding="16,10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Inspect a value for evidence · Test-0 definitions are unapproved" Classes="muted small"/>
+              <TextBlock Text="History / TTM / new metrics / valuation: unavailable" Classes="muted small" ToolTip.Tip="Five-year history, TTM, operating margin, operating cash flow, debt/cash, prices, P/E and EV/sales are not available in this version. Current assets/liabilities are not cash/debt; net margin is not operating margin."/>
+            </StackPanel>
+          </Border>
+        </Grid>
+      </Border>
+      <Border x:Name="EvidencePanel" Grid.Column="1" Classes="panel" Padding="18" Width="340" HorizontalAlignment="Right" IsVisible="{Binding HasEvidence}" BoxShadow="0 8 32 0 #20000000">
+        <Grid RowDefinitions="Auto,*">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="METRIC &amp; SOURCE EVIDENCE" Classes="eyebrow" VerticalAlignment="Center"/>
+            <Button x:Name="CloseEvidenceButton" Grid.Column="1" Content="×" Command="{Binding CloseEvidenceCommand}" AutomationProperties.Name="Close evidence"/>
+          </Grid>
+          <ScrollViewer HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,14,0,0">
+            <StackPanel Spacing="14">
+              <TextBlock Text="{Binding Evidence.Company}" Classes="muted small"/>
+              <TextBlock Text="{Binding Evidence.Title}" Classes="h2" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding Evidence.Value}" FontSize="30" Foreground="{DynamicResource AqAccent}" TextWrapping="Wrap"/>
+              <Border Classes="notice">
+                <TextBlock Text="{Binding Evidence.Formula}" TextWrapping="Wrap"/>
+              </Border>
+              <TextBlock Text="{Binding Evidence.Detail}" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding Evidence.Retrieved}" Classes="muted small"/>
+              <TextBlock Text="{Binding Evidence.Warnings}" Classes="warning small"/>
+              <TextBlock Text="REPORTED INPUTS &amp; FILINGS" Classes="eyebrow"/>
+              <ItemsControl ItemsSource="{Binding Evidence.Facts}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:EvidenceFact">
+                    <Border BorderBrush="{DynamicResource AqLine}" BorderThickness="0,0,0,1" Padding="0,10">
+                      <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Value}"/>
+                        <TextBlock Text="{Binding Period}" Classes="muted small"/>
+                        <TextBlock Text="{Binding Source}" Classes="muted small"/>
+                        <Button Content="Open SEC filing ↗" Command="{Binding OpenFilingCommand}" HorizontalAlignment="Left"/>
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <TextBlock Text="Research evidence, not an investment recommendation." Classes="muted small"/>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

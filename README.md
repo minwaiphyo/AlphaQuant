@@ -2,7 +2,7 @@
 
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
-**Status:** SEC desktop spike plus an implemented browser-OAuth/IEX/comparison backend. The backend is verified with synthetic/fake-provider tests; new screens are owned by the UI teammate and are not wired yet. OAuth registration, hosting and live validation are pending. No installer or release.
+**Status:** Native SEC research UI plus an implemented browser-OAuth/IEX/comparison backend. The backend is verified with synthetic/fake-provider tests; The UI supports two-to-five-company annual test-0 comparisons, numeric filters/sorting, evidence panels and system/light/dark themes. The comparison-1 backend is not wired to these screens yet. OAuth registration, hosting and live validation are pending. No installer or release.
 
 Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 
@@ -70,3 +70,5 @@ Provider selection planning: [price-aware comparison and provider evaluation](do
 See [registration, no-cost preview hosting and UI composition](docs/development/Alpaca_OAuth_Setup.md). Nothing has been deployed. The broker runs with server-side configuration using `dotnet run --project src/AlphaQuant.OAuthBroker`; running the Desktop alone does not expose the new flow yet.
 
 Verified on 2026-10-28 using SDK 10.0.403: solution build succeeded with zero warnings/errors; 170 tests passed without live SEC/Alpaca calls. Loopback broker HTTP smoke checks passed. Docker deployment, real browser consent, real IEX prices, real-filing/independent finance review and end-user screen integration remain unverified.
+
+The native UI milestone is tracked as AQ-D023. Browser OAuth and the comparison-1 baseline remain AQ-D022. See PR #16 for UI review; backend PR #17 is merged. Current combined verification: 186 synthetic/fake-provider tests pass; full solution builds without warnings or errors. No live provider or rendered-UI validation was performed during reconciliation.

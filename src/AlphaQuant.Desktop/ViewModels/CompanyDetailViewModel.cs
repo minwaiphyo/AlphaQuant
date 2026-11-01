@@ -227,6 +227,12 @@ public partial class CompanyDetailViewModel : ObservableObject
         RetrievedText = null;
     }
 
+    public void ShowReport(CompanyReport report)
+    {
+        Clear();
+        Show(report);
+    }
+
     private void Show(CompanyReport report)
     {
         foreach (var fact in report.Facts)

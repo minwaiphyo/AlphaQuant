@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AlphaQuant.Core\AlphaQuant.Core.csproj" />
+    <ProjectReference Include="..\..\src\AlphaQuant.Desktop\AlphaQuant.Desktop.csproj" />
     <ProjectReference Include="..\..\src\AlphaQuant.Infrastructure\AlphaQuant.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 # UI Design Brief: Company Comparison and Valuation
 
-Updated: 2026-10-28. Audience: teammate owning UI design, navigation and interaction flows.
+Updated: 2026-11-01. Audience: teammate owning UI design, navigation and interaction flows.
 
 **Start here for UI work.** This is a shared design brief, not evidence that the backend exists or that financial formulas/authentication have been approved. The [proposal](../product/AlphaQuant_Proposal.md) owns approval status; [feature catalogue](../requirements/Financial_Analysis_Features.md) describes the longer-term ideas; [implementation plan](../requirements/Comparison_Implementation_Plan.md) records proposed backend contracts and open decisions.
 
@@ -22,6 +22,10 @@ Production OAuth needs the server-held client secret; never ask users to paste i
 - Alpaca uses browser OAuth; its tokens remain in memory for the session. No API-key/password fields, Remember checkbox, plaintext settings or persistent token store for this adapter.
 - Complex/unverifiable capital structures may show unavailable valuation with a reason; retain valid fundamentals for those companies.
 - User owns the investment conclusion. The app supplies evidence and comparisons.
+
+## Native UI update (2026-11-01, AQ-D023)
+
+PR #16 now includes persistent navigation, system/light/dark themes, two-to-five-company selection, annual test-0 comparison, numeric filters/sorting and source evidence. It has received the backend merged through PR #17. The backend is available in the branch, but these screens still consume CompanyReport/test-0 rather than ComparisonBackend. Settings correctly identifies browser OAuth as selected and connection setup as pending; there is no working Connect action yet. Earlier screen-status/prototype tables below describe the design baseline, not a claim that these delivered native screens are absent. The next increment is fake-service integration of the existing facade, followed separately by registered/deployed OAuth setup and authorized live checks.
 
 ## What exists today
 

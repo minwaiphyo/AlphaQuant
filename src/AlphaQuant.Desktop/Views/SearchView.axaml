@@ -1,70 +1,78 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
-             x:Class="AlphaQuant.Desktop.Views.SearchView"
-             x:DataType="vm:SearchViewModel">
-    <DockPanel Margin="24">
-        <StackPanel DockPanel.Dock="Top" Spacing="12">
-            <StackPanel Orientation="Horizontal" Spacing="16">
-                <Button Content="Back" Command="{Binding BackCommand}" />
-                <TextBlock Text="Search companies" FontSize="24" VerticalAlignment="Center" />
-            </StackPanel>
-
-            <TextBox Text="{Binding Query, Mode=TwoWay}"
-                     PlaceholderText="Ticker or company name, for example AAPL or apple"
-                     AutomationProperties.Name="Search">
-                <TextBox.KeyBindings>
-                    <KeyBinding Gesture="Enter" Command="{Binding OpenFirstCommand}" />
-                </TextBox.KeyBindings>
-            </TextBox>
-
-            <StackPanel Spacing="8"
-                        IsVisible="{Binding IsLoading}">
-                <TextBlock Text="Loading the SEC company list..." />
-                <ProgressBar IsIndeterminate="True" />
-            </StackPanel>
-
-            <Border IsVisible="{Binding SetupMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                    BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
-                <StackPanel Spacing="6">
-                    <TextBlock Text="Setup needed" FontWeight="SemiBold" />
-                    <TextBlock Text="{Binding SetupMessage}" TextWrapping="Wrap" />
-                    <Button Content="Open Settings" Command="{Binding OpenSettingsCommand}" />
-                </StackPanel>
-            </Border>
-
-            <Border IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                    BorderThickness="1" BorderBrush="Gray" Padding="12" CornerRadius="4">
-                <StackPanel Spacing="6">
-                    <TextBlock Text="Could not load companies" FontWeight="SemiBold" />
-                    <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
-                    <Button Content="Retry" Command="{Binding LoadCommand}" />
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="{Binding DirectoryNote}"
-                       IsVisible="{Binding DirectoryNote, Converter={x:Static ObjectConverters.IsNotNull}}"
-                       TextWrapping="Wrap" />
-            <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" />
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.SearchView" x:DataType="vm:SearchViewModel">
+  <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="18">
+    <StackPanel Spacing="7">
+      <TextBlock Text="Workspace / Company selection" Classes="muted small"/>
+      <TextBlock Text="BUILD YOUR PEER SET" Classes="eyebrow"/>
+      <TextBlock Text="Choose companies" Classes="h1"/>
+      <TextBlock Text="Find a company, inspect its filings, or add two to five peers to your comparison." Classes="muted"/>
+    </StackPanel>
+    <Border Grid.Row="1" Classes="panel">
+      <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="12">
+        <StackPanel Spacing="5">
+          <TextBlock Text="{Binding Workspace.SelectionText}" FontWeight="SemiBold"/>
+          <TextBlock Text="Selections stay in this session. CIK identifies each company." Classes="muted small"/>
         </StackPanel>
-
-        <ScrollViewer Margin="0,12,0,0">
-            <ItemsControl ItemsSource="{Binding Results}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="vm:SearchResultItem">
-                        <Button Command="{Binding OpenCommand}"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left"
-                                Margin="0,0,0,4">
-                            <StackPanel Orientation="Horizontal" Spacing="16">
-                                <TextBlock Text="{Binding Ticker}" FontWeight="SemiBold" Width="80" />
-                                <TextBlock Text="{Binding Name}" />
-                                <TextBlock Text="{Binding CikText}" Opacity="0.7" />
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </DockPanel>
+        <Button Grid.Column="1" Content="Compare companies →" Classes="primary" Command="{Binding CompareCommand}" VerticalAlignment="Top"/>
+        <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Workspace.Peers}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:PeerViewModel">
+              <Button Command="{Binding RemoveCommand}" Margin="0,0,8,6" ToolTip.Tip="Remove from comparison">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <TextBlock Text="{Binding Ticker}"/>
+                  <TextBlock Text="×"/>
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Grid>
+    </Border>
+    <StackPanel Grid.Row="2" Spacing="8">
+      <TextBox Text="{Binding Query, Mode=TwoWay}" PlaceholderText="Search company or ticker, for example AAPL" AutomationProperties.Name="Search">
+        <TextBox.KeyBindings>
+          <KeyBinding Gesture="Enter" Command="{Binding OpenFirstCommand}"/>
+        </TextBox.KeyBindings>
+      </TextBox>
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" Height="3"/>
+      <Border Classes="notice" IsVisible="{Binding SetupMessage, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Spacing="8">
+          <TextBlock Text="SEC setup needed" FontWeight="SemiBold"/>
+          <TextBlock Text="{Binding SetupMessage}" TextWrapping="Wrap"/>
+          <Button Content="Open Settings" Command="{Binding OpenSettingsCommand}" HorizontalAlignment="Left"/>
+        </StackPanel>
+      </Border>
+      <Border Classes="notice" IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Spacing="8">
+          <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap"/>
+          <Button Content="Retry company search" Command="{Binding LoadCommand}" HorizontalAlignment="Left"/>
+        </StackPanel>
+      </Border>
+      <TextBlock Text="{Binding DirectoryNote}" Classes="warning small" IsVisible="{Binding DirectoryNote, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+      <TextBlock Text="{Binding StatusText}" Classes="muted small"/>
+    </StackPanel>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" Grid.Row="3">
+      <ItemsControl ItemsSource="{Binding Results}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:SearchResultItem">
+            <Border Classes="panel" Padding="16" Margin="0,0,0,10">
+              <Grid ColumnDefinitions="80,*,Auto,Auto" ColumnSpacing="14">
+                <TextBlock Text="{Binding Ticker}" Foreground="{DynamicResource AqAccent}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Spacing="4">
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                  <TextBlock Text="{Binding CikText}" Classes="muted small"/>
+                </StackPanel>
+                <Button Grid.Column="2" Content="Details" Command="{Binding OpenCommand}"/>
+                <Button Grid.Column="3" Content="{Binding SelectionLabel}" Command="{Binding ToggleCommand}" MinWidth="82"/>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </Grid>
 </UserControl>

@@ -41,10 +41,9 @@ Keep UI, calculations, ingestion and persistence responsibilities clear. Impleme
 ### Completion and synchronization
 
 1. Update sections 17 through 19 with completed work, actual verification, remaining issues and one exact next action. Add dated decision records for changed direction; update detailed requirements and README when affected.
-2. Keep the local PDF edition synchronized with `docs/product/AlphaQuant_Proposal.md` after substantive changes. Preserve any private-only prefix in its editable source, refresh the shared proposal content, regenerate the PDF and visually inspect every page. The local PDF and its source remain untracked; Git does not transfer them between laptops. A fresh checkout must still have complete shared project context in the tracked proposal and this guidance. Report unavailable local files or failed regeneration explicitly.
-3. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
-4. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
-5. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
+2. Inspect status, filenames and diffs before staging. Check ignore rules and scan staged content for secrets and private information. Never force-add private artifacts. Commit coherent changes and push the agreed feature branch when authorized; preserve peer review and required checks before merging or releasing.
+3. Report saved, verified, committed and pushed states separately. If a file is locked, a check fails or synchronization is blocked, preserve the work and record what remains pending. Never claim a local save is remotely synchronized.
+4. On another laptop, fetch the latest branch and repeat the startup checks. Reconcile concurrent proposal edits deliberately and coordinate local-edition updates. Do not depend on ignored files or an earlier chat for shared requirements and decisions.
 
 ## Collaboration and environment
 
@@ -64,8 +63,10 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Workflow decisions
 
+- 2026-10-31: user removed local PDF synchronization from the documentation workflow. Maintain the tracked Markdown documents directly.
+
 - AQ-D005, 2026-10-25, superseded in document placement: shared context and continuation instructions were initially placed in proposal revision 0.4, with the local PDF synchronized.
-- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `docs/development/Agent_Guidance.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries and synchronize the untracked local PDF with software documentation changes.
+- AQ-W001, 2026-10-25, approved, replaces AQ-D005 placement: agent/developer instructions, workflow decisions and continuation handoffs belong in tracked `docs/development/Agent_Guidance.md`. The proposal describes the software and retains product/engineering decisions and progress. Preserve private/public boundaries.
 
 - AQ-W002, 2026-10-25, approved: prompt the user to switch to planning mode before implementing large, ambiguous or consequential changes; refine and accept the plan before implementation. Small, well-defined tasks and accepted plans proceed without repeated planning prompts.
 
@@ -75,8 +76,9 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
-- 2026-10-28, feat/alpaca-oauth-comparison: user selected browser OAuth, delegated bounded definition finalization and authorized backend work (AQ-D022). comparison-1 is the implemented baseline; this is not independent finance certification. Read proposal sections 17-19, Financial_Definitions.md and Alpaca_OAuth_Setup.md.
-- Backend composition: ComparisonBackend consumes a shared SEC source and exposes browser connect, access test, comparison snapshot stream and disconnect. IEX adapter stays replaceable. Secrets live only in the broker environment; per-user tokens remain in memory. No trading methods/scopes.
-- Desktop/UI files are untouched; teammate owns wiring. UI brief has current OAuth-only guidance; older API-key alternatives are historical, not supported login methods. Do not invent reviewed issuer/split/capital evidence to populate valuation cells.
-- Current verification: SDK 10.0.403 solution build 0 warnings/errors; 170 synthetic/fake-provider tests passed, including a complete fake two-company OAuth/valuation flow; loopback HTTP broker smoke passed. No real SEC/Alpaca requests, OAuth app, deployment, Docker validation, finance certification or live UI run.
-- Exact next action: UI teammate integrates the facade with fake services; separately complete manual app registration and permitted zero-cost preview hosting, then an authorized live check. No paid fallback. Local PDF edition was not refreshed for this increment. Check Git for actual save/commit/push state.
+- 2026-11-01: backend PR #17 merged first under explicit user authorization; main then merged into UI PR #16. Browser OAuth and comparison-1 are authoritative (AQ-D022); native UI uses AQ-D023, resolving the duplicate ID. UI PR remains open; its merge/release is not authorized by this reconciliation task.
+- Native Desktop: navigation/themes, two-to-five-company annual test-0 comparisons, numeric filters/sorting and source evidence. It is not yet wired to ComparisonBackend. Do not relabel net margin/current assets/liabilities as operating margin/cash/debt.
+- Backend: browser authorization, memory-only tokens, server-only application secret exchange, replaceable Alpaca IEX adapter, five-year annual history, TTM and guarded valuation. Read Financial_Definitions.md and Alpaca_OAuth_Setup.md. Valuation requires explicit reviewed scope/equity/split/capital evidence; never invent it to populate cells.
+- OAuth registration, a permitted zero-cost HTTPS broker, eligibility/rights and live checks remain pending. Settings must describe browser OAuth, never undecided API-key authentication or a client-secret field. No trading and no paid fallback.
+- Combined verification: 186 synthetic/fake-provider tests pass; solution build zero warnings/errors. No live SEC/Alpaca requests, rendered UI check, Docker/deployment or independent finance certification during reconciliation. Earlier UI-only fixture visual checks belong to the original PR evidence.
+- Next: review the updated UI PR, then integrate ComparisonBackend into its provider and comparison screens using fake services first. Preserve source, period, age, warnings and unavailable reasons. No subagents or teammate messages authorized.

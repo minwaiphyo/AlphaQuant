@@ -1,39 +1,28 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
-             x:Class="AlphaQuant.Desktop.Views.ReleaseNotesView"
-             x:DataType="vm:ReleaseNotesViewModel">
-    <DockPanel Margin="24">
-        <Button DockPanel.Dock="Top"
-                Content="Back"
-                Command="{Binding BackCommand}"
-                HorizontalAlignment="Left" />
-        <TextBlock DockPanel.Dock="Top"
-                   Text="{Binding Title}"
-                   FontSize="24"
-                   Margin="0,16,0,16" />
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Entries}">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.ReleaseNotesView" x:DataType="vm:ReleaseNotesViewModel">
+  <DockPanel>
+    <Button DockPanel.Dock="Top" Content="Back" Command="{Binding BackCommand}" HorizontalAlignment="Left"/>
+    <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="h1" Margin="0,16,0,16"/>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+      <ItemsControl ItemsSource="{Binding Entries}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:ReleaseNoteEntry">
+            <StackPanel Spacing="10" Margin="0,0,0,24">
+              <TextBlock FontWeight="SemiBold">
+                <Run Text="{Binding Version}"/>
+                <Run Text=" - "/>
+                <Run Text="{Binding Date}"/>
+              </TextBlock>
+              <ItemsControl ItemsSource="{Binding Changes}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ReleaseNoteEntry">
-                        <StackPanel Spacing="4" Margin="0,0,0,16">
-                            <TextBlock FontWeight="SemiBold">
-                                <Run Text="{Binding Version}" />
-                                <Run Text=" - " />
-                                <Run Text="{Binding Date}" />
-                            </TextBlock>
-                            <ItemsControl ItemsSource="{Binding Changes}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <TextBlock Text="{Binding StringFormat='• {0}'}"
-                                                   TextWrapping="Wrap" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </DataTemplate>
+                  <DataTemplate x:DataType="x:String">
+                    <TextBlock Text="{Binding StringFormat='• {0}'}" TextWrapping="Wrap"/>
+                  </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </DockPanel>
+              </ItemsControl>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
 </UserControl>

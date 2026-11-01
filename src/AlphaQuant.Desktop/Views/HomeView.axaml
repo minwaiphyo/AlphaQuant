@@ -1,22 +1,47 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:AlphaQuant.Desktop.ViewModels"
-             x:Class="AlphaQuant.Desktop.Views.HomeView"
-             x:DataType="vm:HomeViewModel">
-    <StackPanel Spacing="16"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-        <TextBlock Text="{Binding Message}"
-                   FontSize="24"
-                   HorizontalAlignment="Center" />
-        <Button Content="Search Companies"
-                Command="{Binding SearchCompaniesCommand}"
-                HorizontalAlignment="Center" />
-        <Button Content="Settings"
-                Command="{Binding OpenSettingsCommand}"
-                HorizontalAlignment="Center" />
-        <Button Content="View Release Notes"
-                Command="{Binding ViewReleaseNotesCommand}"
-                HorizontalAlignment="Center" />
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.HomeView" x:DataType="vm:HomeViewModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Spacing="24">
+      <TextBlock Text="Workspace / Overview" Classes="muted small"/>
+      <StackPanel Spacing="8">
+        <TextBlock Text="RESEARCH, WITH CONTEXT" Classes="eyebrow"/>
+        <TextBlock Text="Your research workspace" Classes="h1"/>
+        <TextBlock Text="Compare the business. Inspect the evidence. Own the conclusion." Classes="muted"/>
+      </StackPanel>
+      <Border Classes="panel" Padding="36" Background="{DynamicResource AqTint}">
+        <StackPanel Spacing="20">
+          <TextBlock Text="FUNDAMENTALS, WITH EVIDENCE" Classes="eyebrow"/>
+          <TextBlock Text="Put companies side by side.&#10;Keep the evidence close." FontSize="36" FontWeight="SemiBold" TextWrapping="Wrap"/>
+          <TextBlock Text="Build a focused peer set, compare supported annual results, and follow the reporting periods and filings behind every number." Classes="muted" MaxWidth="640" HorizontalAlignment="Left"/>
+          <WrapPanel>
+            <Button Content="Start a comparison →" Classes="primary" Command="{Binding SearchCompaniesCommand}" Margin="0,0,12,8"/>
+            <Button Content="Manage data connections" Command="{Binding OpenSettingsCommand}" Margin="0,0,0,8"/>
+          </WrapPanel>
+          <TextBlock Text="Existing SEC annual analysis · New definitions and market-data integration pending" Classes="muted small"/>
+        </StackPanel>
+      </Border>
+      <UniformGrid Columns="3">
+        <Border Classes="panel" Margin="0,0,12,0">
+          <StackPanel Spacing="16">
+            <TextBlock Text="01 / CHOOSE YOUR PEERS" Classes="eyebrow"/>
+            <TextBlock Text="A focused comparison" Classes="h2" TextWrapping="Wrap"/>
+            <TextBlock Text="Find SEC-listed companies and select two to five peers. Your selection stays with you as you move through the workspace." Classes="muted"/>
+          </StackPanel>
+        </Border>
+        <Border Classes="panel" Margin="0,0,12,0">
+          <StackPanel Spacing="16">
+            <TextBlock Text="02 / COMPARE RESULTS" Classes="eyebrow"/>
+            <TextBlock Text="Financials before prices" Classes="h2" TextWrapping="Wrap"/>
+            <TextBlock Text="Compare existing annual facts and test metrics. Missing market access does not block fundamental research." Classes="muted"/>
+          </StackPanel>
+        </Border>
+        <Border Classes="panel">
+          <StackPanel Spacing="16">
+            <TextBlock Text="03 / FOLLOW THE EVIDENCE" Classes="eyebrow"/>
+            <TextBlock Text="Every result, explained" Classes="h2" TextWrapping="Wrap"/>
+            <TextBlock Text="Inspect formulas, inputs, dates, warnings and source filings. Test definitions remain unapproved for release." Classes="muted"/>
+          </StackPanel>
+        </Border>
+      </UniformGrid>
     </StackPanel>
+  </ScrollViewer>
 </UserControl>

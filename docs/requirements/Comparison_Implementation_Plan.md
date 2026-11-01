@@ -71,9 +71,9 @@ Proposed cash policy excludes restricted cash and marketable securities unless s
 
 Run proportionate dotnet build/test commands from README after implementation when SDK is available; no current run claimed. Financial tests include currency/scope mismatch, overlapping periods, negative earnings, missing claim evidence, diluted versus outstanding shares, post-filing split mismatch and amendments. Stream tests include 401/403, 429/backoff, connection cap, stale/out-of-order data, malformed frames, corrections and cancellation. Credential tests avoid actual user vault/data unless explicitly planned and cleaned up. Preserve prior usable financial snapshots; no destructive cache reset as error recovery. Secret-store failure means session-only or explicit failure, never plaintext fallback. Errors show recovery actions without credentials.
 
-No application files, dependencies, credential stores or runtime settings changed during this planning work. No live access or actual finance review claimed. Local PDF synchronization is tracked separately.
+No application files, dependencies, credential stores or runtime settings changed during this planning work. No live access or actual finance review claimed.
 
-## Approval needed before implementation
+## Historical approval checklist (superseded by AQ-D022)
 
 Choose the supported connection route; session-only retention and initial complex-structure valuation exclusions are already agreed. Agree financial definitions; approve the bounded first increment rather than implicitly approve the entire roadmap. Provider eligibility/live evaluation remains a separate prerequisite, not a paid fallback. One coherent first increment recommended: contract/financial-fixture review, then the accepted annual/TTM foundation.
 
@@ -86,4 +86,4 @@ Choose the supported connection route; session-only retention and initial comple
 
 These references describe provider capabilities, not approval of AlphaQuant pilot permissions or a guarantee that the proposed desktop flow is supported without further validation.
 
-UI companion: [teammate design brief](../development/UI_Design_Brief.md). Fields and conceptual contracts are mockup guidance, not compiled/approved integration interfaces.
+Current integration: browser OAuth and comparison-1 are implemented under AQ-D022. Use the compiled ComparisonBackend facade and [OAuth setup guide](../development/Alpaca_OAuth_Setup.md); the native UI milestone AQ-D023 still uses annual test-0 data until integration. Provider eligibility and live setup remain pending. UI companion: [teammate design brief](../development/UI_Design_Brief.md).
