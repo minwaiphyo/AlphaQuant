@@ -15,8 +15,8 @@
       <Border Classes="notice" Padding="14,10">
         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
           <StackPanel Spacing="3">
-            <TextBlock Text="No active market-data provider" FontWeight="SemiBold"/>
-            <TextBlock Text="Annual fundamentals remain available. Price feeds and valuation are not implemented yet." Classes="muted small"/>
+            <TextBlock Text="Annual test-0 workspace" FontWeight="SemiBold"/>
+            <TextBlock Text="Open Financial analysis for comparison-1 history, TTM and configured IEX streaming." Classes="muted small"/>
           </StackPanel>
           <Button Grid.Column="1" Content="Data connections" Command="{Binding OpenSettingsCommand}"/>
         </Grid>
@@ -163,7 +163,7 @@
           <Border Grid.Row="3" BorderBrush="{DynamicResource AqLine}" BorderThickness="0,1,0,0" Padding="16,10">
             <StackPanel Spacing="4">
               <TextBlock Text="Inspect a value for evidence · Test-0 definitions are unapproved" Classes="muted small"/>
-              <TextBlock Text="History / TTM / new metrics / valuation: unavailable" Classes="muted small" ToolTip.Tip="Five-year history, TTM, operating margin, operating cash flow, debt/cash, prices, P/E and EV/sales are not available in this version. Current assets/liabilities are not cash/debt; net margin is not operating margin."/>
+              <TextBlock Text="History / TTM / new metrics / valuation: unavailable" Classes="muted small" ToolTip.Tip="Five-year history, TTM, operating margin, operating cash flow, debt/cash, prices, P/E and EV/sales are available separately in Financial analysis where supported. Current assets/liabilities are not cash/debt; net margin is not operating margin."/>
             </StackPanel>
           </Border>
         </Grid>

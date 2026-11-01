@@ -1,0 +1,35 @@
+name: Verify and package preview
+on:
+  pull_request:
+  push:
+    branches: [main, 'codex/first-version-integration']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Test
+        run: dotnet test AlphaQuant.slnx -c Release --verbosity minimal
+      - name: Build all projects including broker
+        run: dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal
+      - name: Publish self-contained Windows preview
+        shell: pwsh
+        run: ./tools/Publish-Preview.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AlphaQuant-Windows-preview
+          path: |
+            artifacts/*.zip
+            artifacts/*.sha256
+          retention-days: 1
+          if-no-files-found: error
