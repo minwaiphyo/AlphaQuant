@@ -2,7 +2,7 @@
 param(
     [string]$Dotnet = 'dotnet',
     [ValidatePattern('^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$')]
-    [string]$Version = '0.1.0-preview.2'
+    [string]$Version = '0.1.0-preview.3'
 )
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent

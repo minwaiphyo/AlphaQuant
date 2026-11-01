@@ -57,7 +57,7 @@ Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed
 
 Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.
 
-Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Backend integration exists; deployed OAuth setup, UI wiring and permitted pilot access remain pending.
+Provider selection planning: [price-aware comparison and provider evaluation](docs/requirements/Provider_Evaluation_Plan.md). SEC and Alpaca are selected as the current direction; Backend integration exists; deployed OAuth setup, live acceptance and permitted pilot access remain pending.
 
 [Stage A provider and financial feasibility findings](docs/requirements/Provider_Feasibility_Review.md) record the conditional recommendation and unresolved pilot rights.
 
