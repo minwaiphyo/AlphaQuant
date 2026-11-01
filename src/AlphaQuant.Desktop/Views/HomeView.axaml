@@ -16,7 +16,7 @@
             <Button Content="Start a comparison →" Classes="primary" Command="{Binding SearchCompaniesCommand}" Margin="0,0,12,8"/>
             <Button Content="Manage data connections" Command="{Binding OpenSettingsCommand}" Margin="0,0,0,8"/>
           </WrapPanel>
-          <TextBlock Text="Existing SEC annual analysis · New definitions and market-data integration pending" Classes="muted small"/>
+          <TextBlock Text="Annual workspace + comparison-1 financial analysis · Alpaca setup required for prices" Classes="muted small"/>
         </StackPanel>
       </Border>
       <UniformGrid Columns="3">

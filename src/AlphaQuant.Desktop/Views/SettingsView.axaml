@@ -39,14 +39,23 @@
           <Border Classes="panel">
             <StackPanel Spacing="13">
               <TextBlock Text="Market-data providers" Classes="h2"/>
-              <TextBlock Text="PLANNED · NO ACTIVE CONNECTION" Classes="eyebrow"/>
-              <TextBlock Text="Bring your own eligible account when adapters are available. No in-app purchase or paid upgrade." Classes="muted"/>
+              <TextBlock Text="SESSION-ONLY MARKET CONNECTION" Classes="eyebrow"/>
+              <TextBlock Text="Connect your eligible account through the browser. No in-app purchase, trading or paid upgrade." Classes="muted"/>
               <Border Classes="notice">
                 <StackPanel Spacing="7">
                   <TextBlock Text="Alpaca" FontSize="17" FontWeight="SemiBold"/>
-                  <TextBlock Text="First planned adapter · Integration unavailable" Classes="warning small"/>
+                  <TextBlock Text="Implemented adapter · Basic / IEX" Classes="warning small"/>
                   <TextBlock Text="Basic / IEX is the initial free evaluation route. IEX has limited venue coverage; it is not the consolidated US market. Account access and permitted use need verification." Classes="muted small"/>
-                  <TextBlock Text="Browser OAuth selected. Connection setup is pending UI integration and OAuth broker configuration; no credentials are collected here." Classes="muted small"/>
+                  <TextBlock Text="Browser OAuth · data-only consent · tokens stay in memory until disconnect or app exit. The app never asks for your password, API keys or application secret." Classes="muted small"/>                  <StackPanel Spacing="8" IsVisible="{Binding Market, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock Text="{Binding Market.Status}" Classes="muted small" AutomationProperties.LiveSetting="Polite"/>
+                    <ProgressBar IsIndeterminate="True" IsVisible="{Binding Market.Busy}" Height="3"/>
+                    <WrapPanel>
+                      <Button Content="Connect with Alpaca" Command="{Binding Market.ConnectCommand}" IsEnabled="{Binding Market.Configured}" Margin="0,0,8,8"/>
+                      <Button Content="Test selected symbols" Command="{Binding Market.TestCommand}" Margin="0,0,8,8"/>
+                      <Button Content="Cancel" Command="{Binding Market.CancelCommand}" IsVisible="{Binding Market.Busy}" Margin="0,0,8,8"/>
+                      <Button Content="Disconnect" Command="{Binding Market.DisconnectCommand}" Margin="0,0,8,8"/>
+                    </WrapPanel>
+                  </StackPanel>
                 </StackPanel>
               </Border>
               <Border BorderBrush="{DynamicResource AqLine}" BorderThickness="1" CornerRadius="6" Padding="16">
@@ -59,7 +68,19 @@
             </StackPanel>
           </Border>
           <Border Classes="notice">
-            <TextBlock Text="Financial results remain usable without a price connection. Prices, P/E and EV/sales stay unavailable until their supporting services are implemented." TextWrapping="Wrap"/>
+            <TextBlock Text="Financial analysis works without a price connection. Price-based valuation requires a fresh eligible trade and reviewed equity/capital evidence; unavailable results include reasons." TextWrapping="Wrap"/>
+          </Border>
+          <Border Classes="panel">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Reviewed valuation inputs" Classes="h2"/>
+              <TextBlock Text="Optional analyst-reviewed JSON, held only for this session. Establish issuer scope, class/split compatibility and every capital claim from filing evidence first. Parsing does not certify accuracy. See the preview guide for the complete schema." Classes="muted small"/>
+              <TextBox Text="{Binding Market.EvidenceJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="100" MaxHeight="180" MaxLength="65536" AutomationProperties.Name="Reviewed valuation evidence JSON"/>
+              <WrapPanel>
+                <Button Content="Load reviewed inputs" Command="{Binding Market.LoadEvidenceCommand}" Margin="0,0,8,8"/>
+                <Button Content="Clear reviewed inputs" Command="{Binding Market.ClearEvidenceCommand}" Margin="0,0,8,8"/>
+              </WrapPanel>
+              <TextBlock Text="{Binding Market.EvidenceStatus}" Classes="muted small"/>
+            </StackPanel>
           </Border>
         </StackPanel>
       </Grid>

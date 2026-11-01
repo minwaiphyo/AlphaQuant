@@ -4,6 +4,10 @@ Updated: 2026-11-01. Audience: teammate owning UI design, navigation and interac
 
 **Start here for UI work.** This is a shared design brief, not evidence that the backend exists or that financial formulas/authentication have been approved. The [proposal](../product/AlphaQuant_Proposal.md) owns approval status; [feature catalogue](../requirements/Financial_Analysis_Features.md) describes the longer-term ideas; [implementation plan](../requirements/Comparison_Implementation_Plan.md) records proposed backend contracts and open decisions.
 
+## Integrated preview update (2026-11-01)
+
+Financial analysis now consumes comparison-1 through the backend facade: peer summaries, five annual periods where available, TTM, source evidence and guarded valuation. Data connections implements browser Connect/Cancel/Test/Disconnect, plus optional session-only reviewed equity/capital JSON. The operator must configure AQ_OAUTH_BROKER_ORIGIN after actual registration/deployment; no broker disables Connect while leaving fundamentals usable. Access must be verified for all selected symbols before streaming. Existing test-0 comparison remains separately labelled. See [First preview guide](First_Preview.md) for run/package steps, review-input schema and external deployment gates. Earlier unwired-screen statements below are historical design context superseded by this integration update.
+
 ## Backend update for UI integration (2026-10-28)
 
 Browser OAuth is now selected (AQ-D022), and the comparison-1 financial baseline was finalized under user delegation. Use **Connect with Alpaca**, Cancel, access-test status and Disconnect; no Alpaca API-key/secret/password fields for this adapter. Earlier API-key/OAuth alternatives below are historical mockup context only. Other future adapters may still have their own reviewed fields.

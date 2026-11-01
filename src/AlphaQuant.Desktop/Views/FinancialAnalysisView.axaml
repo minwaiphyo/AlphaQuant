@@ -1,0 +1,99 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.FinancialAnalysisView" x:DataType="vm:FinancialAnalysisViewModel" KeyDown="OnKeyDown">
+  <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
+    <StackPanel Spacing="8">
+      <TextBlock Text="Financial analysis · comparison-1" Classes="h1" TextWrapping="Wrap"/>
+      <WrapPanel>
+        <Button Content="← Peer workspace / refresh" Command="{Binding BackCommand}" Margin="0,0,8,8"/>
+        <Button Content="Data connections" Command="{Binding SettingsCommand}" Margin="0,0,8,8"/>
+        <Button Content="Stop updates" Command="{Binding StopCommand}" IsEnabled="{Binding Running}" Margin="0,0,8,8"/>
+      </WrapPanel>
+      <TextBlock Text="{Binding Status}" Classes="muted"/>
+      <TextBlock Text="US domestic non-financial US-GAAP/USD research. Scope/class/split reviews are not automated; unsupported valuation stays unavailable. IEX is not the consolidated US market." Classes="warning small"/>
+    </StackPanel>
+    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="16">      <TextBlock Text="Peer summary · latest annual and TTM periods" Classes="h2"/>
+      <ItemsControl ItemsSource="{Binding Companies}">
+        <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:ResearchCompany">
+            <Border Classes="panel" Width="300" Margin="0,0,12,12" Padding="16">
+              <StackPanel Spacing="8">
+                <TextBlock Text="{Binding Name}" Classes="h2" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Status}" Classes="muted small"/>
+                <TextBlock Text="{Binding Price}" Classes="muted small"/>
+                <ItemsControl ItemsSource="{Binding Summary}">
+                  <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:ResearchMetric">
+                    <StackPanel Spacing="3" Margin="0,6">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                      <Button Content="{Binding Value}" Command="{Binding InspectCommand}" Click="InspectClicked" Classes="metric" AutomationProperties.Name="{Binding Name}"/>
+                      <TextBlock Text="{Binding Period}" Classes="muted small"/>
+                      <TextBlock Text="{Binding Reason}" Classes="warning small"/>
+                    </StackPanel>
+                  </DataTemplate></ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <TextBlock Text="Full history and warnings · expand a company" Classes="h2"/>
+      <ItemsControl ItemsSource="{Binding Companies}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:ResearchCompany">
+            <Expander Header="{Binding Name}" HorizontalAlignment="Stretch" Margin="0,0,0,16"><Border Classes="panel">
+              <StackPanel Spacing="10">
+                <TextBlock Text="{Binding Name}" Classes="h2" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Status}" Classes="muted small"/>
+                <TextBlock Text="{Binding Price}" Classes="muted"/>
+                <TextBlock Text="{Binding Warnings}" Classes="warning small"/>
+                <ItemsControl ItemsSource="{Binding Metrics}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ResearchMetric">
+                      <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource AqLine}" Padding="0,8">
+                        <StackPanel Spacing="4">
+                          <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                          <Button Content="{Binding Value}" Command="{Binding InspectCommand}" Click="InspectClicked" Classes="metric" AutomationProperties.Name="{Binding Name}"/>
+                          <TextBlock Text="{Binding Period}" Classes="muted small"/>
+                          <TextBlock Text="{Binding Reason}" Classes="warning small"/>
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border></Expander>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel></ScrollViewer>
+    <Border Grid.Row="1" Classes="panel" IsVisible="{Binding HasEvidence}" HorizontalAlignment="Right" Width="420" MaxWidth="600">
+      <Grid RowDefinitions="Auto,*">
+        <Button x:Name="CloseEvidenceButton" Content="Close evidence" Command="{Binding CloseEvidenceCommand}" Click="CloseClicked"/>
+        <ScrollViewer Grid.Row="1" Margin="0,12,0,0">
+          <StackPanel Spacing="10">
+            <TextBlock Text="{Binding Evidence.Company}" Classes="h2" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Evidence.Title}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Evidence.Value}" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Evidence.Formula}" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Evidence.Detail}" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Evidence.Retrieved}" Classes="muted small"/>
+            <TextBlock Text="{Binding Evidence.Warnings}" Classes="warning small"/>
+            <ItemsControl ItemsSource="{Binding Evidence.Facts}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:EvidenceFact">
+                  <StackPanel Spacing="6" Margin="0,8">
+                    <TextBlock Text="{Binding Label}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding Value}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding Period}" Classes="muted small"/>
+                    <TextBlock Text="{Binding Source}" Classes="muted small"/>
+                    <Button Content="Open SEC filing" Command="{Binding OpenFilingCommand}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+    <TextBlock Grid.Row="2" Text="Historical fundamentals and current valuation have different dates. Research evidence supports your own conclusion; no trading or automatic recommendations." Classes="muted small"/>
+  </Grid>
+</UserControl>
