@@ -6,6 +6,25 @@ namespace AlphaQuant.Tests;
 
 public sealed class ComparisonIntegrationTests
 {
+    private sealed class MissingContactFacts : ICompanyFactsSource
+    {
+        public Task<CompanyFacts> GetFactsAsync(long cik, CancellationToken token) => throw new DataSourceException(DataSourceErrorKind.ContactMissing, "private-detail-do-not-display");
+    }
+    [Fact]
+    public async Task ContactErrorKindSurvivesCoreBoundaryWithoutPrivateMessage()
+    {
+        var service = new ComparisonService(new MissingContactFacts(), new Feed(new FixedClock()));
+        await foreach (var snapshot in service.WatchAsync([new(1, "ONE", "One"), new(2, "TWO", "Two")]))
+        {
+            Assert.All(snapshot.Rows, row =>
+            {
+                Assert.Equal(DataSourceErrorKind.ContactMissing, row.FinancialErrorKind);
+                Assert.Contains("Data connections", row.Error);
+                Assert.DoesNotContain("private-detail", row.Error);
+            });
+            break;
+        }
+    }
     private sealed class Facts : ICompanyFactsSource
     {
         public Task<CompanyFacts> GetFactsAsync(long cik, CancellationToken token) => Task.FromResult(

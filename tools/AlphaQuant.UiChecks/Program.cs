@@ -42,6 +42,10 @@ internal static class Program
         }
         Capture("comparison-light", 1200, 760, ThemeVariant.Light);
         Capture("comparison-minimum-dark", 648, 560, ThemeVariant.Dark);
+        var filters = view.GetVisualDescendants().OfType<Expander>().First();
+        filters.IsExpanded = true;
+        Capture("filters-minimum-dark", 648, 560, ThemeVariant.Dark);
+        filters.IsExpanded = false;
         var metric = view.GetVisualDescendants().OfType<Button>().First(b => b.Classes.Contains("metric"));
         metric.Focus(); metric.Command!.Execute(null);
         metric.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
