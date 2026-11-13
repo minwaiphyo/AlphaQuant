@@ -38,7 +38,8 @@ public partial class SavedResearchViewModel : ObservableObject
     public ObservableCollection<SavedResearchSet> Sets { get; } = [];
     public ObservableCollection<SavedMemberChoice> Members { get; } = [];
     public ObservableCollection<SavedFinancialSnapshot> Snapshots { get; } = [];
-    public Task SelectionLoad { get; private set; } = Task.CompletedTask;
+    private Task<bool> _selectionLoad = Task.FromResult(true);
+    public Task SelectionLoad => _selectionLoad;
     [ObservableProperty] private SavedResearchSet? _selectedSet;
     [ObservableProperty] private SavedFinancialSnapshot? _selectedSnapshot;
     [ObservableProperty] private string _inputName = string.Empty;
@@ -64,30 +65,32 @@ public partial class SavedResearchViewModel : ObservableObject
             InputName = value.Name;
             foreach (var company in value.Companies)
                 Members.Add(new(company, value.Kind == ResearchSetKind.PeerSet, () => OnPropertyChanged(nameof(SelectionDetails))));
-            SelectionLoad = ReadSnapshotsAsync(value.Id, generation);
+            _selectionLoad = ReadSnapshotsAsync(value.Id, generation);
         }
-        else SelectionLoad = Task.CompletedTask;
+        else _selectionLoad = Task.FromResult(true);
         OnPropertyChanged(nameof(SelectedDetails)); OnPropertyChanged(nameof(SelectionDetails)); OnPropertyChanged(nameof(UpdateMembersLabel));
     }
-    private async Task ReadSnapshotsAsync(Guid id, int generation)
+    private async Task<bool> ReadSnapshotsAsync(Guid id, int generation)
     {
         try
         {
             var snapshots = await _store.ListSnapshotsAsync(id, _lifetime.Token);
-            if (generation != _selectionGeneration || SelectedSet?.Id != id || _lifetime.IsCancellationRequested) return;
+            if (generation != _selectionGeneration || SelectedSet?.Id != id || _lifetime.IsCancellationRequested) return false;
             Snapshots.Clear(); foreach (var item in snapshots) Snapshots.Add(item);
             SelectedSnapshot = Snapshots.FirstOrDefault();
+            return true;
         }
-        catch (ResearchStorageException ex) { if (generation == _selectionGeneration) Status = ex.Message; }
-        catch (OperationCanceledException) { }
+        catch (ResearchStorageException ex) { if (generation == _selectionGeneration) Status = ex.Message; return false; }
+        catch (OperationCanceledException) { return false; }
     }
-    private async Task RefreshSetsAsync(Guid? selected = null)
+    private async Task<bool> RefreshSetsAsync(Guid? selected = null)
     {
         var sets = await _store.ListSetsAsync(IncludeDeleted, _lifetime.Token);
         var id = selected ?? SelectedSet?.Id;
         SelectedSet = null;
         Sets.Clear(); foreach (var set in sets) Sets.Add(set);
         SelectedSet = Sets.FirstOrDefault(s => s.Id == id);
+        return await _selectionLoad;
     }
     private async Task RunAsync(Func<Task> operation)
     {
@@ -102,7 +105,7 @@ public partial class SavedResearchViewModel : ObservableObject
     private Task ReloadAsync() => RunAsync(async () =>
     {
         await _store.InitializeAsync(_lifetime.Token);
-        await RefreshSetsAsync();
+        if (!await RefreshSetsAsync()) return;
         Status = "Local research loaded. Offline snapshots retain original dates; quotes and credentials are never saved here.";
     });
     [RelayCommand]
@@ -111,7 +114,7 @@ public partial class SavedResearchViewModel : ObservableObject
         await _store.InitializeAsync(_lifetime.Token);
         var saved = await _store.SaveSetAsync(new(InputName, SaveAsWatchlist ? ResearchSetKind.Watchlist : ResearchSetKind.PeerSet, _selection())
             { Preset = _analysis.CapturePreset() }, _lifetime.Token);
-        await RefreshSetsAsync(saved.Id);
+        if (!await RefreshSetsAsync(saved.Id)) return;
         Status = "Saved a new named set and its applied filter/sort preset. Financial snapshots are captured separately.";
     });
     [RelayCommand]
@@ -119,7 +122,7 @@ public partial class SavedResearchViewModel : ObservableObject
     {
         if (SelectedSet is not { } set) { Status = "Choose a saved set to rename."; return; }
         var saved = await _store.SaveSetAsync(new(InputName, set.Kind, set.Companies, set.Id, set.Revision) { Preset = set.Preset }, _lifetime.Token);
-        await RefreshSetsAsync(saved.Id); Status = "Renamed. Members and historical snapshots were retained.";
+        if (await RefreshSetsAsync(saved.Id)) Status = "Renamed. Members and historical snapshots were retained.";
     });
     [RelayCommand]
     private Task UpdateMembersAsync() => RunAsync(async () =>
@@ -128,7 +131,7 @@ public partial class SavedResearchViewModel : ObservableObject
         var companies = set.Kind == ResearchSetKind.Watchlist ? set.Companies.Concat(_selection()).DistinctBy(c => c.Cik).ToArray() : _selection();
         var saved = await _store.SaveSetAsync(new(set.Name, set.Kind, companies, set.Id, set.Revision)
             { Preset = _analysis.CapturePreset() }, _lifetime.Token);
-        await RefreshSetsAsync(saved.Id); Status = "Saved members and the applied filter preset. Existing financial snapshots were not rewritten.";
+        if (await RefreshSetsAsync(saved.Id)) Status = "Saved members and the applied filter preset. Existing financial snapshots were not rewritten.";
     });
     [RelayCommand] private Task DeleteAsync() => ChangeDeletedAsync(true);
     [RelayCommand]
@@ -139,14 +142,14 @@ public partial class SavedResearchViewModel : ObservableObject
         var remaining = set.Companies.Where(c => !remove.Contains(c.Cik)).ToArray();
         if (remove.Count == 0 || remaining.Length == 0) { Status = "Check members to remove, keeping at least one. Move the whole set to deleted if it is no longer needed."; return; }
         var saved = await _store.SaveSetAsync(new(set.Name, set.Kind, remaining, set.Id, set.Revision) { Preset = set.Preset }, _lifetime.Token);
-        await RefreshSetsAsync(saved.Id); Status = "Removed the checked watchlist members. Historical financial snapshots were retained.";
+        if (await RefreshSetsAsync(saved.Id)) Status = "Removed the checked watchlist members. Historical financial snapshots were retained.";
     });
     [RelayCommand] private Task RecoverAsync() => ChangeDeletedAsync(false);
     private Task ChangeDeletedAsync(bool deleted) => RunAsync(async () =>
     {
         if (SelectedSet is not { } set) { Status = "Choose a saved set first."; return; }
         var saved = await _store.SetDeletedAsync(set.Id, set.Revision, deleted, _lifetime.Token);
-        await RefreshSetsAsync(saved.Id);
+        if (!await RefreshSetsAsync(saved.Id)) return;
         Status = deleted ? "Moved to deleted. Enable Include deleted to recover it; historical snapshots remain stored." : "Recovered the saved set and its snapshots.";
     });
     [RelayCommand]
@@ -154,7 +157,7 @@ public partial class SavedResearchViewModel : ObservableObject
     {
         if (SelectedSet is not { } set || set.DeletedAt is not null) { Status = "Choose an active saved set matching the financial comparison first."; return; }
         var saved = await _store.SaveSnapshotAsync(_analysis.CaptureFinancials(set.Id, set.Revision), _lifetime.Token);
-        if (SelectedSet?.Id == saved.PeerSetId) await ReadSnapshotsAsync(saved.PeerSetId, _selectionGeneration);
+        if (SelectedSet?.Id == saved.PeerSetId && !await ReadSnapshotsAsync(saved.PeerSetId, _selectionGeneration)) return;
         Status = "Captured immutable financial results and source evidence. No market quotes, valuation reviews, contact or tokens were stored.";
     });
     [RelayCommand]
@@ -186,6 +189,6 @@ public partial class SavedResearchViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(BackupPath)) { Status = "Choose the local backup file path first."; return; }
         ConfirmRestore = false;
         await _store.RestoreAsync(BackupPath, _lifetime.Token);
-        await RefreshSetsAsync(); Status = "Research restored from the verified backup; the previous valid database was backed up separately.";
+        if (await RefreshSetsAsync()) Status = "Research restored from the verified backup; the previous valid database was backed up separately.";
     });
 }

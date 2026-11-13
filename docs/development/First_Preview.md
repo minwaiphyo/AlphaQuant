@@ -21,11 +21,11 @@ Connect with Alpaca opens your browser for data-only consent. Select your peers,
 ## Known limitations and release gates
 
 - This is an unsigned development preview. Windows Smart App Control or organizational policy may block it. Do not disable Windows security to run it. A trusted signing/distribution route or an approved development environment is still required on enforcing devices. A ZIP, checksum or self-contained runtime does not establish publisher trust.
-- P/E and EV/sales require reviewed issuer/class/split/capital evidence. Data connections accepts explicit reviewed JSON for this session; parsing is not a financial review. Without those inputs, valuation remains unavailable with reasons. The backend calculations are implemented and fixture-tested; do not describe valuation as generally usable yet.
+- P/E and EV/sales require reviewed issuer/class/split/capital evidence. Data connections offers a structured review form and advanced explicit JSON import for this session. Neither entry nor parsing certifies a review. Missing scope, claims, dates or eligible prices leave valuation unavailable. See [structured review](Valuation_Review.md).
 - Debt requires explicit reviewed composition and is unavailable without it. Missing facts never become zero. Supported scope is not automatically certified from fact availability.
 - Five years appear where compatible filings exist; annual and TTM periods differ. Historical fundamentals use latest-filed facts, not historical point-in-time valuation.
 - No live OAuth/provider or independent finance certification is implied by synthetic tests. Registration, permitted pilot use and zero-cost host availability must be established before a connected pilot.
-- The existing annual comparison remains labelled test-0; comparison-1 is a separate screen. Research state is session-only; notes/export/watchlists are not included.
+- Production Compare uses comparison-1.1; legacy annual test-0 references remain separately labelled. Saved research now includes named peers/watchlists, presets and immutable financial snapshots with original dates and offline evidence. Quotes and reviewed valuation objects remain session-only. Thesis notes and exports are not implemented.
 
 ## Build and deployment
 
@@ -34,6 +34,11 @@ From the repository: dotnet test AlphaQuant.slnx, then powershell -File tools/Pu
 First-version acceptance: clean build/tests; inspected UI with fake sources; install/run smoke on a supported Windows machine; trusted distribution decision; real SEC reconciliation; registered/deployed OAuth and entitlement verification for a connected preview. Pending external gates must stay explicit.
 
 ## Reviewed evidence schema
+
+The structured form avoids editing this JSON. Its per-company Apply is atomic;
+equity-only Apply explicitly removes that company's prior capital review while
+retaining other issuers. Clear draft and Clear applied are separate. The following
+advanced import retains its original whole-document replacement behavior.
 
 Data connections → Reviewed valuation inputs accepts this versioned JSON structure. Arrays may be empty or contain up to five unique CIKs each. Property names are case-sensitive. Every property is mandatory for each entry, including explicit zeros; the app never infers that an omitted claim equals zero. Loading a valid document replaces both review lists atomically; invalid input preserves the prior lists. Clear removes both lists. Nothing is written to disk. Return to financial analysis after loading/clearing to apply it.
 

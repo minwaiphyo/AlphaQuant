@@ -15,6 +15,7 @@ using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Avalonia.Automation;
 
 // Fixture-only rendering. No production composition, settings, credentials or network.
 internal static class Program
@@ -102,6 +103,52 @@ internal static class Program
             Capture("saved-offline-evidence-dark", 648, 560, ThemeVariant.Dark);
         }
         finally { savedVm.CancelOperations(); if (Directory.Exists(researchRoot)) Directory.Delete(researchRoot, true); }
+        var reviewStore = new ReviewedEvidenceStore();
+        var reviewVm = new ValuationReviewViewModel(reviewStore, () => peers, vm.ReviewInputs, new NoLinks(), vm.StopWatching);
+        reviewVm.RefreshCompanies();
+        var reviewView = new ValuationReviewView { DataContext = reviewVm };
+        var reviewScroll = new ScrollViewer { Content = reviewView, HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled };
+        window.Content = reviewScroll;
+        Capture("review-empty-light", 1200, 760, ThemeVariant.Light);
+        Capture("review-minimum-dark", 648, 560, ThemeVariant.Dark);
+        var filingInput = reviewView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Review filing accession");
+        filingInput.Focus(); Dispatcher.UIThread.RunJobs();
+        if (!filingInput.IsFocused) throw new InvalidOperationException("Review filing field did not receive focus");
+        reviewVm.FilingAccession = "0000000001-26-000001";
+        reviewVm.ReviewReference = "Synthetic source review only; no issuer eligibility or real source acceptance claimed";
+        reviewVm.ScopeConfirmed = reviewVm.ClassConfirmed = true; reviewVm.IncludeCapital = true;
+        reviewVm.SplitThrough = DateTime.UtcNow.ToString("yyyy-MM-dd");
+        reviewVm.SharesDate = reviewVm.BalanceSheetDate = DateTime.UtcNow.ToString("yyyy-MM-dd");
+        reviewVm.OutstandingShares = "100"; reviewVm.Debt = "400"; reviewVm.CapitalClaimsConfirmed = true;
+        reviewVm.ApplyCommand.Execute(null);
+        if (reviewStore.Capital.Count != 0) throw new InvalidOperationException("Incomplete review was accepted");
+        reviewScroll.Offset = default;
+        Capture("review-missing-capital-dark", 648, 560, ThemeVariant.Dark);
+        reviewVm.Cash = "100"; reviewVm.PreferredEquity = reviewVm.NonControllingInterests = "0";
+        reviewVm.ApplyCommand.Execute(null);
+        if (reviewStore.Capital.Count != 1) throw new InvalidOperationException("Explicit synthetic review was not applied");
+        Dispatcher.UIThread.RunJobs();
+        var sharesInput = reviewView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Actual outstanding common shares");
+        var sharesPoint = sharesInput.TranslatePoint(default, reviewView) ?? throw new InvalidOperationException("Share input layout missing");
+        reviewScroll.Offset = new Vector(0, Math.Max(0, sharesPoint.Y - 80));
+        Capture("review-capital-fields-dark", 648, 560, ThemeVariant.Dark);
+        var preferredInput = reviewView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Reviewed preferred equity USD");
+        var preferredPoint = preferredInput.TranslatePoint(default, reviewView) ?? throw new InvalidOperationException("Preferred input layout missing");
+        reviewScroll.Offset = new Vector(0, Math.Max(0, preferredPoint.Y - 80));
+        Capture("review-explicit-zero-claims-dark", 648, 560, ThemeVariant.Dark);
+        var sourceExpander = reviewView.GetVisualDescendants().OfType<Expander>().First(); sourceExpander.IsExpanded = true;
+        Dispatcher.UIThread.RunJobs();
+        var sourcePoint = sourceExpander.TranslatePoint(default, reviewView) ?? throw new InvalidOperationException("Source layout missing");
+        reviewScroll.Offset = new Vector(0, Math.Max(0, sourcePoint.Y - 200));
+        Capture("review-applied-source-dark", 648, 560, ThemeVariant.Dark);
+        var mixedDraft = vm.CaptureFinancials(Guid.NewGuid(), 1);
+        var mixedCompanies = mixedDraft.Companies.Select((company, index) => index == 1
+            ? company with { DefinitionVersion = "comparison-legacy-fixture" } : company).ToArray();
+        Complete(vm.ShowSavedSnapshotAsync(new SavedFinancialSnapshot(Guid.NewGuid(), mixedDraft.PeerSetId, 1,
+            DateTimeOffset.UtcNow, "mixed definitions", mixedCompanies)));
+        if (!vm.Title.Contains("mixed definitions") || !vm.FilterDescription.Contains("disabled")) throw new InvalidOperationException("Mixed-definition guards were not visible");
+        window.Content = view;
+        Capture("mixed-definition-offline-dark", 648, 560, ThemeVariant.Dark);
         window.Close();
         File.WriteAllText(Path.Combine(output, "scope.txt"), "Synthetic services only. Real Avalonia layout/rendering and evidence Escape/focus checked. Viewport 648x560 approximates the research area at the 900x720 shell minimum. Not a native accessibility or live-provider certification.\n");
         Console.WriteLine("UI fixture rendering and evidence keyboard checks passed.");

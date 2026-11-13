@@ -343,16 +343,20 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
-Cloud continuation, 2026-11-13: owner resumed a few stages while Windows trust
-work remains pending. S04 implements SQLite schema/migration, verified backups,
-transaction/revision handling and recovery. S05 adds named peers/watchlists,
-versioned presets and immutable financial snapshots with no retained prices or
-credentials; offline opening and Settings return make no source request. On the
-stacked development branch 241 synthetic tests and 12 headless rendering states
-pass. PR24 remains unmerged; GitHub API/remote CI delivery and native Windows
-acceptance remain unverified. Distribution changes are preserved separately.
-Next: structured valuation-review input forms (S06), retaining comparison-1.1
-guards and session-only review state. No live finance requests or spending.
+Cloud continuation, 2026-11-13 (AQ-D029): owner resumed a few stages while Windows
+trust work remains pending. S04 implements SQLite schema/migration, verified
+backups, revision handling and recovery. S05 adds named peers/watchlists, presets
+and immutable financial snapshots with no retained prices or credentials; offline
+opening and Settings return make no source request. S06 adds structured, atomic,
+session-only valuation reviews with explicit scope/source/date/zero claims, keeping
+comparison-1.1 arithmetic and freshness guards unchanged. The latest branch passes
+274 .NET tests, 19 Python reference tests, zero-warning/error Release build and
+19 headless UI render states/keyboard checks. An unsigned Windows x64 ZIP and its
+SQLite native dependency were inspected, not executed. PR24 remains unmerged;
+GitHub API/remote CI delivery and native Windows acceptance remain unverified.
+Distribution changes are preserved separately. Next: resolve API access and
+exact-head review/CI delivery without bypassing the PR24 hold; S07 is the next
+independent engineering stage. No live finance requests or spending.
 
 Stage checkpoint, 2026-11-13: S01 merged through PR #22 (1e3b11b), with 206 tests passing on clean CI and a clean local compile. Fixed finite-stream completion leaving active valuation and disabled SEC redirects. Local runtime is blocked by OS policy. S02 prepares real-source capture and independently expected synthetic cases, and corrects ambiguous prior-FY TTM selection under comparison-1.1. No saved/process SEC contact exists, so live retrieval/reconciliation stays blocked and no real issuer values are claimed. S03 is the independent continuation after deterministic S02 delivery. See ledger and validation reports for exact status.
 
@@ -378,6 +382,7 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D029 2026-11-13 | Approved continuation; S04–S06 locally verified, remote delivery pending | Resume a few independent development stages while Windows signing/PC validation stays pending. Preserve no-cost/no-live-call boundaries, existing PR24 work and explicit delivery gates. SQLite research excludes credentials/quotes; reviewed valuation objects remain session-only. | Owner: keep PC work pending and proceed with a few more stages. |
 | AQ-D027 2026-11-13 | Approved stage execution | Accept roadmap 1.0 and begin the next few stages autonomously under its quality skills, checks, normal Git delivery and independent blocker fallback. Initial set S01-S03. No new spending, account creation, trading or fabricated gate evidence. | Owner's explicit proceed instruction after roadmap/skill review. |
 | AQ-D026 2026-11-13 | Implemented reusable quality layer | Add project-owned specialized skills for evidence, quantitative models, design, data connections, storage/recovery and stage acceptance. Use concise instructions, relevant references, deterministic numeric tooling, selective discovery/routing and explicit validation limits. Preserve existing scope, stage approval and external gates. | Owner requested reusable domain/design/calculation skills before continuing development. |
 | AQ-D025 2026-11-13 | Planning policies confirmed, stage contracts draft | Full-product resumable roadmap through forecasts/DCF/scenarios. Stage invocations authorize autonomous implementation and normal Git delivery after checks. Continue independent stages on external blockers. Delegate documented finance definitions, adopt SQLite/recovery, permit bounded configured SEC and explicitly connected Alpaca validation. Preserve zero required cost and no trading/recommendations. No application changes begin until plan acceptance/invocation. | Owner planning request and two GUI decision rounds. |
@@ -411,6 +416,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-11-13 | Cloud S04–S06 continuation: SQLite/recovery, saved peer/watchlist and immutable offline research, structured session reviews. 274 .NET tests and 19 reference tests passed; full Release build zero warnings/errors; 19 headless PNG states generated with focus/Escape checks and relevant light/dark/minimum layouts inspected. Windows cross-publish/ZIP checksum/native x64 SQLite/provider contents checked, with no user settings/research files bundled. Branches committed separately; PR24 unchanged. | api.github.com absent from enforced allowlist blocks PR/CI API delivery. No remote exact-head CI, native Windows execution, signing, live source reconciliation or release publication claimed. See ledger for precise status. |
 | 2026-10-28 | feat/alpaca-oauth-comparison: implemented browser-OAuth client/server broker, IEX adapter, financial comparison-1 baseline and UI-independent ComparisonBackend facade. Extended parser and added synthetic/security/stream/end-to-end tests. Solution build 0 warnings/errors; 170 tests passed. Loopback broker HTTP smoke passed with no provider calls. No Desktop files changed. Documentation/setup instructions added; local PDF not refreshed. | Teammate screen wiring, OAuth registration/HTTPS preview deployment, eligibility/rights, real login/quotes/filing reconciliation and independent finance review. |
 | 2026-10-28 | Revision 0.20: consolidated current scope, added UI_Design_Brief.md for teammate-owned screens/fields/states and linked all planning records. Documentation only; financial definitions/authentication remain unapproved. No application build/tests or provider calls. Documentation checks passed (33 local links, root placement, story preservation and diff/privacy checks); local private source/PDF synchronized and all pages visually inspected. Private artifacts excluded from Git. | Prototype synthetic UI flow, agree shared contracts/authentication and approve financial definitions/first increment. |
 | 2026-10-28 | Clarified that provider credential permissions do not introduce trading features. Recorded session-only storage and limited verifiable valuation coverage; authentication remains undecided. Documentation-only, no application/live tests. PDF/source revision 0.19 pending. | Settle supported authentication and accept bounded plan. |

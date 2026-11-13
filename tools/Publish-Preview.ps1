@@ -17,6 +17,9 @@ if ((Test-Path -LiteralPath $publishDir) -or (Test-Path -LiteralPath $zipPath)) 
 & $Dotnet publish (Join-Path $repoRoot 'src/AlphaQuant.Desktop/AlphaQuant.Desktop.csproj') -c Release -r win-x64 --self-contained true -o $publishDir "-p:Version=$Version" -p:PublishSingleFile=false -p:DebugType=None -p:DebugSymbols=false
 if ($LASTEXITCODE -ne 0) { throw 'Desktop publish failed.' }
 Copy-Item -LiteralPath (Join-Path $repoRoot 'docs/development/First_Preview.md') -Destination (Join-Path $publishDir 'START-HERE.md')
+foreach ($guide in @('Research_Storage.md', 'Valuation_Review.md')) {
+    Copy-Item -LiteralPath (Join-Path $repoRoot "docs/development/$guide") -Destination (Join-Path $publishDir $guide)
+}
 Compress-Archive -LiteralPath $publishDir -DestinationPath $zipPath
 $hash = (Get-FileHash -LiteralPath $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
 "$hash  $packageName.zip" | Set-Content -LiteralPath "$zipPath.sha256" -Encoding ascii

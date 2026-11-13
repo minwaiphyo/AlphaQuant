@@ -18,6 +18,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ReleaseNotesViewModel _releaseNotes;
     private readonly SearchViewModel _search;
     private readonly SettingsViewModel _settings;
+    private readonly ReviewedEvidenceStore? _sessionEvidence;
     public ComparisonViewModel Comparison { get; }
     public FinancialAnalysisViewModel? Analysis { get; }
     public MarketConnectionViewModel? Market { get; }
@@ -37,6 +38,7 @@ public partial class MainWindowViewModel : ObservableObject
         IResearchStore? researchStore = null)
     {
         _facts = facts;
+        _sessionEvidence = evidence;
         _linkOpener = linkOpener;
         _home = new HomeViewModel(ShowSearch, OpenSettingsFromHome, ShowReleaseNotes);
         _releaseNotes = new ReleaseNotesViewModel(ShowHome);
@@ -49,6 +51,12 @@ public partial class MainWindowViewModel : ObservableObject
             Market = new MarketConnectionViewModel(research, () => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Ticker)), evidence);
             Market.Disconnected += Analysis.StopWatching;
             _settings.Market = Market;
+            if (evidence is not null)
+            {
+                _settings.Review = new ValuationReviewViewModel(evidence, () => Comparison.Peers.Select(p => p.Company).ToArray(),
+                    Analysis.ReviewInputs, linkOpener, Analysis.StopWatching);
+                Market.ReviewedInputsChanged += () => { Analysis.StopWatching(); _settings.Review.RefreshAppliedStatus(); };
+            }
         }
         _search.Workspace = Comparison;
         _search.CompareAction = ShowComparison;
@@ -88,7 +96,11 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentPage = Analysis;
         _ = Analysis.LoadAsync(System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Company)));
     }
-    public void Shutdown() { Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); SavedResearch?.CancelOperations(); }
+    public void Shutdown()
+    {
+        Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); SavedResearch?.CancelOperations();
+        _sessionEvidence?.Clear(); _settings.Review?.ClearDraftCommand.Execute(null);
+    }
     [RelayCommand]
     private void ShowSavedResearch()
     {

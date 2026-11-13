@@ -146,6 +146,18 @@ public sealed class SqliteResearchStore : IResearchStore
         var snapshot = new SavedFinancialSnapshot(Guid.NewGuid(), draft.PeerSetId, draft.PeerSetRevision,
             DateTimeOffset.UtcNow, draft.DefinitionVersion, draft.Companies?.ToArray() ?? []);
         ValidateSnapshot(snapshot);
+        // Debt in comparison-1.1 is an analyst capital-review input, not an
+        // independently selected public filing fact. Keep its values/references
+        // session-only even though it is displayed among financial fundamentals.
+        snapshot = snapshot with { Companies = snapshot.Companies.Select(company => company with
+        {
+            DefinitionVersion = company.DefinitionVersion ?? snapshot.DefinitionVersion,
+            Fundamentals = company.Fundamentals is { } financials ? financials with
+            {
+                DebtBalance = ComparisonAnalyzer.Missing("Reviewed interest-bearing debt", "USD",
+                    "Reviewed capital inputs are session-only and were not retained in this snapshot.")
+            } : null
+        }).ToArray() };
         // Deep-copy only the explicitly typed financial DTO before awaiting I/O.
         var json = JsonSerializer.Serialize(snapshot, JsonOptions);
         if (Encoding.UTF8.GetByteCount(json) > MaxSnapshotBytes) throw Failure(ResearchStorageFailure.Validation, "Financial snapshot exceeds the 2 MiB limit; nothing saved.");
@@ -161,7 +173,7 @@ public sealed class SqliteResearchStore : IResearchStore
                 throw Failure(ResearchStorageFailure.Validation, "Snapshot companies must match the entire saved peer set. Choose a matching set first.");
             if (new FileInfo(_path).Length + Encoding.UTF8.GetByteCount(json) + 16384 > MaxDatabaseBytes)
                 throw Failure(ResearchStorageFailure.Validation, "Research storage is full; preserve a backup before choosing a new research file.");
-            Execute(db, "INSERT INTO financial_snapshots(id,set_id,captured_utc,payload_schema,payload) VALUES($id,$set,$time,1,$payload);", tx,
+            Execute(db, "INSERT INTO financial_snapshots(id,set_id,captured_utc,payload_schema,payload) VALUES($id,$set,$time,2,$payload);", tx,
                 ("$id", captured.Id.ToString()), ("$set", captured.PeerSetId.ToString()), ("$time", Time(captured.CapturedAt)), ("$payload", json));
             token.ThrowIfCancellationRequested();
             tx.Commit();
@@ -172,7 +184,13 @@ public sealed class SqliteResearchStore : IResearchStore
     public Task<IReadOnlyList<SavedFinancialSnapshot>> ListSnapshotsAsync(Guid setId, CancellationToken token = default) => AccessAsync<IReadOnlyList<SavedFinancialSnapshot>>(() =>
     {
         using var db = OpenCurrent();
+        return ReadSnapshots(db, setId, token);
+    }, token);
+
+    private static IReadOnlyList<SavedFinancialSnapshot> ReadSnapshots(SqliteConnection db, Guid setId, CancellationToken token, SqliteTransaction? transaction = null)
+    {
         using var command = db.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = "SELECT id,payload_schema,payload FROM financial_snapshots WHERE set_id=$id ORDER BY captured_utc DESC,id;";
         command.Parameters.AddWithValue("$id", setId.ToString());
         using var reader = command.ExecuteReader();
@@ -180,16 +198,29 @@ public sealed class SqliteResearchStore : IResearchStore
         while (reader.Read())
         {
             token.ThrowIfCancellationRequested();
-            if (reader.GetInt32(1) != 1) throw Failure(ResearchStorageFailure.UnsupportedVersion, "Snapshot payload version is unsupported; preserve the database and use a compatible app.");
+            if (Enumerable.Range(0, 3).Any(reader.IsDBNull)) throw Failure(ResearchStorageFailure.Corrupt, "Required snapshot metadata is missing; file preserved.");
+            var payloadVersion = reader.GetInt32(1);
+            if (payloadVersion is not (1 or 2)) throw Failure(ResearchStorageFailure.UnsupportedVersion, "Snapshot payload version is unsupported; preserve the database and use a compatible app.");
             var text = reader.GetString(2);
             if (Encoding.UTF8.GetByteCount(text) > MaxSnapshotBytes) throw Failure(ResearchStorageFailure.Corrupt, "Stored snapshot exceeds the supported size.");
             var item = JsonSerializer.Deserialize<SavedFinancialSnapshot>(text, JsonOptions) ?? throw Failure(ResearchStorageFailure.Corrupt, "Stored snapshot is empty.");
-            ValidateSnapshot(item);
+            if (payloadVersion == 2 && item.Companies is not null && item.Companies.Any(company => company is null || string.IsNullOrWhiteSpace(company.DefinitionVersion)))
+                throw Failure(ResearchStorageFailure.Corrupt, "Snapshot per-company definition provenance is missing; file preserved.");
+            if (payloadVersion == 1 && item.Companies is not null && item.Companies.All(company => company is not null))
+                item = item with { Companies = item.Companies.Select(company => company with { DefinitionVersion = item.DefinitionVersion }).ToArray() };
+            try { ValidateSnapshot(item); }
+            catch (ResearchStorageException ex) when (ex.Kind == ResearchStorageFailure.Validation)
+            { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Stored financial snapshot is malformed; it was preserved.", ex); }
             if (item.Id.ToString() != reader.GetString(0) || item.PeerSetId != setId) throw Failure(ResearchStorageFailure.Corrupt, "Snapshot identity does not match its stored record.");
             result.Add(item);
         }
         return result;
-    }, token);
+    }
+
+    private static void ValidateContent(SqliteConnection db, CancellationToken token, SqliteTransaction? transaction = null)
+    {
+        foreach (var set in ReadSets(db, true, token, transaction)) _ = ReadSnapshots(db, set.Id, token, transaction);
+    }
 
     public Task RestoreAsync(string backupPath, CancellationToken token = default) => AccessAsync<object?>(() =>
     {
@@ -207,6 +238,7 @@ public sealed class SqliteResearchStore : IResearchStore
                 source.BackupDatabase(stage);
                 Upgrade(stage, token);
                 Validate(stage);
+                ValidateContent(stage, token);
             }
             var exists = File.Exists(_path);
             // Never create a DB over a corrupt/foreign existing file. A new path is the recovery route.
@@ -254,6 +286,7 @@ public sealed class SqliteResearchStore : IResearchStore
         catch (Exception ex) when (ex is FormatException or OverflowException)
         { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Research contains malformed values; file preserved. Restore a verified backup into a new location.", ex); }
         catch (JsonException ex) { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Research payload is malformed; it was preserved. Restore a verified backup into a new location.", ex); }
+        catch (InvalidCastException ex) { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Research column types are invalid; file preserved.", ex); }
         finally { gate.Release(); }
     }
 
@@ -296,6 +329,7 @@ public sealed class SqliteResearchStore : IResearchStore
         if (version < 2) Execute(db, Schema2Changes, tx);
         if (version < 3) Execute(db, Schema3Changes, tx);
         Execute(db, $"PRAGMA user_version={CurrentVersion};", tx);
+        ValidateContent(db, token, tx);
         token.ThrowIfCancellationRequested();
         tx.Commit();
     }
@@ -311,6 +345,7 @@ public sealed class SqliteResearchStore : IResearchStore
             {
                 source.BackupDatabase(destination);
                 if (Validate(destination) != version) throw Failure(ResearchStorageFailure.Corrupt, "Backup version verification failed.");
+                if (version == CurrentVersion) ValidateContent(destination, CancellationToken.None);
             }
             File.Move(temp, final, false);
             return new ResearchBackup(final, version, created);
@@ -328,6 +363,7 @@ public sealed class SqliteResearchStore : IResearchStore
             while (reader.Read())
             {
                 token.ThrowIfCancellationRequested();
+                if (Enumerable.Range(0, 6).Any(reader.IsDBNull)) throw Failure(ResearchStorageFailure.Corrupt, "Required research metadata is missing; file preserved.");
                 rows.Add(new SavedResearchSet(Guid.Parse(reader.GetString(0)), reader.GetString(1), (ResearchSetKind)reader.GetInt32(2), [], reader.GetInt64(3),
                     ParseTime(reader.GetString(4)), ParseTime(reader.GetString(5)), reader.IsDBNull(6) ? null : ParseTime(reader.GetString(6)))
                 { Preset = reader.IsDBNull(7) ? null : JsonSerializer.Deserialize<ResearchScreenPreset>(reader.GetString(7), JsonOptions) });
@@ -342,8 +378,22 @@ public sealed class SqliteResearchStore : IResearchStore
             command.Parameters.AddWithValue("$id", rows[i].Id.ToString());
             using var reader = command.ExecuteReader();
             var members = new List<CompanyRef>();
-            while (reader.Read()) members.Add(new CompanyRef(reader.GetInt64(0), reader.GetString(1), reader.GetString(2)));
+            while (reader.Read())
+            {
+                if (Enumerable.Range(0, 3).Any(reader.IsDBNull)) throw Failure(ResearchStorageFailure.Corrupt, "Stored company metadata is missing; file preserved.");
+                members.Add(new CompanyRef(reader.GetInt64(0), reader.GetString(1), reader.GetString(2)));
+            }
             rows[i] = rows[i] with { Companies = members.ToArray() };
+            try
+            {
+                ValidName(rows[i].Name); ValidatePreset(rows[i].Preset);
+                if (!Enum.IsDefined(rows[i].Kind) || rows[i].Revision < 1 || members.Count < (rows[i].Kind == ResearchSetKind.PeerSet ? 2 : 1)
+                    || members.Count > (rows[i].Kind == ResearchSetKind.PeerSet ? 5 : 100))
+                    throw Failure(ResearchStorageFailure.Validation, "Invalid saved-set shape.");
+                foreach (var company in members) ValidCompany(company);
+            }
+            catch (ResearchStorageException ex) when (ex.Kind == ResearchStorageFailure.Validation)
+            { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Stored research identity, preset or membership is malformed; file preserved.", ex); }
         }
         return rows;
     }
@@ -389,8 +439,17 @@ public sealed class SqliteResearchStore : IResearchStore
         foreach (var company in snapshot.Companies)
         {
             ValidCompany(company.Company);
-            if (company.Fundamentals is { } f && (f.History is null || f.History.Count > 5))
-                throw Failure(ResearchStorageFailure.Validation, "A financial snapshot supports up to five annual periods per company.");
+            ValidName(company.DefinitionVersion ?? snapshot.DefinitionVersion);
+            if (company.Fundamentals is not { } f) continue;
+            if (f.History is null || f.History.Count > 5 || f.History.Any(h => h is null) || f.Warnings is null)
+                throw Failure(ResearchStorageFailure.Validation, "A financial snapshot needs valid history/warnings and supports up to five annual periods.");
+            var values = f.History.SelectMany(h => new[] { h.Revenue, h.RevenueGrowth, h.OperatingMargin, h.OperatingCashFlow })
+                .Concat(new[] { f.TtmRevenue, f.TtmOperatingIncome, f.TtmOperatingMargin, f.TtmOperatingCashFlow, f.TtmDilutedEps, f.CashBalance, f.DebtBalance });
+            foreach (var value in values)
+                if (value is null || string.IsNullOrWhiteSpace(value.Name) || string.IsNullOrWhiteSpace(value.Unit) || value.Inputs is null || value.EvidenceReferences is null
+                    || value.Inputs.Any(input => input?.Fact is null || string.IsNullOrWhiteSpace(input.Fact.Concept) || string.IsNullOrWhiteSpace(input.Fact.Unit)
+                        || string.IsNullOrWhiteSpace(input.Fact.Form) || string.IsNullOrWhiteSpace(input.Fact.Accession)))
+                    throw Failure(ResearchStorageFailure.Validation, "A financial snapshot contains malformed values or source evidence.");
         }
     }
     private static CompanyRef ValidCompany(CompanyRef? company)

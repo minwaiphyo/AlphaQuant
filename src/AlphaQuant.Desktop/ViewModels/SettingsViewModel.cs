@@ -10,6 +10,8 @@ public partial class SettingsViewModel : ObservableObject
     private readonly ContactSettings _settings;
     private readonly Action _back;
     public MarketConnectionViewModel? Market { get; set; }
+    public ValuationReviewViewModel? Review { get; set; }
+    public bool HasValuationReview => Review is not null;
 
     public SettingsViewModel(ContactSettings settings, Action back)
     {
@@ -44,6 +46,7 @@ public partial class SettingsViewModel : ObservableObject
         StatusMessage = null;
         StatusIsError = false;
         OnPropertyChanged(nameof(SourceText));
+        Review?.RefreshCompanies();
     }
 
     [RelayCommand]

@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.SettingsView" x:DataType="vm:SettingsViewModel">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:views="using:AlphaQuant.Desktop.Views" x:Class="AlphaQuant.Desktop.Views.SettingsView" x:DataType="vm:SettingsViewModel">
   <ScrollViewer HorizontalScrollBarVisibility="Disabled">
     <StackPanel Spacing="22">
       <TextBlock Text="Workspace / Data connections" Classes="muted small"/>
@@ -72,8 +72,8 @@
           </Border>
           <Border Classes="panel">
             <StackPanel Spacing="10">
-              <TextBlock Text="Reviewed valuation inputs" Classes="h2"/>
-              <TextBlock Text="Optional analyst-reviewed JSON, held only for this session. Establish issuer scope, class/split compatibility and every capital claim from filing evidence first. Parsing does not certify accuracy. See the preview guide for the complete schema." Classes="muted small"/>
+              <TextBlock Text="Advanced reviewed JSON import" Classes="h2"/>
+              <TextBlock Text="The structured review form below avoids JSON editing. Existing reviewed JSON import remains supported for this session only; parsing does not certify accuracy or fill absent zero claims." Classes="muted small"/>
               <TextBox Text="{Binding Market.EvidenceJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="100" MaxHeight="180" MaxLength="65536" AutomationProperties.Name="Reviewed valuation evidence JSON"/>
               <WrapPanel>
                 <Button Content="Load reviewed inputs" Command="{Binding Market.LoadEvidenceCommand}" Margin="0,0,8,8"/>
@@ -84,6 +84,9 @@
           </Border>
         </StackPanel>
       </Grid>
+      <ContentControl IsVisible="{Binding HasValuationReview}">
+        <views:ValuationReviewView DataContext="{Binding Review}"/>
+      </ContentControl>
     </StackPanel>
   </ScrollViewer>
 </UserControl>

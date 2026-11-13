@@ -16,7 +16,10 @@ public sealed record ResearchScreenPreset(string DefinitionVersion, string SortM
     string? FilterMetric = null, string? Operator = null, decimal? Threshold = null);
 /// <summary>Deliberately excludes quotes, valuations, session errors, review objects and credentials.</summary>
 public sealed record SavedFinancialCompany(CompanyRef Company, ComparisonFundamentals? Fundamentals,
-    DateTimeOffset? FactsRetrievedAt, bool FactsStale);
+    DateTimeOffset? FactsRetrievedAt, bool FactsStale)
+{
+    public string? DefinitionVersion { get; init; }
+}
 public sealed record FinancialSnapshotDraft(Guid PeerSetId, long PeerSetRevision, string DefinitionVersion,
     IReadOnlyList<SavedFinancialCompany> Companies);
 public sealed record SavedFinancialSnapshot(Guid Id, Guid PeerSetId, long PeerSetRevision,

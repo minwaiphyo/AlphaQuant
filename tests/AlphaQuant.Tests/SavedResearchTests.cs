@@ -103,6 +103,12 @@ public sealed class SavedResearchTests : IDisposable
         var malformed = await Assert.ThrowsAsync<ResearchStorageException>(() => store.ListSnapshotsAsync(set.Id));
         Assert.Equal(ResearchStorageFailure.Corrupt, malformed.Kind);
         Assert.Single(await store.ListSetsAsync());
+        var analysis = new FinancialAnalysisViewModel(new OfflineBackend(), new NoLinks(), () => { }, () => { });
+        var page = new SavedResearchViewModel(store, () => [A, B], analysis, _ => { }, (_, _) => Task.FromResult(true));
+        page.SelectedSet = set; await page.SelectionLoad;
+        await page.ReloadCommand.ExecuteAsync(null);
+        Assert.Contains("malformed", page.Status); Assert.DoesNotContain("Local research loaded", page.Status);
+        page.CancelOperations();
     }
 
     [Fact]
@@ -117,6 +123,9 @@ public sealed class SavedResearchTests : IDisposable
         var json = JsonSerializer.Serialize(saved);
         Assert.DoesNotContain("SECRET_SESSION_DETAIL", json);
         Assert.DoesNotContain("DO_NOT_STORE_MARKET", json);
+        Assert.DoesNotContain("DO_NOT_STORE_REVIEW_NOTE", json);
+        Assert.False(saved.Companies[0].Fundamentals!.DebtBalance.Available);
+        Assert.Contains("session-only", saved.Companies[0].Fundamentals!.DebtBalance.Reason);
         Assert.DoesNotContain("Valuation", json); Assert.DoesNotContain("Connection", json); Assert.DoesNotContain("accessToken", json);
         Assert.Equal(1, backend.Requests);
     }
@@ -200,6 +209,103 @@ public sealed class SavedResearchTests : IDisposable
         vm.CancelOperations();
     }
 
+    [Fact]
+    public async Task Explicit_null_source_evidence_is_rejected_as_corrupt_without_changing_payload()
+    {
+        var set = await PeerSet(); var store = Store(); await store.SaveSnapshotAsync(Snapshot(set));
+        string corrupted;
+        using (var db = new SqliteConnection($"Data Source={DbPath};Pooling=False"))
+        {
+            db.Open(); using var command = db.CreateCommand(); command.CommandText = "SELECT payload FROM financial_snapshots;";
+            var node = System.Text.Json.Nodes.JsonNode.Parse((string)command.ExecuteScalar()!)!;
+            node["Companies"]![0]!["Fundamentals"]!["TtmRevenue"]!["Inputs"] = null;
+            corrupted = node.ToJsonString();
+            command.CommandText = "UPDATE financial_snapshots SET payload=$payload;"; command.Parameters.AddWithValue("$payload", corrupted); command.ExecuteNonQuery();
+        }
+        var error = await Assert.ThrowsAsync<ResearchStorageException>(() => store.ListSnapshotsAsync(set.Id));
+        Assert.Equal(ResearchStorageFailure.Corrupt, error.Kind);
+        using var inspect = new SqliteConnection($"Data Source={DbPath};Pooling=False"); inspect.Open();
+        using var read = inspect.CreateCommand(); read.CommandText = "SELECT payload FROM financial_snapshots;";
+        Assert.Equal(corrupted, read.ExecuteScalar());
+    }
+
+    [Fact]
+    public async Task Malformed_stored_filter_is_not_silently_applied_or_treated_as_empty_research()
+    {
+        await PeerSet();
+        using (var db = new SqliteConnection($"Data Source={DbPath};Pooling=False"))
+        {
+            db.Open(); using var command = db.CreateCommand();
+            command.CommandText = "UPDATE research_sets SET preset_json=$preset;";
+            command.Parameters.AddWithValue("$preset", "{\"DefinitionVersion\":\"comparison-1.1\",\"SortMetric\":\"Annual revenue\",\"Descending\":false,\"FilterMetric\":\"Annual revenue\",\"Operator\":null,\"Threshold\":1}");
+            command.ExecuteNonQuery();
+        }
+        var error = await Assert.ThrowsAsync<ResearchStorageException>(() => Store().ListSetsAsync());
+        Assert.Equal(ResearchStorageFailure.Corrupt, error.Kind);
+    }
+
+    [Fact]
+    public async Task Physically_valid_backup_with_bad_payload_cannot_replace_current_research()
+    {
+        var set = await PeerSet(); var store = Store(); var snapshot = await store.SaveSnapshotAsync(Snapshot(set));
+        var backup = await store.BackupAsync();
+        await store.SaveSetAsync(new("Current research must survive", ResearchSetKind.Watchlist, [C]));
+        using (var db = new SqliteConnection($"Data Source={backup.Path};Pooling=False"))
+        {
+            db.Open(); using var command = db.CreateCommand();
+            command.CommandText = "UPDATE financial_snapshots SET payload='{}';"; command.ExecuteNonQuery();
+            command.CommandText = "PRAGMA quick_check;"; Assert.Equal("ok", command.ExecuteScalar());
+        }
+        var error = await Assert.ThrowsAsync<ResearchStorageException>(() => store.RestoreAsync(backup.Path));
+        Assert.Equal(ResearchStorageFailure.Corrupt, error.Kind);
+        Assert.Equal(2, (await store.ListSetsAsync()).Count);
+        Assert.Equal(snapshot.Id, Assert.Single(await store.ListSnapshotsAsync(set.Id)).Id);
+        Assert.Single(Directory.GetFiles(_root, "*.backup-*.db"));
+    }
+
+    [Fact]
+    public async Task Partial_refresh_preserves_each_retained_definition_in_UI_and_new_snapshot()
+    {
+        var set = await PeerSet(); var store = Store();
+        var old = await store.SaveSnapshotAsync(Snapshot(set, 123.456m, "comparison-legacy"));
+        var backend = new OfflineBackend { AllowSynthetic = true, NextRows =
+            [new(A, Fundamentals(200m), null, MarketConnectionState.Disconnected, null, DateTimeOffset.UtcNow, false),
+             new(B, null, null, MarketConnectionState.Disconnected, "Synthetic refresh failure", null, false)] };
+        var vm = new FinancialAnalysisViewModel(backend, new NoLinks(), () => { }, () => { });
+        Assert.True(await vm.ShowSavedSnapshotAsync(old));
+        await vm.LoadAsync([A, B]);
+        Assert.Contains("mixed definitions", vm.Title);
+        var retained = vm.Companies.Single(c => c.Name.Contains(B.Name));
+        Assert.Contains("comparison-legacy", retained.Status);
+        retained.Metrics.First(m => m.Name == "Annual revenue").InspectCommand.Execute(null);
+        Assert.Contains("comparison-legacy", vm.Evidence!.Formula); Assert.Contains("123.456", vm.Evidence.Detail);
+        vm.Threshold = "0"; vm.ApplyFilterCommand.Execute(null);
+        Assert.Contains("requires one supported definition", vm.FilterError); Assert.Equal(2, vm.Companies.Count);
+        var captured = await store.SaveSnapshotAsync(vm.CaptureFinancials(set.Id, set.Revision));
+        Assert.Equal(ComparisonAnalyzer.DefinitionVersion, captured.Companies.Single(c => c.Company.Cik == 1).DefinitionVersion);
+        Assert.Equal("comparison-legacy", captured.Companies.Single(c => c.Company.Cik == 2).DefinitionVersion);
+        var reopened = (await store.ListSnapshotsAsync(set.Id)).Single(s => s.Id == captured.Id);
+        var viewer = new FinancialAnalysisViewModel(backend, new NoLinks(), () => { }, () => { });
+        Assert.True(await viewer.ShowSavedSnapshotAsync(reopened)); Assert.Contains("mixed definitions", viewer.Title);
+        Assert.Equal(1, backend.Requests);
+    }
+
+    [Fact]
+    public async Task Legacy_snapshot_payload_uses_its_original_root_definition_for_each_company()
+    {
+        var set = await PeerSet(); var store = Store(); await store.SaveSnapshotAsync(Snapshot(set, 100m, "comparison-legacy"));
+        using (var db = new SqliteConnection($"Data Source={DbPath};Pooling=False"))
+        {
+            db.Open(); using var command = db.CreateCommand(); command.CommandText = "SELECT payload FROM financial_snapshots;";
+            var node = System.Text.Json.Nodes.JsonNode.Parse((string)command.ExecuteScalar()!)!;
+            foreach (var company in node["Companies"]!.AsArray()) company!.AsObject().Remove("DefinitionVersion");
+            command.CommandText = "UPDATE financial_snapshots SET payload_schema=1,payload=$payload;";
+            command.Parameters.AddWithValue("$payload", node.ToJsonString()); command.ExecuteNonQuery();
+        }
+        var restored = Assert.Single(await store.ListSnapshotsAsync(set.Id));
+        Assert.All(restored.Companies, c => Assert.Equal("comparison-legacy", c.DefinitionVersion));
+    }
+
     private sealed class NoLinks : ILinkOpener { public void Open(Uri uri) => throw new InvalidOperationException("No links in synthetic tests"); }
     private sealed class NoDirectory : ICompanyDirectory
     { public Task<CompanyDirectoryResult> GetCompaniesAsync(CancellationToken cancellationToken) => throw new InvalidOperationException("Unexpected network directory request"); }
@@ -208,6 +314,7 @@ public sealed class SavedResearchTests : IDisposable
     private sealed class OfflineBackend : IResearchBackend
     {
         public int Requests; public bool AllowSynthetic;
+        public IReadOnlyList<AlphaQuant.Core.ComparisonRow>? NextRows;
         public bool Configured => false; public bool Authorized => false;
         public Task ConnectAsync(CancellationToken token) => throw new InvalidOperationException("No live connections");
         public Task<MarketAccess> TestAsync(IReadOnlyList<string> symbols, CancellationToken token) => throw new InvalidOperationException("No live requests");
@@ -217,7 +324,10 @@ public sealed class SavedResearchTests : IDisposable
         {
             Requests++; if (!AllowSynthetic) throw new InvalidOperationException("Unexpected backend request");
             await Task.CompletedTask;
-            yield return new(companies.Select(c => new AlphaQuant.Core.ComparisonRow(c, Fundamentals(),
+            if (NextRows is not null) { yield return new(NextRows); yield break; }
+            yield return new(companies.Select(c => new AlphaQuant.Core.ComparisonRow(c, Fundamentals() with
+                { DebtBalance = new FinancialValue("Reviewed interest-bearing debt", 987654m, "USD", null, new(2025, 12, 31), [])
+                    { EvidenceReferences = ["DO_NOT_STORE_REVIEW_NOTE"] } },
                 new ValuationResult(ComparisonAnalyzer.DefinitionVersion, ComparisonAnalyzer.Missing("Trailing P/E", "x", "Synthetic missing review"),
                     ComparisonAnalyzer.Missing("EV / TTM sales", "x", "Synthetic missing review"), null,
                     new MarketPrice(c.Ticker, 60m, "USD", "DO_NOT_STORE_MARKET", "IEX", DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, "synthetic-trade"), null, null),

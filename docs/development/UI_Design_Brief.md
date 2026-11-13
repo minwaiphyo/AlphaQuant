@@ -1,5 +1,14 @@
 # UI Design Brief: Company Comparison and Valuation
 
+Cloud implementation checkpoint, 2026-11-13: Saved research now provides named
+peers/watchlists, explicit member selection, immutable offline financial snapshots
+and recoverable deletion/backup controls. Data connections adds structured
+session-only review fields with explicit unknown/zero, dates, issuer/class scope
+and source references; advanced JSON import remains. Synthetic layout/keyboard
+checks pass in the cloud; native Windows scaling/accessibility and live provider
+acceptance remain pending. See [storage](Research_Storage.md),
+[review inputs](Valuation_Review.md) and the stage ledger for delivery status.
+
 Updated: 2026-11-13. Audience: teammate owning UI design, navigation and interaction flows.
 
 ## S03 comparison consolidation (2026-11-13)

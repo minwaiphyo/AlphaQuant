@@ -40,7 +40,10 @@ Then choose **Search Companies**, type a ticker or name (for example `AAPL`), an
 dotnet test AlphaQuant.slnx
 ```
 
-The tests use synthetic fixtures and never contact the SEC. Verified on Windows 11 x64 only. There is no installer or release yet.
+The tests use synthetic fixtures and never contact the SEC. The synthetic suite and
+headless UI checks also run in the Linux cloud environment. Native Windows trust,
+scaling/accessibility and clean installation still require separate acceptance.
+There is no trusted installer or published release yet.
 
 ## Saved research and offline use
 
@@ -54,6 +57,16 @@ recoverable deletion and verified backup/restore. See the
 
 Cloud synthetic tests and Linux headless rendering are verified; trusted Windows
 execution remains pending the owner's PC and signing-provider eligibility.
+
+## Reviewed valuation inputs
+
+In **Data connections → Review valuation inputs**, choose a peer and enter filing
+references, explicit scope/class assertions and dated split/capital claims. Blank
+amounts remain unknown; a reviewed zero must be typed explicitly. Apply validates
+the entire draft before replacing that issuer's session review. The current-price
+and TTM eligibility guards still apply. Reviews are cleared on exit and are not
+saved with research. Advanced JSON import remains available. See the
+[review form contract and limitations](docs/development/Valuation_Review.md).
 
 ## Contributing
 

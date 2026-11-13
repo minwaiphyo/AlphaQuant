@@ -75,11 +75,30 @@ prices, contacts or market sessions were persisted by these tests.
 
 Schema 3 adds an optional typed filter/sort preset on each named set and immutable
 fundamentals-only snapshot records. The schema-2 upgrade is backed up and
-transactional. Snapshot payload schema 1 preserves original decimals, reporting
+transactional. Current snapshot payload schema 2 preserves original decimals, reporting
 periods, weighted source facts, retrieval dates and definition version; it does
 not recalculate old results or persist quotes, valuations, session-error text,
 contact settings or credential objects. Payloads are bounded to 2 MiB, with a
 50 MiB supported database limit. Unknown payload schemas fail explicitly.
+
+Payload schema 2 records each issuer's calculation-definition version. Legacy
+payload schema 1 retains its original outer version for every company. A partial
+refresh never relabels retained old financials with the current definition; mixed
+versions remain visible per issuer, with numeric filtering/sorting disabled until
+one supported version is available. Old snapshots remain readable and are never
+silently rewritten.
+
+New captures also exclude reviewed debt values/references: comparison-1.1 debt is
+a session capital-review input even though it appears among fundamentals.
+Snapshots mark that field unavailable with an explicit retention reason. Public
+filing cash/history and their source inputs remain unchanged. Existing immutable
+snapshot records are never silently rewritten.
+
+Current-schema backups and restore staging validate logical set/preset/snapshot
+payloads as well as SQLite integrity and foreign keys. A physically valid database
+with malformed research JSON is rejected before replacing the current store.
+Supported migrations validate the resulting records inside the schema transaction;
+bad logical data rolls back and leaves the verified old backup available.
 
 The Saved research page supports new named sets, rename, peer replacement,
 duplicate-free watchlist append, explicit member removal, recoverable deletion,
