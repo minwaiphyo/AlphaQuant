@@ -109,7 +109,50 @@ public partial class FinancialAnalysisViewModel : ObservableObject
     public IRelayCommand BackCommand { get; }
     public IRelayCommand SettingsCommand { get; }
     public ObservableCollection<ResearchCompany> Companies { get; } = [];
-    public string Title => "Company comparison · " + ComparisonAnalyzer.DefinitionVersion;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(Title))] private string _definitionVersion = ComparisonAnalyzer.DefinitionVersion;
+    [ObservableProperty] private bool _isOffline;
+    private SavedFinancialSnapshot? _offlineSnapshot;
+    public string Title => "Company comparison · " + DefinitionVersion;
+    public ResearchScreenPreset CapturePreset() => new(DefinitionVersion, SelectedMetric, Descending,
+        _filter?.Metric, _filter?.Operator, _filter?.Threshold);
+    public string RestorePreset(ResearchScreenPreset? preset)
+    {
+        ClearFilter();
+        if (preset is null) return string.Empty;
+        if (preset.DefinitionVersion != DefinitionVersion || preset.DefinitionVersion != ComparisonAnalyzer.DefinitionVersion
+            || !MetricChoices.Contains(preset.SortMetric) || (preset.FilterMetric is not null && (!MetricChoices.Contains(preset.FilterMetric) || !Operators.Contains(preset.Operator ?? string.Empty))))
+            return "Saved filter definition is not supported here; stored values remain unchanged and no filter was applied.";
+        if (preset.FilterMetric is not null && preset.Threshold is { } threshold)
+        {
+            SelectedMetric = preset.FilterMetric; SelectedOperator = preset.Operator!;
+            Threshold = threshold.ToString(CultureInfo.InvariantCulture); ApplyFilter();
+        }
+        SelectedMetric = preset.SortMetric; Descending = preset.Descending;
+        return string.Empty;
+    }
+    public FinancialSnapshotDraft CaptureFinancials(Guid setId, long revision)
+    {
+        if (_snapshot is null) throw new ResearchStorageException(ResearchStorageFailure.Validation, "Open a financial comparison before capturing it.");
+        return new(setId, revision, DefinitionVersion, _snapshot.Rows.Select(r =>
+            new SavedFinancialCompany(r.Company, r.Fundamentals, r.FactsRetrievedAt, r.FactsStale)).ToArray());
+    }
+    public async Task<bool> ShowSavedSnapshotAsync(SavedFinancialSnapshot saved, ResearchScreenPreset? preset = null)
+    {
+        StopWatching();
+        var generation = ++_generation;
+        try { await _activeLoad.WaitAsync(_closeTimeout); }
+        catch (TimeoutException) { Status = "Previous update is still closing. Retry opening the saved snapshot shortly."; return false; }
+        if (generation != _generation) return false;
+        DefinitionVersion = saved.DefinitionVersion; IsOffline = true; _offlineSnapshot = saved;
+        _selected = saved.Companies.Select(c => c.Company).ToArray();
+        _snapshot = new(saved.Companies.Select(c => new AlphaQuant.Core.ComparisonRow(c.Company, c.Fundamentals, null,
+            MarketConnectionState.Disconnected, c.Fundamentals is null ? "No financial results saved for this company." : null, c.FactsRetrievedAt, true)).ToArray());
+        Render(_snapshot); HasSetupIssue = false;
+        var warning = RestorePreset(preset);
+        Status = OfflineStatus(saved) + (warning.Length == 0 ? string.Empty : " " + warning);
+        return true;
+    }
+    private static string OfflineStatus(SavedFinancialSnapshot saved) => $"Saved offline snapshot · captured {saved.CapturedAt:yyyy-MM-dd HH:mm:ss} UTC · {saved.DefinitionVersion}. Original filing/retrieval dates retained. No current prices or valuations. Refresh is an explicit new request.";
     [ObservableProperty] private bool _hasSetupIssue;
     [RelayCommand] private void Refresh() => _ = LoadAsync(_selected);
     [ObservableProperty] private bool _running;
@@ -129,12 +172,14 @@ public partial class FinancialAnalysisViewModel : ObservableObject
             Render(_snapshot);
         }
         Evidence = null;
-        Status = "Updates stopped. Financial snapshots retained; reopen analysis to refresh and subscribe.";
+        Status = IsOffline && _offlineSnapshot is not null ? OfflineStatus(_offlineSnapshot)
+            : "Updates stopped. Financial snapshots retained; reopen analysis to refresh and subscribe.";
     }
 
     public Task LoadAsync(IReadOnlyList<CompanyRef> selected)
     {
         StopWatching();
+        IsOffline = false; _offlineSnapshot = null; DefinitionVersion = ComparisonAnalyzer.DefinitionVersion;
         _selected = selected.ToArray();
         if (selected.Count is < 2 or > 5 || selected.Select(c => c.Cik).Distinct().Count() != selected.Count
             || selected.Select(c => c.Ticker).Distinct(StringComparer.OrdinalIgnoreCase).Count() != selected.Count)
@@ -195,10 +240,11 @@ public partial class FinancialAnalysisViewModel : ObservableObject
             var metrics = new List<ResearchMetric>();
             void Add(FinancialValue value, string basis)
             {
+                var definition = DefinitionVersion;
                 var period = value.End is null ? basis : value.Start is null ? $"{basis} · at {value.End:yyyy-MM-dd}"
                     : $"{basis} · {value.Start:yyyy-MM-dd} to {value.End:yyyy-MM-dd}";
                 metrics.Add(new(value.Name, Format(value), period, value.Reason ?? string.Empty,
-                    new RelayCommand(() => Inspect(row, value, period)), value.Available ? value.Value : null));
+                    new RelayCommand(() => Inspect(row, value, period, definition)), value.Available ? value.Value : null));
             }
             var f = row.Fundamentals;
             if (f is not null)
@@ -239,12 +285,13 @@ public partial class FinancialAnalysisViewModel : ObservableObject
     }
     private static string Format(FinancialValue value) => value.Available
         ? $"{value.Value!.Value.ToString(value.Unit == "USD/shares" ? "0.########" : "N2", CultureInfo.InvariantCulture)} {value.Unit}" : "Unavailable";
-    private void Inspect(AlphaQuant.Core.ComparisonRow row, FinancialValue value, string period)
+    private void Inspect(AlphaQuant.Core.ComparisonRow row, FinancialValue value, string period, string definition)
     {
         Evidence = new()
         {
             Company = row.Company.Name, Title = value.Name, Value = value.Available ? Display.FactValue(value.Value!.Value, value.Unit) : "Unavailable",
-            Formula = ComparisonAnalyzer.DefinitionVersion + " · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
+            Formula = definition != ComparisonAnalyzer.DefinitionVersion ? definition + " · Saved result; stored inputs shown without re-evaluating this older or unknown definition."
+                : definition + " · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
                 : value.Name == "EV / TTM sales" ? "(Price × actual outstanding shares + debt + preferred equity + non-controlling interests − cash) / TTM revenue."
                 : value.Name.Contains("margin", StringComparison.OrdinalIgnoreCase)
                 ? "Operating income / matching-period revenue × 100."

@@ -70,3 +70,45 @@ and external SQLite locks. Skill-resource validation also passed.
 Remote exact-head CI/PR delivery and actual Windows execution remain unverified.
 The old S02 live-data and Windows signing gates remain open; no source data,
 prices, contacts or market sessions were persisted by these tests.
+
+## S05 saved/offline research
+
+Schema 3 adds an optional typed filter/sort preset on each named set and immutable
+fundamentals-only snapshot records. The schema-2 upgrade is backed up and
+transactional. Snapshot payload schema 1 preserves original decimals, reporting
+periods, weighted source facts, retrieval dates and definition version; it does
+not recalculate old results or persist quotes, valuations, session-error text,
+contact settings or credential objects. Payloads are bounded to 2 MiB, with a
+50 MiB supported database limit. Unknown payload schemas fail explicitly.
+
+The Saved research page supports new named sets, rename, peer replacement,
+duplicate-free watchlist append, explicit member removal, recoverable deletion,
+backup and confirmed restore. Select 2–5 watchlist members explicitly; selection
+is never silently truncated. Capturing a financial snapshot requires exact saved
+membership and the expected set revision. Later membership changes do not rewrite
+old snapshots. Applied filter/sort state is stored with its definition version;
+older unsupported presets are not silently reapplied.
+
+Opening saved evidence starts no source request and clears current prices. It
+waits for the preceding stream to close, preserves source/retrieval dates and
+labels the view offline. Returning from Settings remains offline; Refresh is an
+explicit new request. Stale or late selection responses cannot replace a newer
+set's evidence. Missing/corrupt data produces an error instead of a successful
+empty research list. SEC contact and reviewed capital inputs remain separate.
+
+Recovery uses IResearchStore.RestoreAsync at a new chosen database path if the
+original file is corrupt; the corrupt file is never overwritten. The normal UI
+restores verified backups over an existing valid store only after confirmation
+and preserves a verified pre-restore backup. Selecting a different recovery path
+in the UI is not yet implemented; preserve the original and use the documented
+API/diagnostic recovery path rather than deleting it.
+
+S05 validation on 2026-11-13: 241 .NET tests passed, including snapshot replay,
+old definitions, required-field/schema corruption, membership revision conflicts,
+real market-metadata exclusion, no-network restart/Settings recovery, watchlist
+editing and delayed-selection isolation. The Avalonia headless fixture produced
+12 PNGs under artifacts/ui-stage05-final. Light/dark and a 648x560 research
+viewport, scrolled members, backup controls and offline evidence were inspected;
+keyboard focus/Escape checks passed. These are synthetic Linux rendering checks,
+not native Windows accessibility/scaling certification. Remote CI/delivery remains
+pending GitHub API access; PR24 itself remains unmerged.

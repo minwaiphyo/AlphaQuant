@@ -2,10 +2,28 @@ namespace AlphaQuant.Core;
 
 public enum ResearchSetKind { PeerSet, Watchlist }
 public sealed record ResearchSetDraft(string Name, ResearchSetKind Kind, IReadOnlyList<CompanyRef> Companies,
-    Guid? Id = null, long? ExpectedRevision = null);
+    Guid? Id = null, long? ExpectedRevision = null)
+{
+    public ResearchScreenPreset? Preset { get; init; }
+}
 public sealed record SavedResearchSet(Guid Id, string Name, ResearchSetKind Kind,
     IReadOnlyList<CompanyRef> Companies, long Revision, DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt, DateTimeOffset? DeletedAt);
+    DateTimeOffset UpdatedAt, DateTimeOffset? DeletedAt)
+{
+    public ResearchScreenPreset? Preset { get; init; }
+}
+public sealed record ResearchScreenPreset(string DefinitionVersion, string SortMetric, bool Descending,
+    string? FilterMetric = null, string? Operator = null, decimal? Threshold = null);
+/// <summary>Deliberately excludes quotes, valuations, session errors, review objects and credentials.</summary>
+public sealed record SavedFinancialCompany(CompanyRef Company, ComparisonFundamentals? Fundamentals,
+    DateTimeOffset? FactsRetrievedAt, bool FactsStale);
+public sealed record FinancialSnapshotDraft(Guid PeerSetId, long PeerSetRevision, string DefinitionVersion,
+    IReadOnlyList<SavedFinancialCompany> Companies);
+public sealed record SavedFinancialSnapshot(Guid Id, Guid PeerSetId, long PeerSetRevision,
+    DateTimeOffset CapturedAt, string DefinitionVersion, IReadOnlyList<SavedFinancialCompany> Companies)
+{
+    public string Label => $"{CapturedAt:yyyy-MM-dd HH:mm:ss} UTC · {DefinitionVersion}";
+}
 public sealed record ResearchBackup(string Path, int SchemaVersion, DateTimeOffset CreatedAt);
 public enum ResearchStorageFailure { Validation, Conflict, Busy, ReadOnly, Corrupt, UnsupportedVersion, Io }
 public sealed class ResearchStorageException(ResearchStorageFailure kind, string message, Exception? inner = null)
@@ -23,4 +41,6 @@ public interface IResearchStore
     Task<SavedResearchSet> SetDeletedAsync(Guid id, long expectedRevision, bool deleted, CancellationToken token = default);
     Task<ResearchBackup> BackupAsync(CancellationToken token = default);
     Task RestoreAsync(string backupPath, CancellationToken token = default);
+    Task<SavedFinancialSnapshot> SaveSnapshotAsync(FinancialSnapshotDraft draft, CancellationToken token = default);
+    Task<IReadOnlyList<SavedFinancialSnapshot>> ListSnapshotsAsync(Guid setId, CancellationToken token = default);
 }

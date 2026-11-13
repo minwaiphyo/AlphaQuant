@@ -343,6 +343,17 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Cloud continuation, 2026-11-13: owner resumed a few stages while Windows trust
+work remains pending. S04 implements SQLite schema/migration, verified backups,
+transaction/revision handling and recovery. S05 adds named peers/watchlists,
+versioned presets and immutable financial snapshots with no retained prices or
+credentials; offline opening and Settings return make no source request. On the
+stacked development branch 241 synthetic tests and 12 headless rendering states
+pass. PR24 remains unmerged; GitHub API/remote CI delivery and native Windows
+acceptance remain unverified. Distribution changes are preserved separately.
+Next: structured valuation-review input forms (S06), retaining comparison-1.1
+guards and session-only review state. No live finance requests or spending.
+
 Stage checkpoint, 2026-11-13: S01 merged through PR #22 (1e3b11b), with 206 tests passing on clean CI and a clean local compile. Fixed finite-stream completion leaving active valuation and disabled SEC redirects. Local runtime is blocked by OS policy. S02 prepares real-source capture and independently expected synthetic cases, and corrects ambiguous prior-FY TTM selection under comparison-1.1. No saved/process SEC contact exists, so live retrieval/reconciliation stays blocked and no real issuer values are claimed. S03 is the independent continuation after deterministic S02 delivery. See ledger and validation reports for exact status.
 
 Execution update, 2026-11-13 (AQ-D027): the owner approved roadmap 1.0 and requested the next few stages autonomously. S01-S03 are the initial execution set, with approved blocker fallback. Routine implementation/checks/Git delivery and domain defaults remain delegated. Follow the ledger for live stage state, not the earlier draft notes. External release gates are not implicitly closed by this approval.

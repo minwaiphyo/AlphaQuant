@@ -3,6 +3,7 @@ using AlphaQuant.Desktop;
 using AlphaQuant.Desktop.Services;
 using AlphaQuant.Desktop.ViewModels;
 using AlphaQuant.Desktop.Views;
+using AlphaQuant.Infrastructure;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -38,7 +39,7 @@ internal static class Program
             Dispatcher.UIThread.RunJobs();
             using var frame = window.CaptureRenderedFrame() ?? throw new InvalidOperationException("No rendered frame");
             frame.Save(Path.Combine(output, name + ".png"), new PngBitmapEncoderOptions());
-            if (view.Bounds.Width <= 0 || view.Bounds.Height <= 0) throw new InvalidOperationException("Empty layout");
+            if (window.Content is not Control content || content.Bounds.Width <= 0 || content.Bounds.Height <= 0) throw new InvalidOperationException("Empty layout");
         }
         Capture("comparison-light", 1200, 760, ThemeVariant.Light);
         Capture("comparison-minimum-dark", 648, 560, ThemeVariant.Dark);
@@ -60,6 +61,47 @@ internal static class Program
         vm.ClearFilterCommand.Execute(null);
         backend.Fail = true; vm.LoadAsync(peers).GetAwaiter().GetResult();
         Capture("retained-setup-light", 1200, 760, ThemeVariant.Light);
+        var researchRoot = Path.Combine(Path.GetTempPath(), "aq-ui-research-" + Guid.NewGuid().ToString("N"));
+        var store = new SqliteResearchStore(Path.Combine(researchRoot, "research.db"));
+        var savedVm = new SavedResearchViewModel(store, () => peers, vm,
+            _ => throw new InvalidOperationException("No source refresh from the saved fixture"), vm.ShowSavedSnapshotAsync);
+        void Complete(Task task)
+        {
+            var deadline = DateTime.UtcNow.AddSeconds(10);
+            while (!task.IsCompleted && DateTime.UtcNow < deadline)
+            { Dispatcher.UIThread.RunJobs(); Thread.Sleep(1); }
+            if (!task.IsCompleted) throw new TimeoutException("Fixture research operation timed out");
+            task.GetAwaiter().GetResult(); Dispatcher.UIThread.RunJobs();
+        }
+        try
+        {
+            Complete(savedVm.ReloadCommand.ExecuteAsync(null));
+            savedVm.InputName = "Synthetic long-name peers and independent evidence";
+            Complete(savedVm.SaveNewCommand.ExecuteAsync(null));
+            Complete(savedVm.CaptureCommand.ExecuteAsync(null));
+            if (savedVm.Snapshots.Count != 1) throw new InvalidOperationException("Saved snapshot was not captured");
+            var savedView = new SavedResearchView { DataContext = savedVm };
+            window.Content = savedView;
+            Capture("saved-research-light", 1200, 760, ThemeVariant.Light);
+            Capture("saved-research-minimum-dark", 648, 560, ThemeVariant.Dark);
+            var savedScroll = savedView.GetVisualDescendants().OfType<ScrollViewer>().First();
+            savedScroll.Offset = new Vector(0, 540);
+            Capture("saved-members-minimum-dark", 648, 560, ThemeVariant.Dark);
+            savedView.GetVisualDescendants().OfType<Expander>().First().IsExpanded = true;
+            Dispatcher.UIThread.RunJobs();
+            savedScroll.Offset = new Vector(0, Math.Max(0, savedScroll.Extent.Height - savedScroll.Viewport.Height));
+            Capture("saved-recovery-minimum-dark", 648, 560, ThemeVariant.Dark);
+            var name = savedView.GetVisualDescendants().OfType<TextBox>().First();
+            name.Focus(); Dispatcher.UIThread.RunJobs();
+            if (!name.IsFocused) throw new InvalidOperationException("Saved research name field did not receive focus");
+            Complete(savedVm.OpenOfflineCommand.ExecuteAsync(null));
+            if (!vm.IsOffline || vm.Companies.Count != peers.Length) throw new InvalidOperationException("Offline comparison did not retain selected financials");
+            window.Content = view;
+            Capture("saved-offline-dark", 648, 560, ThemeVariant.Dark);
+            vm.Companies[0].Metrics[0].InspectCommand.Execute(null);
+            Capture("saved-offline-evidence-dark", 648, 560, ThemeVariant.Dark);
+        }
+        finally { savedVm.CancelOperations(); if (Directory.Exists(researchRoot)) Directory.Delete(researchRoot, true); }
         window.Close();
         File.WriteAllText(Path.Combine(output, "scope.txt"), "Synthetic services only. Real Avalonia layout/rendering and evidence Escape/focus checked. Viewport 648x560 approximates the research area at the 900x720 shell minimum. Not a native accessibility or live-provider certification.\n");
         Console.WriteLine("UI fixture rendering and evidence keyboard checks passed.");

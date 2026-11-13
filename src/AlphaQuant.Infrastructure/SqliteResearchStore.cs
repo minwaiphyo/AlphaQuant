@@ -1,6 +1,9 @@
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AlphaQuant.Core;
 using Microsoft.Data.Sqlite;
 
@@ -10,7 +13,12 @@ namespace AlphaQuant.Infrastructure;
 public sealed class SqliteResearchStore : IResearchStore
 {
     internal const int ApplicationId = 0x41515253;
-    internal const int CurrentVersion = 2;
+    internal const int CurrentVersion = 3;
+    private const string Schema2Changes = "ALTER TABLE research_sets ADD COLUMN revision INTEGER NOT NULL DEFAULT 1 CHECK(revision>=1); ALTER TABLE research_sets ADD COLUMN deleted_utc TEXT;";
+    private const string Schema3Changes = "ALTER TABLE research_sets ADD COLUMN preset_json TEXT; CREATE TABLE financial_snapshots(id TEXT PRIMARY KEY, set_id TEXT NOT NULL REFERENCES research_sets(id), captured_utc TEXT NOT NULL, payload_schema INTEGER NOT NULL, payload TEXT NOT NULL); CREATE INDEX snapshots_by_set ON financial_snapshots(set_id,captured_utc);";
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    { MaxDepth = 32, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow, RespectRequiredConstructorParameters = true };
+    private const int MaxSnapshotBytes = 2 * 1024 * 1024;
     internal const string Schema1 = """
         CREATE TABLE companies(cik INTEGER PRIMARY KEY CHECK(cik>0 AND cik<=9999999999), ticker TEXT NOT NULL, name TEXT NOT NULL);
         CREATE TABLE research_sets(id TEXT PRIMARY KEY, name TEXT NOT NULL, kind INTEGER NOT NULL CHECK(kind IN(0,1)), created_utc TEXT NOT NULL, updated_utc TEXT NOT NULL);
@@ -38,7 +46,7 @@ public sealed class SqliteResearchStore : IResearchStore
         if (!exists)
         {
             using var tx = db.BeginTransaction();
-            Execute(db, $"PRAGMA application_id={ApplicationId};" + Schema1 + "ALTER TABLE research_sets ADD COLUMN revision INTEGER NOT NULL DEFAULT 1 CHECK(revision>=1); ALTER TABLE research_sets ADD COLUMN deleted_utc TEXT; PRAGMA user_version=2;", tx);
+            Execute(db, $"PRAGMA application_id={ApplicationId};" + Schema1 + Schema2Changes + Schema3Changes + $"PRAGMA user_version={CurrentVersion};", tx);
             token.ThrowIfCancellationRequested();
             tx.Commit();
         }
@@ -72,6 +80,8 @@ public sealed class SqliteResearchStore : IResearchStore
             || companies.Select(c => c?.Cik).Distinct().Count() != companies.Length)
             throw Failure(ResearchStorageFailure.Validation, "Peer sets need 2–5 distinct companies; watchlists need 1–100.");
         companies = companies.Select(ValidCompany).ToArray();
+        ValidatePreset(draft.Preset);
+        object presetJson = draft.Preset is null ? DBNull.Value : JsonSerializer.Serialize(draft.Preset, JsonOptions);
         if (draft.Id == Guid.Empty || (draft.Id.HasValue != draft.ExpectedRevision.HasValue) || draft.ExpectedRevision is <= 0)
             throw Failure(ResearchStorageFailure.Validation, "Updates require a stable ID and positive expected revision.");
         return AccessAsync(() =>
@@ -83,13 +93,13 @@ public sealed class SqliteResearchStore : IResearchStore
             var now = DateTimeOffset.UtcNow;
             if (draft.Id.HasValue)
             {
-                var changed = Execute(db, "UPDATE research_sets SET name=$name, updated_utc=$now, revision=revision+1 WHERE id=$id AND revision=$revision AND deleted_utc IS NULL AND kind=$kind;", tx,
-                    ("$name", name), ("$now", Time(now)), ("$id", id.ToString()), ("$revision", draft.ExpectedRevision!.Value), ("$kind", (int)draft.Kind));
+                var changed = Execute(db, "UPDATE research_sets SET name=$name, preset_json=$preset, updated_utc=$now, revision=revision+1 WHERE id=$id AND revision=$revision AND deleted_utc IS NULL AND kind=$kind;", tx,
+                    ("$name", name), ("$preset", presetJson), ("$now", Time(now)), ("$id", id.ToString()), ("$revision", draft.ExpectedRevision!.Value), ("$kind", (int)draft.Kind));
                 if (changed != 1) throw Failure(ResearchStorageFailure.Conflict, "Research changed, was deleted, or changed kind. Reload before saving.");
                 Execute(db, "DELETE FROM set_members WHERE set_id=$id;", tx, ("$id", id.ToString()));
             }
-            else Execute(db, "INSERT INTO research_sets(id,name,kind,created_utc,updated_utc,revision) VALUES($id,$name,$kind,$now,$now,1);", tx,
-                ("$id", id.ToString()), ("$name", name), ("$kind", (int)draft.Kind), ("$now", Time(now)));
+            else Execute(db, "INSERT INTO research_sets(id,name,kind,created_utc,updated_utc,revision,preset_json) VALUES($id,$name,$kind,$now,$now,1,$preset);", tx,
+                ("$id", id.ToString()), ("$name", name), ("$kind", (int)draft.Kind), ("$now", Time(now)), ("$preset", presetJson));
             for (var i = 0; i < companies.Length; i++)
             {
                 token.ThrowIfCancellationRequested();
@@ -128,6 +138,57 @@ public sealed class SqliteResearchStore : IResearchStore
         using var db = OpenCurrent();
         token.ThrowIfCancellationRequested();
         return MakeBackup(db, _path);
+    }, token);
+
+    public Task<SavedFinancialSnapshot> SaveSnapshotAsync(FinancialSnapshotDraft draft, CancellationToken token = default)
+    {
+        ArgumentNullException.ThrowIfNull(draft);
+        var snapshot = new SavedFinancialSnapshot(Guid.NewGuid(), draft.PeerSetId, draft.PeerSetRevision,
+            DateTimeOffset.UtcNow, draft.DefinitionVersion, draft.Companies?.ToArray() ?? []);
+        ValidateSnapshot(snapshot);
+        // Deep-copy only the explicitly typed financial DTO before awaiting I/O.
+        var json = JsonSerializer.Serialize(snapshot, JsonOptions);
+        if (Encoding.UTF8.GetByteCount(json) > MaxSnapshotBytes) throw Failure(ResearchStorageFailure.Validation, "Financial snapshot exceeds the 2 MiB limit; nothing saved.");
+        var captured = JsonSerializer.Deserialize<SavedFinancialSnapshot>(json, JsonOptions)!;
+        return AccessAsync(() =>
+        {
+            EnsureWritable();
+            using var db = OpenCurrent();
+            using var tx = db.BeginTransaction();
+            var set = ReadSets(db, false, token, tx).SingleOrDefault(s => s.Id == draft.PeerSetId);
+            if (set is null || set.Revision != draft.PeerSetRevision) throw Failure(ResearchStorageFailure.Conflict, "Saved research changed. Reload before capturing a snapshot.");
+            if (!set.Companies.Select(c => c.Cik).Order().SequenceEqual(captured.Companies.Select(c => c.Company.Cik).Order()))
+                throw Failure(ResearchStorageFailure.Validation, "Snapshot companies must match the entire saved peer set. Choose a matching set first.");
+            if (new FileInfo(_path).Length + Encoding.UTF8.GetByteCount(json) + 16384 > MaxDatabaseBytes)
+                throw Failure(ResearchStorageFailure.Validation, "Research storage is full; preserve a backup before choosing a new research file.");
+            Execute(db, "INSERT INTO financial_snapshots(id,set_id,captured_utc,payload_schema,payload) VALUES($id,$set,$time,1,$payload);", tx,
+                ("$id", captured.Id.ToString()), ("$set", captured.PeerSetId.ToString()), ("$time", Time(captured.CapturedAt)), ("$payload", json));
+            token.ThrowIfCancellationRequested();
+            tx.Commit();
+            return captured;
+        }, token);
+    }
+
+    public Task<IReadOnlyList<SavedFinancialSnapshot>> ListSnapshotsAsync(Guid setId, CancellationToken token = default) => AccessAsync<IReadOnlyList<SavedFinancialSnapshot>>(() =>
+    {
+        using var db = OpenCurrent();
+        using var command = db.CreateCommand();
+        command.CommandText = "SELECT id,payload_schema,payload FROM financial_snapshots WHERE set_id=$id ORDER BY captured_utc DESC,id;";
+        command.Parameters.AddWithValue("$id", setId.ToString());
+        using var reader = command.ExecuteReader();
+        var result = new List<SavedFinancialSnapshot>();
+        while (reader.Read())
+        {
+            token.ThrowIfCancellationRequested();
+            if (reader.GetInt32(1) != 1) throw Failure(ResearchStorageFailure.UnsupportedVersion, "Snapshot payload version is unsupported; preserve the database and use a compatible app.");
+            var text = reader.GetString(2);
+            if (Encoding.UTF8.GetByteCount(text) > MaxSnapshotBytes) throw Failure(ResearchStorageFailure.Corrupt, "Stored snapshot exceeds the supported size.");
+            var item = JsonSerializer.Deserialize<SavedFinancialSnapshot>(text, JsonOptions) ?? throw Failure(ResearchStorageFailure.Corrupt, "Stored snapshot is empty.");
+            ValidateSnapshot(item);
+            if (item.Id.ToString() != reader.GetString(0) || item.PeerSetId != setId) throw Failure(ResearchStorageFailure.Corrupt, "Snapshot identity does not match its stored record.");
+            result.Add(item);
+        }
+        return result;
     }, token);
 
     public Task RestoreAsync(string backupPath, CancellationToken token = default) => AccessAsync<object?>(() =>
@@ -192,6 +253,7 @@ public sealed class SqliteResearchStore : IResearchStore
         catch (IOException ex) { throw new ResearchStorageException(ResearchStorageFailure.Io, "Research file access failed; existing data was preserved.", ex); }
         catch (Exception ex) when (ex is FormatException or OverflowException)
         { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Research contains malformed values; file preserved. Restore a verified backup into a new location.", ex); }
+        catch (JsonException ex) { throw new ResearchStorageException(ResearchStorageFailure.Corrupt, "Research payload is malformed; it was preserved. Restore a verified backup into a new location.", ex); }
         finally { gate.Release(); }
     }
 
@@ -231,7 +293,9 @@ public sealed class SqliteResearchStore : IResearchStore
         var version = Validate(db);
         if (version == CurrentVersion) return;
         using var tx = db.BeginTransaction();
-        Execute(db, "ALTER TABLE research_sets ADD COLUMN revision INTEGER NOT NULL DEFAULT 1 CHECK(revision>=1); ALTER TABLE research_sets ADD COLUMN deleted_utc TEXT; PRAGMA user_version=2;", tx);
+        if (version < 2) Execute(db, Schema2Changes, tx);
+        if (version < 3) Execute(db, Schema3Changes, tx);
+        Execute(db, $"PRAGMA user_version={CurrentVersion};", tx);
         token.ThrowIfCancellationRequested();
         tx.Commit();
     }
@@ -259,13 +323,14 @@ public sealed class SqliteResearchStore : IResearchStore
         using (var command = db.CreateCommand())
         {
             command.Transaction = transaction;
-            command.CommandText = "SELECT id,name,kind,revision,created_utc,updated_utc,deleted_utc FROM research_sets " + (includeDeleted ? "" : "WHERE deleted_utc IS NULL ") + "ORDER BY name COLLATE NOCASE,id;";
+            command.CommandText = "SELECT id,name,kind,revision,created_utc,updated_utc,deleted_utc,preset_json FROM research_sets " + (includeDeleted ? "" : "WHERE deleted_utc IS NULL ") + "ORDER BY name COLLATE NOCASE,id;";
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
                 token.ThrowIfCancellationRequested();
                 rows.Add(new SavedResearchSet(Guid.Parse(reader.GetString(0)), reader.GetString(1), (ResearchSetKind)reader.GetInt32(2), [], reader.GetInt64(3),
-                    ParseTime(reader.GetString(4)), ParseTime(reader.GetString(5)), reader.IsDBNull(6) ? null : ParseTime(reader.GetString(6))));
+                    ParseTime(reader.GetString(4)), ParseTime(reader.GetString(5)), reader.IsDBNull(6) ? null : ParseTime(reader.GetString(6)))
+                { Preset = reader.IsDBNull(7) ? null : JsonSerializer.Deserialize<ResearchScreenPreset>(reader.GetString(7), JsonOptions) });
             }
         }
         for (var i = 0; i < rows.Count; i++)
@@ -303,6 +368,30 @@ public sealed class SqliteResearchStore : IResearchStore
         var value = name?.Trim();
         if (string.IsNullOrEmpty(value) || value.Length > 80 || value.Any(char.IsControl)) throw Failure(ResearchStorageFailure.Validation, "Use a research name of 1–80 printable characters.");
         return value;
+    }
+    private static void ValidatePreset(ResearchScreenPreset? preset)
+    {
+        if (preset is null) return;
+        ValidName(preset.DefinitionVersion); ValidName(preset.SortMetric);
+        if (preset.FilterMetric is null && preset.Operator is null && preset.Threshold is null) return;
+        if (preset.FilterMetric is null || preset.Operator is not (">" or ">=" or "<" or "<=") || preset.Threshold is null)
+            throw Failure(ResearchStorageFailure.Validation, "A filter needs a named metric, operator and explicit threshold.");
+        ValidName(preset.FilterMetric);
+    }
+    private static void ValidateSnapshot(SavedFinancialSnapshot snapshot)
+    {
+        if (snapshot.Id == Guid.Empty || snapshot.PeerSetId == Guid.Empty || snapshot.PeerSetRevision < 1
+            || snapshot.Companies is null || snapshot.Companies.Count is < 2 or > 5
+            || snapshot.Companies.Any(c => c is null || c.Company is null) || snapshot.Companies.Select(c => c.Company.Cik).Distinct().Count() != snapshot.Companies.Count
+            || snapshot.Companies.All(c => c.Fundamentals is null))
+            throw Failure(ResearchStorageFailure.Validation, "Capture 2–5 distinct saved peers with at least one financial result.");
+        ValidName(snapshot.DefinitionVersion);
+        foreach (var company in snapshot.Companies)
+        {
+            ValidCompany(company.Company);
+            if (company.Fundamentals is { } f && (f.History is null || f.History.Count > 5))
+                throw Failure(ResearchStorageFailure.Validation, "A financial snapshot supports up to five annual periods per company.");
+        }
     }
     private static CompanyRef ValidCompany(CompanyRef? company)
     {

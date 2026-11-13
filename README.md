@@ -42,6 +42,19 @@ dotnet test AlphaQuant.slnx
 
 The tests use synthetic fixtures and never contact the SEC. Verified on Windows 11 x64 only. There is no installer or release yet.
 
+## Saved research and offline use
+
+Open **Saved research** to name the current peer selection or create a watchlist.
+Capture a financial comparison separately, then reopen its snapshot without a
+network request. Original values, source dates and definition versions stay frozen;
+quotes and connection credentials are not saved. Watchlist comparison requires an
+explicit choice of 2–5 members. Sets support rename, editable membership,
+recoverable deletion and verified backup/restore. See the
+[storage and recovery contract](docs/development/Research_Storage.md).
+
+Cloud synthetic tests and Linux headless rendering are verified; trusted Windows
+execution remains pending the owner's PC and signing-provider eligibility.
+
 ## Contributing
 
 Read [developer and agent guidance](docs/development/Agent_Guidance.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
