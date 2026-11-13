@@ -1,5 +1,7 @@
 # AlphaQuant
 
+**Continue development:** read the [autonomous development roadmap](docs/roadmap/Development_Plan.md), [execution runbook](docs/roadmap/Stage_Runbook.md) and [stage ledger](docs/roadmap/Stage_Ledger.json). The full roadmap is a draft pending owner acceptance or a stage invocation after review. "Proceed with the next stage" then supplies the execution scope and standing Git/validation policy. It does not imply that external accounts, rights or deployment gates are already complete.
+
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
 **Status:** Integrated Windows preview candidate: SEC company selection, annual test-0 workspace and comparison-1 peer summaries/history/TTM/source evidence. Browser OAuth and IEX streaming are wired with session-only tokens and explicit access tests. Reviewed valuation inputs can be loaded for the session; missing or invalid evidence remains unavailable. OAuth registration/HTTPS deployment, trusted distribution and live verification are still required for a connected pilot.
