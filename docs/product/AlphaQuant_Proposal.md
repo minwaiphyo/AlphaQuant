@@ -1,7 +1,7 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.24
-Last updated: 2026-11-01 Asia/Singapore
+Document revision: 0.25
+Last updated: 2026-11-13 Asia/Singapore
 Product status: SEC desktop spike plus implemented/tested OAuth-IEX-comparison backend; UI wiring/live setup pending, no release
 Working name: AlphaQuant  
 
@@ -343,6 +343,8 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Planning update, 2026-11-13 (AQ-D025): the owner requested a resumable autonomous plan for the full proposed product through DCF/scenarios. The [stage plan](../roadmap/Development_Plan.md), [execution runbook](../roadmap/Stage_Runbook.md) and [ledger](../roadmap/Stage_Ledger.json) define 20 stages and 83 checkpointed work packages, dependencies, checks, delivery and external-gate fallback. The owner selected automatic commit/push/PR/merge after checks/self-review, delegated versioned financial definitions, local SQLite with migration/recovery, and bounded configured SEC/explicitly connected Alpaca validation. These policy choices are confirmed. Detailed stage contracts remain draft pending plan acceptance or a reviewed stage invocation. No application stage has started. Next: review the plan, then invoke S01. Future agents should resume from tracked packages rather than require earlier chats. Account/rights/signing gates remain real but do not prevent independent ready work.
+
 As of 2026-11-01, revision 0.24. AQ-D022 remains authoritative: browser OAuth, session-only tokens, server-only application secret and comparison-1 financial definitions under user delegation. AQ-D023 is the native UI milestone. User authorized autonomous first-version development (AQ-D024), within the existing no-trading/zero-required-cost scope.
 
 Implemented integration: Financial analysis consumes ComparisonBackend and displays peer summaries, up to five annual periods, current TTM, cash/debt, guarded valuation and inspectable weighted source contributions/filings. Existing annual test-0 filters/sorting remain in the peer workspace. Data connections supplies browser Connect, Cancel, access test and Disconnect. No configured broker leaves Connect disabled while fundamentals work. Only a successful real-time/streaming access test covering every selected symbol enables streaming. Navigation stops the watch, clears displayed prices and preserves financial snapshots; app exit clears market tokens. Failed per-company refreshes retain financials with stale/retained labels and original retrieval time.
@@ -359,6 +361,7 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D025 2026-11-13 | Planning policies confirmed, stage contracts draft | Full-product resumable roadmap through forecasts/DCF/scenarios. Stage invocations authorize autonomous implementation and normal Git delivery after checks. Continue independent stages on external blockers. Delegate documented finance definitions, adopt SQLite/recovery, permit bounded configured SEC and explicitly connected Alpaca validation. Preserve zero required cost and no trading/recommendations. No application changes begin until plan acceptance/invocation. | Owner planning request and two GUI decision rounds. |
 | AQ-D024 2026-11-01 | Authorized autonomous first-version integration | Proceed with UI/backend integration, regression checks and deployment preparation under current browser-OAuth/comparison-1/zero-cost scope. Preserve user and teammate work. Account registration, secrets, permissions and signing cannot be invented; keep those external gates explicit. | User requested continued autonomous development while unavailable. |
 | AQ-D023 2026-10-31 | Implemented native UI; review pending | Persistent navigation, themes, two-to-five-company annual test-0 comparisons, filters/sorting and source evidence. Retain the existing calculation definitions in current screens until ComparisonBackend integration; no production demo mode. Renumbered from the UI branch's conflicting AQ-D022 during reconciliation. | Teammate UI milestone and user instruction to preserve newer backend decisions. |
 | AQ-D022 2026-10-28 | Approved backend implementation direction; baseline finalized under delegation | Browser OAuth selected; user delegated financial definitions and authorized Alpaca adapter/comparison backend. comparison-1 formalizes conservative annual/TTM/EPS/EV rules and reviewed evidence guards. Server-only secret exchange required; prepare registration/free-preview steps without accounts/deployment. UI teammate retains ownership. No independent finance certification or live readiness claimed. | User implementation instruction and confirmation that no OAuth app/endpoint exists. |

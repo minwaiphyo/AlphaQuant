@@ -1,6 +1,6 @@
 # Alpaca browser OAuth: setup and UI integration
 
-Updated: 2026-10-28. Backend code exists and is fake-provider tested. No OAuth application, hosted service, provider approval or live connection has been created for this project. The Desktop project has intentionally not been modified while the UI teammate works on it.
+Current update: 2026-11-13. OAuth/backend code is integrated into Desktop and fake-provider tested. Registration, hosted configuration, permitted pilot use and live acceptance remain unverified. No actual deployment is claimed. See [the stage roadmap](../roadmap/Development_Plan.md) S07/S08 and [current preview setup](First_Preview.md). The composition example below is background for the implemented facade, not evidence that screen integration is still absent.
 
 ## Components
 

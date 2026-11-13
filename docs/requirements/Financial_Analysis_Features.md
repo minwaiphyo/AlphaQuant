@@ -1,8 +1,8 @@
 # Financial Analysis Features
 
-Current scope: SEC + per-user free Alpaca Basic IEX; zero-cost pilot; replaceable adapter; session-only credentials if API-key input is chosen. Authentication route and financial definitions remain undecided. Complex/unverifiable valuations may be unavailable. No trading. See [UI design brief](../development/UI_Design_Brief.md) and proposal revision 0.20 for current status. Older provider/budget/account-free statements below are dated review context, superseded where inconsistent with AQ-D018/AQ-D020/AQ-D021.
+Current scope: SEC plus per-user Alpaca IEX, zero required pilot cost, replaceable adapter and browser OAuth with session-only tokens. Comparison-1 is the implemented project baseline under AQ-D022, with explicit review guards for complex/unverifiable valuation. Native UI and backend are integrated. Live setup/acceptance and trusted distribution remain pending. No trading. The [full-product stage plan](../roadmap/Development_Plan.md) now maps these feature candidates to S01-S20, including later definitions delegated by the owner for versioned implementation. The plan remains draft until acceptance/stage invocation. Older undecided-authentication, SEC-only, phase and unimplemented-spike statements below are historical catalogue context, not current status.
 
-Updated: 2026-10-28
+Updated: 2026-11-13
 
 ## Latest scope selection
 
