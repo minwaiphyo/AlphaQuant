@@ -24,23 +24,23 @@
     "automatic_subagents": false
   },
   "active_run": {
-    "run_id": "20261113-initial-stages",
-    "owner": "primary-developer-agent",
-    "stage": "S03",
-    "package": "S03.4",
-    "branch": "codex/stage03-unified-comparison",
-    "baseline_commit": "f3a5149",
+    "run_id": "20261113-cloud-continuation",
+    "owner": "primary-cloud-agent",
+    "stage": "S04",
+    "package": "S04.1",
+    "branch": "feat/research-storage",
+    "baseline_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
     "scope": [
-      "S01",
-      "S02",
-      "S03"
+      "S03",
+      "S04",
+      "S05"
     ],
     "skills": [
+      "alphaquant-research-storage",
       "alphaquant-stage-verification",
-      "alphaquant-avalonia-design",
-      "alphaquant-data-connections"
+      "alphaquant-avalonia-design"
     ],
-    "next_action": "Owner stopped development on 2026-11-13. Wait for an explicit resume instruction. Then check PR24 exact-head CI, inspect revised UI PNGs, fix any failures and deliver normally. Do not merge while stopped."
+    "next_action": "Implement and validate SQLite storage/recovery while PR24 merge policy and GitHub API access remain unresolved."
   },
   "next_recommended_stage": "S03",
   "external_gates": [
@@ -277,15 +277,11 @@
           ]
         }
       ],
-      "next_action": "Configure local SEC contact, run bounded capture, inspect original filings and reconcile the matrix before closing S02.",
-      "validation": [
-        "Exact PR head 9aa74af passed Windows CI, including deterministic application tests and source-capture no-network preflight."
-      ],
+      "next_action": "Deterministic changes merged through PR23. Live source reconciliation remains blocked; continue independent stages.",
+      "validation": [],
       "self_review": null,
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/23",
-      "ci_runs": [
-        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43434771506"
-      ],
+      "ci_runs": [],
       "merge_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
       "artifacts": [],
       "blocker_ids": [
@@ -294,7 +290,7 @@
       ],
       "checkpoint": {
         "date": "2026-11-13",
-        "summary": "Deterministic matrix/fixture, ambiguous-FY correction and source-capture tool merged through PR23. Actual live-source reconciliation remains blocked by E01."
+        "summary": "Matrix and independently written synthetic expected fixture added. Source-capture utility and ambiguous-prior-FY correction comparison-1.1 awaiting exact-head CI. No live data used."
       }
     },
     {
@@ -360,7 +356,7 @@
           ]
         }
       ],
-      "next_action": "Owner stopped development on 2026-11-13. Wait for an explicit resume instruction. Then check PR24 exact-head CI, inspect revised UI PNGs, fix any failures and deliver normally. Do not merge while stopped.",
+      "next_action": "Resume local verification on current cloud runtime; PR24 remains unmerged pending owner clarification and exact-head CI. S05 work is stacked on its existing code.",
       "validation": [],
       "self_review": "Reviewed raw decimal filter/sort, unavailable ordering, stable presentation identity, typed setup failures, stream close serialization and navigation. CI execution/render review still required.",
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/24",
@@ -381,7 +377,7 @@
     {
       "id": "S04",
       "title": "SQLite storage and recovery",
-      "status": "planned",
+      "status": "verifying",
       "depends_on": [
         "S01"
       ],
@@ -391,49 +387,73 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s04-sqlite-storage-and-recovery",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
-      "baseline_commit": null,
+      "owner": "primary-cloud-agent",
+      "run_id": "20261113-cloud-continuation",
+      "branch": "feat/research-storage",
+      "baseline_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
       "work_packages": [
         {
           "id": "S04.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Research_Storage.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S04.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Research_Storage.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S04.3",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Research_Storage.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S04.4",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Research_Storage.md"
+          ],
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S04 contract, verify prerequisites and start S04.1 after plan acceptance.",
-      "validation": [],
-      "self_review": null,
+      "next_action": "Push reviewed storage branch; remote exact-head CI/PR delivery pending GitHub API access. Continue S05 on the existing S03 comparison code without merging PR24.",
+      "validation": [
+        {
+          "command": "dotnet test AlphaQuant.slnx -c Release --no-restore",
+          "result": "224 passed, 0 failed, 0 skipped; includes 14 isolated storage tests"
+        },
+        {
+          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore",
+          "result": "0 warnings/errors"
+        },
+        {
+          "command": "python tools/Validate-ProjectSkills.py",
+          "result": "passed"
+        }
+      ],
+      "self_review": "Reviewed typed-only payloads, revision conflicts, online backup integrity, malformed/foreign/corrupt/future files, cancellation before commits, rollback of later migration steps, read-only and noncooperating locks. Fresh schemas are initialized directly; migrations run explicit statements inside a transaction.",
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,
       "artifacts": [],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-13",
+        "summary": "Storage implementation verified on Linux; Windows and remote CI not yet verified. No live finance calls or market-data persistence."
+      }
     },
     {
       "id": "S05",
@@ -1430,12 +1450,14 @@
     {
       "date": "2026-11-13",
       "event": "Owner accepted roadmap and authorized autonomous execution of next stages. S01 claimed on codex/stage01-baseline."
-    },
-    {
-      "date": "2026-11-13",
-      "event": "Owner requested stop. Saved S03 PR24 checkpoint without merging. Resume only on owner instruction. S01 is delivered and S02 deterministic work is merged, with live reconciliation still blocked on E01."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
-  "quality_skill_routing": "../skills/Skill_Routing.md"
+  "quality_skill_routing": "../skills/Skill_Routing.md",
+  "distribution_pending": {
+    "branch": "chore/windows-distribution",
+    "commit": "f841108",
+    "status": "pending_owner_pc_and_provider",
+    "instruction": "Owner on 2026-11-13 resumed other development; keep Windows signing/validation pending. No purchases, live finance calls or signing configuration."
+  }
 }
