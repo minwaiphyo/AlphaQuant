@@ -1,11 +1,11 @@
 # AlphaQuant autonomous development plan
 
-Version: 1.0 draft for review
+Version: 1.0 approved for stage execution on 2026-11-13
 Updated: 2026-11-13 Asia/Singapore
 
-This is a documentation-only plan. Application implementation has not started under it.
+The owner approved execution on 2026-11-13 with "Proceed with next few stages and continue developing autonomously." Current work, evidence and blockers are recorded in the stage ledger.
 
-The plan becomes approved when the owner accepts it or invokes a stage after reviewing it, for example "Proceed with the next stage using the roadmap". Draft existence alone does not authorize implementation.
+The standing stage policies below are approved. Routine implementation, checks and Git delivery within these contracts do not need repeated approval. External access and release gates still require actual evidence.
 
 ## Entry points and authority
 
