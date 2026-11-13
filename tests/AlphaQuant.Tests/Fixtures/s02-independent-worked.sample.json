@@ -1,0 +1,209 @@
+{
+  "_note": "Synthetic S02 independent worked case. No real issuer or SEC retrieval. fy/fp labels are deliberately misleading. Expected values are hand-derived and cross-checked by the Decimal skill helper.",
+  "_s02": {
+    "asOf": "2026-10-28",
+    "expected": {
+      "annualRevenueGrowth": "20",
+      "ttmRevenue": "1350000000",
+      "ttmOperatingIncome": "270000000",
+      "ttmOperatingMargin": "20",
+      "ttmOperatingCashFlow": "360000000",
+      "ttmEps": "3",
+      "cash": "100000000",
+      "pe": "20",
+      "enterpriseValue": "6300000000",
+      "evSales": "4.666666666666666666666666667"
+    },
+    "review": {
+      "price": "60",
+      "shares": "100000000",
+      "debt": "400000000",
+      "cash": "100000000",
+      "preferred": "0",
+      "nci": "0"
+    }
+  },
+  "cik": 1,
+  "entityName": "Fictional S02 Fixture",
+  "facts": {
+    "us-gaap": {
+      "Revenues": {
+        "units": {
+          "USD": [
+            {
+              "val": 1000000000,
+              "start": "2024-01-01",
+              "end": "2024-12-31",
+              "form": "10-K",
+              "filed": "2025-02-01",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 1200000000,
+              "start": "2025-01-01",
+              "end": "2025-12-31",
+              "form": "10-K",
+              "filed": "2026-02-01",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 1000000000,
+              "start": "2026-01-01",
+              "end": "2026-09-30",
+              "form": "10-Q",
+              "filed": "2026-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 850000000,
+              "start": "2025-01-01",
+              "end": "2025-09-30",
+              "form": "10-Q",
+              "filed": "2025-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            }
+          ]
+        }
+      },
+      "OperatingIncomeLoss": {
+        "units": {
+          "USD": [
+            {
+              "val": 240000000,
+              "start": "2025-01-01",
+              "end": "2025-12-31",
+              "form": "10-K",
+              "filed": "2026-02-01",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 200000000,
+              "start": "2026-01-01",
+              "end": "2026-09-30",
+              "form": "10-Q",
+              "filed": "2026-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 170000000,
+              "start": "2025-01-01",
+              "end": "2025-09-30",
+              "form": "10-Q",
+              "filed": "2025-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            }
+          ]
+        }
+      },
+      "NetCashProvidedByUsedInOperatingActivities": {
+        "units": {
+          "USD": [
+            {
+              "val": 300000000,
+              "start": "2025-01-01",
+              "end": "2025-12-31",
+              "form": "10-K",
+              "filed": "2026-02-01",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 280000000,
+              "start": "2026-01-01",
+              "end": "2026-09-30",
+              "form": "10-Q",
+              "filed": "2026-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 220000000,
+              "start": "2025-01-01",
+              "end": "2025-09-30",
+              "form": "10-Q",
+              "filed": "2025-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            }
+          ]
+        }
+      },
+      "EarningsPerShareDiluted": {
+        "units": {
+          "USD/shares": [
+            {
+              "val": 0.5,
+              "start": "2025-10-01",
+              "end": "2025-12-31",
+              "form": "10-K",
+              "filed": "2026-02-01",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 0.75,
+              "start": "2026-01-01",
+              "end": "2026-03-31",
+              "form": "10-Q",
+              "filed": "2026-04-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 0.75,
+              "start": "2026-04-01",
+              "end": "2026-06-30",
+              "form": "10-Q",
+              "filed": "2026-07-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            },
+            {
+              "val": 1,
+              "start": "2026-07-01",
+              "end": "2026-09-30",
+              "form": "10-Q",
+              "filed": "2026-10-20",
+              "accn": "0000000001-26-000001",
+              "fy": 2099,
+              "fp": "FY"
+            }
+          ]
+        }
+      },
+      "CashAndCashEquivalentsAtCarryingValue": {
+        "units": {
+          "USD": [
+            {
+              "val": 100000000,
+              "end": "2026-09-30",
+              "form": "10-Q",
+              "filed": "2026-10-20",
+              "accn": "0000000001-26-000001"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
