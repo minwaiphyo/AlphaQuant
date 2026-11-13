@@ -1,6 +1,6 @@
 # AlphaQuant Project Proposal and Development Record
 
-Document revision: 0.25
+Document revision: 0.26
 Last updated: 2026-11-13 Asia/Singapore
 Product status: SEC desktop spike plus implemented/tested OAuth-IEX-comparison backend; UI wiring/live setup pending, no release
 Working name: AlphaQuant  
@@ -343,6 +343,8 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Quality-layer update, 2026-11-13 (AQ-D026): the owner requested specialized reusable agent skills before stage development. Six tracked skills cover SEC evidence, quantitative modeling, Avalonia design, data connections, research storage and stage verification. The [routing guide](../skills/Skill_Routing.md) and catalog connect them to the roadmap. A scoped installer supplies local discovery links without global changes, and the quant skill includes independently checked Decimal reference arithmetic and worked examples. These resources support developer decisions and verification, not professional certification or automatic release-gate closure. The roadmap remains draft and no application stage is activated by this work.
+
 Planning update, 2026-11-13 (AQ-D025): the owner requested a resumable autonomous plan for the full proposed product through DCF/scenarios. The [stage plan](../roadmap/Development_Plan.md), [execution runbook](../roadmap/Stage_Runbook.md) and [ledger](../roadmap/Stage_Ledger.json) define 20 stages and 83 checkpointed work packages, dependencies, checks, delivery and external-gate fallback. The owner selected automatic commit/push/PR/merge after checks/self-review, delegated versioned financial definitions, local SQLite with migration/recovery, and bounded configured SEC/explicitly connected Alpaca validation. These policy choices are confirmed. Detailed stage contracts remain draft pending plan acceptance or a reviewed stage invocation. No application stage has started. Next: review the plan, then invoke S01. Future agents should resume from tracked packages rather than require earlier chats. Account/rights/signing gates remain real but do not prevent independent ready work.
 
 As of 2026-11-01, revision 0.24. AQ-D022 remains authoritative: browser OAuth, session-only tokens, server-only application secret and comparison-1 financial definitions under user delegation. AQ-D023 is the native UI milestone. User authorized autonomous first-version development (AQ-D024), within the existing no-trading/zero-required-cost scope.
@@ -361,6 +363,7 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D026 2026-11-13 | Implemented reusable quality layer | Add project-owned specialized skills for evidence, quantitative models, design, data connections, storage/recovery and stage acceptance. Use concise instructions, relevant references, deterministic numeric tooling, selective discovery/routing and explicit validation limits. Preserve existing scope, stage approval and external gates. | Owner requested reusable domain/design/calculation skills before continuing development. |
 | AQ-D025 2026-11-13 | Planning policies confirmed, stage contracts draft | Full-product resumable roadmap through forecasts/DCF/scenarios. Stage invocations authorize autonomous implementation and normal Git delivery after checks. Continue independent stages on external blockers. Delegate documented finance definitions, adopt SQLite/recovery, permit bounded configured SEC and explicitly connected Alpaca validation. Preserve zero required cost and no trading/recommendations. No application changes begin until plan acceptance/invocation. | Owner planning request and two GUI decision rounds. |
 | AQ-D024 2026-11-01 | Authorized autonomous first-version integration | Proceed with UI/backend integration, regression checks and deployment preparation under current browser-OAuth/comparison-1/zero-cost scope. Preserve user and teammate work. Account registration, secrets, permissions and signing cannot be invented; keep those external gates explicit. | User requested continued autonomous development while unavailable. |
 | AQ-D023 2026-10-31 | Implemented native UI; review pending | Persistent navigation, themes, two-to-five-company annual test-0 comparisons, filters/sorting and source evidence. Retain the existing calculation definitions in current screens until ComparisonBackend integration; no production demo mode. Renumbered from the UI branch's conflicting AQ-D022 during reconciliation. | Teammate UI milestone and user instruction to preserve newer backend decisions. |
