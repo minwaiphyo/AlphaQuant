@@ -147,7 +147,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         var operation = LoadCoreAsync(previous, selected.ToArray(), generation);
         // Keep the original close pending even if this attempt times out. A retry must
         // not treat a timed-out wait as proof that the old enumerator was disposed.
-        _activeLoad = Task.WhenAll(previous, operation);
+        _activeLoad = previous.IsCompletedSuccessfully ? operation : Task.WhenAll(previous, operation);
         return operation;
     }
     private async Task LoadCoreAsync(Task previous, IReadOnlyList<CompanyRef> selected, int generation)
@@ -238,7 +238,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         while (target.Count > desired.Count) target.RemoveAt(target.Count - 1);
     }
     private static string Format(FinancialValue value) => value.Available
-        ? $"{value.Value!.Value.ToString("N2", CultureInfo.InvariantCulture)} {value.Unit}" : "Unavailable";
+        ? $"{value.Value!.Value.ToString(value.Unit == "USD/shares" ? "0.########" : "N2", CultureInfo.InvariantCulture)} {value.Unit}" : "Unavailable";
     private void Inspect(AlphaQuant.Core.ComparisonRow row, FinancialValue value, string period)
     {
         Evidence = new()

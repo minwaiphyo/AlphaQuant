@@ -20,7 +20,7 @@ Regression coverage includes raw sub-cent EPS filtering/evidence, missing orderi
 
 `tools/AlphaQuant.UiChecks` uses matching Avalonia.Headless 12.1.4 (MIT, verification-only) with real Skia drawing and the shared theme. It never composes production settings/services or accesses network/browser. It renders five synthetic long-name peers in light/dark, a constrained research viewport, expanded evidence, empty-filter and retained-setup states. Evidence focus and Escape return are checked against actual controls. CI retains separate PNG artifacts for one day. These are not live financial/provider evidence or native screen-reader certification.
 
-CI/result and visual review are pending at this checkpoint. Do not mark S03 done until exact-head checks pass, artifacts are inspected and normal merge is recorded in the ledger. S02 actual source reconciliation remains open on BL-001.
+Initial Windows CI run 43436890942 passed 216 application tests, 19 independent skill tests, rendering/keyboard checks, build and packaging. Visual inspection of its five PNGs found that fixed filter controls crowded the minimum research/evidence viewport. Filters were moved into a collapsible section in the scrollable research area. A separate expanded-filter render now covers this state. Sub-cent EPS display precision and Core typed-error propagation were also reviewed and strengthened. Final exact-head CI and revised PNG inspection are required before merge. S02 actual source reconciliation remains open on BL-001.
 
 ## Dependency evidence
 
