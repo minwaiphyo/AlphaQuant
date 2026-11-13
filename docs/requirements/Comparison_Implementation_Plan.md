@@ -1,5 +1,7 @@
 # SEC and Alpaca Comparison: Bounded Implementation Plan
 
+Current authority, 2026-11-13: this document retains the original bounded planning history. Browser OAuth and comparison-1 are implemented and integrated into Desktop under AQ-D022/AQ-D023. Use the [full-product stage plan](../roadmap/Development_Plan.md), [runbook](../roadmap/Stage_Runbook.md) and [ledger](../roadmap/Stage_Ledger.json) for new autonomous work. Earlier undecided authentication, approval-needed and unwired-Desktop statements below are superseded historical context. No live deployment or independent certification is implied.
+
 ## Implementation update, 2026-10-28
 
 User authorized backend implementation, selected browser OAuth and delegated financial-definition finalization (AQ-D022). Core/Infrastructure contracts, annual/TTM/valuation engine, IEX access/stream adapter, browser client and server token broker now exist, with a fake end-to-end two-company test. See [OAuth/UI composition guide](../development/Alpaca_OAuth_Setup.md) and [comparison-1 baseline](Financial_Definitions.md). 169 tests passed and solution build is clean; no real OAuth registration/deployment/provider access or independent finance review occurred. Desktop/UI files were not changed; teammate integration remains pending. Earlier undecided authentication/formula labels below are historical where superseded.
