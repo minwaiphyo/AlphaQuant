@@ -15,7 +15,7 @@ public static class ComparisonConcepts
 /// <summary>comparison-1: no annual-minus-YTD EPS, calendar fy/fp heuristics, or inferred zero capital claims.</summary>
 public static class ComparisonAnalyzer
 {
-    public const string DefinitionVersion = "comparison-1";
+    public const string DefinitionVersion = "comparison-1.1";
 
     public static ComparisonFundamentals Analyze(IReadOnlyList<RawFact> facts, DateOnly asOf)
     {
@@ -99,9 +99,12 @@ public static class ComparisonAnalyzer
             if (parts.Count == 4 && latest.Value.DayNumber - parts[^1].Start!.Value.DayNumber is >= 349 and <= 379)
                 return Value(name, parts.Select(f => new FactContribution(f)).ToArray(), unit);
             if (!additiveYtd) continue;
-            var fy = set.Where(f => f.End < latest && Annual(f) && f.Form is "10-K" or "10-K/A")
-                .OrderByDescending(f => f.End).FirstOrDefault();
-            if (fy is null) continue;
+            var priorFullYears = set.Where(f => f.End < latest && Annual(f) && f.Form is "10-K" or "10-K/A")
+                .GroupBy(f => f.End).OrderByDescending(g => g.Key).FirstOrDefault();
+            if (priorFullYears is null) continue;
+            if (priorFullYears.Count() != 1)
+                return Missing(name, unit, "Ambiguous prior full-year start dates require review before a YTD bridge.");
+            var fy = priorFullYears.Single();
             var current = set.SingleOrDefault(f => f.End == latest && f.Start == fy.End.AddDays(1)
                 && Days(f) is >= 60 and <= 300);
             if (current is null) continue;

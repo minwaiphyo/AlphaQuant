@@ -204,6 +204,30 @@ public sealed class ComparisonBackendTests
     }
 
     [Fact]
+    public void AmbiguousPriorFullYearCannotFeedCurrentYtdBridgeRegardlessOfInputOrder()
+    {
+        var facts = ReviewedSample();
+        facts.Add(Fact("Revenues", 1300m, "2024-12-25", "2025-12-31", "10-K", filed: "2026-02-01"));
+        foreach (var order in new[] { facts, facts.AsEnumerable().Reverse().ToList() })
+        {
+            var result = ComparisonAnalyzer.Analyze(order, Today);
+            Assert.Null(result.TtmRevenue.Value);
+            Assert.Contains("Ambiguous prior full-year", result.TtmRevenue.Reason);
+            Assert.Null(result.TtmOperatingMargin.Value);
+            Assert.Equal(3m, result.TtmDilutedEps.Value); // Independent valid direct-quarter facts survive.
+        }
+    }
+
+    [Fact]
+    public void IdenticalDuplicateFullYearFactsDoNotCreateFalseAmbiguity()
+    {
+        var facts = ReviewedSample();
+        facts.Add(facts[0] with { Accession = "another-identical-disclosure" });
+        Assert.Equal(1350m, ComparisonAnalyzer.Analyze(facts, Today).TtmRevenue.Value);
+        Assert.Equal("comparison-1.1", ComparisonAnalyzer.DefinitionVersion);
+    }
+
+    [Fact]
     public void AmbiguousAnnualStartDatesAreNotSelectedByApiOrder()
     {
         var facts = new[]

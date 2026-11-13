@@ -129,7 +129,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         Evidence = new()
         {
             Company = row.Company.Name, Title = value.Name, Value = Format(value),
-            Formula = "comparison-1 · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
+            Formula = ComparisonAnalyzer.DefinitionVersion + " · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
                 : value.Name == "EV / TTM sales" ? "(Price × actual outstanding shares + debt + preferred equity + non-controlling interests − cash) / TTM revenue."
                 : value.Name.Contains("margin", StringComparison.OrdinalIgnoreCase)
                 ? "Operating income / matching-period revenue × 100."
