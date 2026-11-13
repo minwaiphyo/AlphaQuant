@@ -92,8 +92,17 @@ public sealed class ComparisonService(ICompanyFactsSource factsSource, IMarketDa
         {
             try
             {
+                MarketConnectionState? lastState = null;
                 await foreach (var item in market.StreamAsync(companies.Select(c => c.Ticker).ToArray(), lifetime.Token))
+                {
+                    lastState = item.State;
                     await channel.Writer.WriteAsync(item, lifetime.Token);
+                }
+                // A completed producer cannot leave the last snapshot looking like an active feed.
+                // Preserve explicit terminal failures instead of replacing their recovery message.
+                if (lastState is not (MarketConnectionState.Disconnected or MarketConnectionState.Failed))
+                    await channel.Writer.WriteAsync(new(MarketConnectionState.Disconnected,
+                        Message: "Market stream ended. Financial results remain available; reconnect for current prices."), lifetime.Token);
             }
             catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
             catch (OperationCanceledException)

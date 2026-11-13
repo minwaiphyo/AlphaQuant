@@ -397,6 +397,21 @@ public class SecClientTests
     }
 
     [Fact]
+    public async Task RedirectIsRejectedWithoutForwardingOrCachingTheResponse()
+    {
+        var h = new Harness();
+        var redirect = new HttpResponseMessage(HttpStatusCode.Found);
+        redirect.Headers.Location = new Uri("https://other.example/not-sec");
+        h.Handler.Enqueue(redirect);
+        var error = await Assert.ThrowsAsync<DataSourceException>(() => h.Client.GetFactsAsync(320193, default));
+        Assert.Equal(DataSourceErrorKind.InvalidData, error.Kind);
+        Assert.Contains("not forwarded", error.Message);
+        Assert.Single(h.Handler.Requests);
+        Assert.Equal(FactsUrl, h.Handler.Requests[0].Url);
+        Assert.Equal(0, h.Cache.Writes);
+    }
+
+    [Fact]
     public async Task RejectsANonPositiveCik()
     {
         var h = new Harness();

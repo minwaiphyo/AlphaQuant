@@ -70,7 +70,7 @@ public sealed class SecClient : ICompanyDirectory, ICompanyFactsSource
 
     /// <summary>An HttpClient with decompression and a bounded timeout, for production use.</summary>
     public static HttpClient CreateHttpClient() =>
-        new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All })
+        new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All, AllowAutoRedirect = false })
         {
             Timeout = TimeSpan.FromSeconds(60),
         };
@@ -220,6 +220,9 @@ public sealed class SecClient : ICompanyDirectory, ICompanyFactsSource
                 var status = (int)response.StatusCode;
                 switch (status)
                 {
+                    case >= 300 and < 400:
+                        throw new DataSourceException(DataSourceErrorKind.InvalidData,
+                            "The SEC returned a redirect. The request was not forwarded to another address.");
                     case 403:
                         throw new DataSourceException(
                             DataSourceErrorKind.Forbidden,
