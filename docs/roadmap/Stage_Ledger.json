@@ -1,0 +1,1295 @@
+{
+  "schema_version": 1,
+  "plan_version": "1.0",
+  "updated_on": "2026-11-13",
+  "plan_status": "draft",
+  "approval": {
+    "status": "awaiting_owner_acceptance_or_stage_invocation",
+    "instruction_reference": null,
+    "date": null
+  },
+  "baseline": {
+    "planning_commit": "13ec3af",
+    "reported_test_count": 203,
+    "verification_status": "historical_evidence_recheck_in_S01"
+  },
+  "execution_policy": {
+    "git_delivery": "commit_push_pr_and_normal_merge_after_self_review_and_required_checks",
+    "blocked_work": "record_blocker_and_continue_independent_ready_work",
+    "financial_definitions": "delegated_versioned_with_worked_examples_and_regression_checks",
+    "persistence": "local_sqlite_with_migrations_backup_recovery",
+    "live_validation": "bounded_sec_with_configured_contact_and_alpaca_after_explicit_user_connection",
+    "required_cost_budget": 0,
+    "currency": "USD",
+    "automatic_subagents": false
+  },
+  "active_run": null,
+  "next_recommended_stage": "S01",
+  "external_gates": [
+    {
+      "id": "E01",
+      "name": "Configured SEC contact",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Configure a valid local contact if absent. Standing bounded SEC call authority was selected on 2026-11-13."
+    },
+    {
+      "id": "E02",
+      "name": "Registered OAuth app and explicitly connected eligible account",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Register the app and connect through the supported browser flow. Never send secrets in chat."
+    },
+    {
+      "id": "E03",
+      "name": "Permitted zero-cost HTTPS host and provider use",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Supply approved host access/configuration and non-secret intended-use evidence when available."
+    },
+    {
+      "id": "E04",
+      "name": "Trusted distribution and clean supported test environment",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Provide a supported trusted route/environment when available. Never disable security."
+    },
+    {
+      "id": "E05",
+      "name": "Historical point-in-time data completeness and rights",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Supply suitable no-required-cost data/rights evidence if available. The agent may research permitted alternatives without purchasing."
+    },
+    {
+      "id": "E06",
+      "name": "Required execution tooling or platform access",
+      "status": "not_verified",
+      "evidence": [],
+      "owner_action": "Only if needed, make unavailable SDK/container/native UI or platform capability available through approved means."
+    }
+  ],
+  "blockers": [],
+  "stages": [
+    {
+      "id": "S01",
+      "title": "Baseline audit and execution readiness",
+      "status": "planned",
+      "depends_on": [],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 1,
+        "max": 2
+      },
+      "contract": "Development_Plan.md#s01-baseline-audit-and-execution-readiness",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S01.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S01.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S01.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S01.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S01 contract, verify prerequisites and start S01.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S02",
+      "title": "Financial source validation",
+      "status": "planned",
+      "depends_on": [
+        "S01"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s02-financial-source-validation",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S02.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S02.2",
+          "status": "planned",
+          "external_gates": [
+            "E01"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S02.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S02.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S02 contract, verify prerequisites and start S02.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S03",
+      "title": "One comparison workspace",
+      "status": "planned",
+      "depends_on": [
+        "S01"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 3
+      },
+      "contract": "Development_Plan.md#s03-one-comparison-workspace",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S03.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S03.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S03.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S03.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S03 contract, verify prerequisites and start S03.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S04",
+      "title": "SQLite storage and recovery",
+      "status": "planned",
+      "depends_on": [
+        "S01"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s04-sqlite-storage-and-recovery",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S04.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S04.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S04.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S04.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S04 contract, verify prerequisites and start S04.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S05",
+      "title": "Saved peers, watchlists and offline research",
+      "status": "planned",
+      "depends_on": [
+        "S03",
+        "S04"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s05-saved-peers-watchlists-and-offline-research",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S05.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S05.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S05.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S05.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S05 contract, verify prerequisites and start S05.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S06",
+      "title": "Reviewed valuation inputs without JSON editing",
+      "status": "planned",
+      "depends_on": [
+        "S03"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 3
+      },
+      "contract": "Development_Plan.md#s06-reviewed-valuation-inputs-without-json-editing",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S06.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S06.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S06.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S06.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S06 contract, verify prerequisites and start S06.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S07",
+      "title": "OAuth broker operational readiness",
+      "status": "planned",
+      "depends_on": [
+        "S01"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 1,
+        "max": 3
+      },
+      "contract": "Development_Plan.md#s07-oauth-broker-operational-readiness",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S07.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S07.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S07.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S07.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S07 contract, verify prerequisites and start S07.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S08",
+      "title": "Real OAuth and IEX acceptance",
+      "status": "planned",
+      "depends_on": [
+        "S03",
+        "S07"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 1,
+        "max": 2
+      },
+      "contract": "Development_Plan.md#s08-real-oauth-and-iex-acceptance",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S08.1",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S08.2",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S08.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S08.4",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S08 contract, verify prerequisites and start S08.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S09",
+      "title": "Windows usability, upgrade and trusted distribution",
+      "status": "planned",
+      "depends_on": [
+        "S03",
+        "S04"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s09-windows-usability-upgrade-and-trusted-distribution",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S09.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S09.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S09.3",
+          "status": "planned",
+          "external_gates": [
+            "E04"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S09.4",
+          "status": "planned",
+          "external_gates": [
+            "E04"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S09 contract, verify prerequisites and start S09.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S10",
+      "title": "Pilot usability, diagnostics and feedback",
+      "status": "planned",
+      "depends_on": [
+        "S03",
+        "S05",
+        "S06"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 3
+      },
+      "contract": "Development_Plan.md#s10-pilot-usability-diagnostics-and-feedback",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S10.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S10.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S10.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S10.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S10 contract, verify prerequisites and start S10.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S11",
+      "title": "Connected pilot release",
+      "status": "planned",
+      "depends_on": [
+        "S02",
+        "S03",
+        "S05",
+        "S06",
+        "S08",
+        "S09",
+        "S10"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 1,
+        "max": 2
+      },
+      "contract": "Development_Plan.md#s11-connected-pilot-release",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S11.1",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03",
+            "E04"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S11.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S11.3",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03",
+            "E04"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S11.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S11 contract, verify prerequisites and start S11.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S12",
+      "title": "Expanded fundamentals and efficiency metrics",
+      "status": "planned",
+      "depends_on": [
+        "S03",
+        "S04"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 6
+      },
+      "contract": "Development_Plan.md#s12-expanded-fundamentals-and-efficiency-metrics",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S12.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S12.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S12.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S12.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S12 contract, verify prerequisites and start S12.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S13",
+      "title": "Quality flags and explainable screening",
+      "status": "planned",
+      "depends_on": [
+        "S05",
+        "S12"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s13-quality-flags-and-explainable-screening",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S13.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S13.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S13.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S13.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S13 contract, verify prerequisites and start S13.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S14",
+      "title": "Versioned investment-thesis workspace",
+      "status": "planned",
+      "depends_on": [
+        "S04",
+        "S05"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 2,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s14-versioned-investment-thesis-workspace",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S14.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S14.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S14.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S14.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S14 contract, verify prerequisites and start S14.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S15",
+      "title": "Spreadsheet, CSV and PDF reports",
+      "status": "planned",
+      "depends_on": [
+        "S05",
+        "S12",
+        "S14"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 4
+      },
+      "contract": "Development_Plan.md#s15-spreadsheet-csv-and-pdf-reports",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S15.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S15.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S15.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S15.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S15 contract, verify prerequisites and start S15.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S16",
+      "title": "User-controlled forecasts",
+      "status": "planned",
+      "depends_on": [
+        "S12",
+        "S14"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 5
+      },
+      "contract": "Development_Plan.md#s16-user-controlled-forecasts",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S16.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S16.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S16.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S16.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S16 contract, verify prerequisites and start S16.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S17",
+      "title": "Discounted cash flow valuation",
+      "status": "planned",
+      "depends_on": [
+        "S06",
+        "S16"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 4,
+        "max": 7
+      },
+      "contract": "Development_Plan.md#s17-discounted-cash-flow-valuation",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S17.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S17.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S17.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S17.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S17.5",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S17 contract, verify prerequisites and start S17.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S18",
+      "title": "Scenarios, sensitivity and reverse DCF",
+      "status": "planned",
+      "depends_on": [
+        "S17"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 6
+      },
+      "contract": "Development_Plan.md#s18-scenarios-sensitivity-and-reverse-dcf",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S18.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S18.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S18.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S18.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S18.5",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S18 contract, verify prerequisites and start S18.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S19",
+      "title": "Monitoring and historical comparisons",
+      "status": "planned",
+      "depends_on": [
+        "S05",
+        "S12",
+        "S14"
+      ],
+      "completion_requires": [],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 6
+      },
+      "contract": "Development_Plan.md#s19-monitoring-and-historical-comparisons",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S19.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S19.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S19.3",
+          "status": "planned",
+          "external_gates": [
+            "E05"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S19.4",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S19.5",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S19 contract, verify prerequisites and start S19.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    },
+    {
+      "id": "S20",
+      "title": "Full-product hardening and release",
+      "status": "planned",
+      "depends_on": [
+        "S13",
+        "S15",
+        "S18"
+      ],
+      "completion_requires": [
+        "S11",
+        "S19"
+      ],
+      "effort_developer_days": {
+        "min": 3,
+        "max": 5
+      },
+      "contract": "Development_Plan.md#s20-full-product-hardening-and-release",
+      "owner": null,
+      "run_id": null,
+      "branch": null,
+      "baseline_commit": null,
+      "work_packages": [
+        {
+          "id": "S20.1",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S20.2",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S20.3",
+          "status": "planned",
+          "external_gates": [],
+          "evidence": [],
+          "remaining_acceptance": []
+        },
+        {
+          "id": "S20.4",
+          "status": "planned",
+          "external_gates": [
+            "E02",
+            "E03",
+            "E04",
+            "E05"
+          ],
+          "evidence": [],
+          "remaining_acceptance": []
+        }
+      ],
+      "next_action": "Read the S20 contract, verify prerequisites and start S20.1 after plan acceptance.",
+      "validation": [],
+      "self_review": null,
+      "pr_url": null,
+      "ci_runs": [],
+      "merge_commit": null,
+      "artifacts": [],
+      "blocker_ids": [],
+      "checkpoint": null
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-11-13",
+      "event": "Draft roadmap created after owner selected full-product scope, automatic Git delivery, independent blocker fallback, delegated finance definitions, SQLite and bounded configured live validation. No application stage has started."
+    }
+  ]
+}

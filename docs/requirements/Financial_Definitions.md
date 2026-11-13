@@ -1,6 +1,6 @@
 # Financial definitions: comparison-1
 
-Status: implementation baseline finalized under the user's explicit delegation on 2026-10-28. This is project approval of a bounded definition, not independent qualified-finance certification. Reviewed synthetic tests exist; real-filing reconciliation and an independent finance review remain outstanding. The older `test-0` engine remains intact for the existing Desktop spike.
+Status: implementation baseline finalized under the user's explicit delegation on 2026-10-28. This is project approval of a bounded definition, not independent qualified-finance certification. Synthetic tests exist, while real-filing reconciliation and independent finance review remain outstanding. Comparison-1 is integrated into Desktop alongside the legacy test-0 workspace. The 2026-11-13 [stage roadmap](../roadmap/Development_Plan.md) schedules reconciliation/unification and later versioned definitions. Future implementation must preserve this baseline's version and provenance rather than silently rewrite it.
 
 ## Scope and selection
 
