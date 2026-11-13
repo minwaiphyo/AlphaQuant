@@ -6,7 +6,7 @@
 
 A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
-**Status:** Integrated Windows preview candidate: SEC company selection, annual test-0 workspace and comparison-1 peer summaries/history/TTM/source evidence. Browser OAuth and IEX streaming are wired with session-only tokens and explicit access tests. Reviewed valuation inputs can be loaded for the session; missing or invalid evidence remains unavailable. OAuth registration/HTTPS deployment, trusted distribution and live verification are still required for a connected pilot.
+**Status:** Integrated Windows preview candidate. Production Compare uses comparison-1.1 peer summaries, history/TTM, source evidence and raw-value filtering/sorting. Annual test-0 filing references remain separately labelled. Browser OAuth and IEX streaming are wired with session-only tokens and explicit access tests. Reviewed valuation inputs can be loaded for the session; missing or invalid evidence remains unavailable. Live SEC reconciliation, OAuth registration/HTTPS deployment and trusted distribution are still required for a connected pilot. See the stage ledger for verified delivery status.
 
 Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business scope, architecture diagrams, data flow, release gates and current progress. Diagrams render directly on GitHub.
 

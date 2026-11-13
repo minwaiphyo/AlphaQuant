@@ -15,7 +15,11 @@ public partial class FinancialAnalysisView : UserControl
         Dispatcher.UIThread.Post(() => CloseEvidenceButton.Focus());
     }
     private void CloseClicked(object? sender, RoutedEventArgs e) => RestoreFocus();
-    private void RestoreFocus() { if (_lastCell?.IsAttachedToVisualTree() == true) _lastCell.Focus(); }
+    private void RestoreFocus()
+    {
+        if (_lastCell?.IsAttachedToVisualTree() == true) _lastCell.Focus();
+        else EditCompaniesButton.Focus();
+    }
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape && DataContext is FinancialAnalysisViewModel { HasEvidence: true } vm)

@@ -17,4 +17,7 @@ internal static class Display
         metric.Value is { } value
             ? $"{value.ToString("N2", Culture)}{metric.DisplayUnit}"
             : "n/a";
+
+    /// <summary>Evidence preserves the supplied decimal, including per-share precision.</summary>
+    public static string FactValue(decimal value, string unit) => $"{value.ToString("G29", Culture)} {unit}";
 }

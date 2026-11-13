@@ -31,6 +31,14 @@ jobs:
         run: dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal
       - name: Validate source-capture configuration preflight without network
         run: dotnet run --project tools/AlphaQuant.SourceCapture -c Release --no-build -- --preflight
+      - name: Render isolated comparison states and check evidence keyboard focus
+        run: dotnet run --project tools/AlphaQuant.UiChecks -c Release --no-build -- --output artifacts/ui-checks
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AlphaQuant-UI-checks
+          path: artifacts/ui-checks
+          retention-days: 1
+          if-no-files-found: error
       - name: Publish self-contained Windows preview
         shell: pwsh
         run: ./tools/Publish-Preview.ps1

@@ -39,10 +39,11 @@ public sealed class ComparisonService(ICompanyFactsSource factsSource, IMarketDa
                 return new ComparisonRow(company, financials,
                     null, MarketConnectionState.Disconnected, null, facts.RetrievedAt, facts.IsStale);
             }
-            catch (DataSourceException) { return new ComparisonRow(company, null, null, MarketConnectionState.Disconnected,
-                "Financial data could not be loaded. Retry the financial refresh.", null, false); }
+            catch (DataSourceException ex) { return new ComparisonRow(company, null, null, MarketConnectionState.Disconnected,
+                ex.Kind == DataSourceErrorKind.ContactMissing ? "Configure the SEC contact in Data connections, then refresh."
+                    : "Financial data could not be loaded. Retry the financial refresh.", null, false) { FinancialErrorKind = ex.Kind }; }
             catch (HttpRequestException) { return new ComparisonRow(company, null, null, MarketConnectionState.Disconnected,
-                "Financial connection failed. Retry the financial refresh.", null, false); }
+                "Financial connection failed. Retry the financial refresh.", null, false) { FinancialErrorKind = DataSourceErrorKind.Network }; }
         }));
         yield return new(rows.ToArray());
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

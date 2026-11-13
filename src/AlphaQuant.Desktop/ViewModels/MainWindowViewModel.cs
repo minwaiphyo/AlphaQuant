@@ -39,7 +39,7 @@ public partial class MainWindowViewModel : ObservableObject
         Comparison = new ComparisonViewModel(facts, linkOpener, ShowSearch, OpenSettingsFromComparison, ShowComparisonCompany);
         if (research is not null)
         {
-            Analysis = new FinancialAnalysisViewModel(research, linkOpener, ShowComparison, () => OpenSettings(Analysis!));
+            Analysis = new FinancialAnalysisViewModel(research, linkOpener, ShowSearch, () => OpenSettings(Analysis!));
             Market = new MarketConnectionViewModel(research, () => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Ticker)), evidence);
             Market.Disconnected += Analysis.StopWatching;
             _settings.Market = Market;
@@ -82,6 +82,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void ShowComparison()
     {
+        if (Analysis is not null) { if (Comparison.CanCompare) ShowAnalysis(); else ShowSearch(); return; }
         if (!Comparison.CanCompare) { CurrentPage = Comparison; return; }
         CurrentPage = Comparison;
         _ = Comparison.EnsureLoadedAsync();
