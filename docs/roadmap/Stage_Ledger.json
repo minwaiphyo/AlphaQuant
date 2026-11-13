@@ -26,22 +26,23 @@
   "active_run": {
     "run_id": "20261113-initial-stages",
     "owner": "primary-developer-agent",
-    "stage": "S01",
-    "package": "S01.4",
-    "branch": "codex/stage01-baseline",
-    "baseline_commit": "36f4a8a",
+    "stage": "S02",
+    "package": "S02.3",
+    "branch": "codex/stage02-financial-validation",
+    "baseline_commit": "1e3b11b",
     "scope": [
       "S01",
       "S02",
       "S03"
     ],
     "skills": [
-      "alphaquant-stage-verification",
-      "alphaquant-data-connections"
+      "alphaquant-sec-evidence",
+      "alphaquant-quant-models",
+      "alphaquant-stage-verification"
     ],
-    "next_action": "Await required CI on S01 PR, merge normally, record SHA, then proceed S02."
+    "next_action": "Verify and merge deterministic work, then mark S02 blocked on E01 and continue S03. Resume live packages after configured capture/reconciliation."
   },
-  "next_recommended_stage": "S01",
+  "next_recommended_stage": "S03",
   "external_gates": [
     {
       "id": "E01",
@@ -131,7 +132,7 @@
     {
       "id": "S01",
       "title": "Baseline audit and execution readiness",
-      "status": "verifying",
+      "status": "done",
       "depends_on": [],
       "completion_requires": [],
       "effort_developer_days": {
@@ -173,7 +174,7 @@
         },
         {
           "id": "S01.4",
-          "status": "verifying",
+          "status": "done",
           "external_gates": [],
           "evidence": [
             "docs/development/validation/S01_Baseline_Audit.md"
@@ -181,7 +182,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Await required CI on S01 PR, merge normally, record SHA, then proceed S02.",
+      "next_action": "S01 complete. S02 live evidence remains gated, S03 is independently ready.",
       "validation": [
         {
           "command": "dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal",
@@ -194,12 +195,18 @@
         {
           "command": "python tools/Validate-ProjectSkills.py",
           "result": "passed, six skills and 20 stage routes"
+        },
+        {
+          "command": "clean Windows CI on PR 22 final head",
+          "result": "passed: 206 application tests, 19 skill-reference tests, skill/installer checks, solution build and packaging"
         }
       ],
       "self_review": "Reviewed finite stream termination, explicit failure preservation, SEC redirect boundary and deferred S02/S03 findings. Remote exact-head regressions required before merge.",
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/22",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43433331979"
+      ],
+      "merge_commit": "1e3b11b53af115fb5c406889a534e88ec0b60ea8",
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": {
@@ -210,7 +217,7 @@
     {
       "id": "S02",
       "title": "Financial source validation",
-      "status": "planned",
+      "status": "verifying",
       "depends_on": [
         "S01"
       ],
@@ -220,51 +227,71 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s02-financial-source-validation",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
-      "baseline_commit": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261113-initial-stages",
+      "branch": "codex/stage02-financial-validation",
+      "baseline_commit": "1e3b11b",
       "work_packages": [
         {
           "id": "S02.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S02_Source_Validation.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S02.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E01"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/validation/S02_Source_Validation.md"
+          ],
+          "remaining_acceptance": [
+            "Actual configured SEC retrieval, filing inspection and independently derived source-backed expectations."
+          ]
         },
         {
           "id": "S02.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/validation/S02_Source_Validation.md"
+          ],
+          "remaining_acceptance": [
+            "Actual configured SEC retrieval, filing inspection and independently derived source-backed expectations."
+          ]
         },
         {
           "id": "S02.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/validation/S02_Source_Validation.md"
+          ],
+          "remaining_acceptance": [
+            "Actual configured SEC retrieval, filing inspection and independently derived source-backed expectations."
+          ]
         }
       ],
-      "next_action": "Read the S02 contract, verify prerequisites and start S02.1 after plan acceptance.",
+      "next_action": "Verify and merge deterministic work, then mark S02 blocked on E01 and continue S03. Resume live packages after configured capture/reconciliation.",
       "validation": [],
       "self_review": null,
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,
       "artifacts": [],
-      "blocker_ids": [],
-      "checkpoint": null
+      "blocker_ids": [
+        "BL-001",
+        "BL-002"
+      ],
+      "checkpoint": {
+        "date": "2026-11-13",
+        "summary": "Matrix and independently written synthetic expected fixture added. Source-capture utility and ambiguous-prior-FY correction comparison-1.1 awaiting exact-head CI. No live data used."
+      }
     },
     {
       "id": "S03",
