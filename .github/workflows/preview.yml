@@ -18,6 +18,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+      - name: Validate project skill resources
+        run: python tools/Validate-ProjectSkills.py
+      - name: Test independent skill reference arithmetic
+        run: python -m unittest discover -s docs/skills/tests -v
+      - name: Test isolated skill discovery installation
+        shell: pwsh
+        run: ./tools/Test-ProjectSkillInstallation.ps1
       - name: Test
         run: dotnet test AlphaQuant.slnx -c Release --verbosity minimal
       - name: Build all projects including broker

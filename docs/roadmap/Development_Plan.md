@@ -352,6 +352,8 @@ This maps delivery, not completed requirements. S20 reconciles it to actual evid
 
 ## Universal completion evidence
 
+Use the [specialized skill library](../skills/Skill_Routing.md) to apply domain methods instead of treating stage work as a generic prompt. Its catalog maps stage hints, while the actual changed package decides what to load. SEC selection, numerical verification, UI behavior, connections and storage have distinct evidence requirements. Skill structure/helper checks are not proof of agent compliance or independent professional certification. Preserve the actual results in the stage checkpoint.
+
 Record deliverables/files, actual validation commands/results, financial specs/worked fixtures, UI checks, dependency rationale and migration/provider evidence as applicable. Self-review does not pretend to be an independent second reviewer. Required checks pass for the exact PR head before normal merge, without force-push or bypassing protection. Reconcile concurrent main and recheck affected behavior. Update ledger, proposal, handoff and user docs with the next ready package.
 
 Tests are deterministic by default, with bounded live checks recorded separately. Never invent a professional reviewer, live result or certification. Passing tests does not waive release/provider/distribution gates.
