@@ -9,6 +9,7 @@
     <Project Path="tests/AlphaQuant.Tests/AlphaQuant.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
+    <Project Path="tools/AlphaQuant.UiChecks/AlphaQuant.UiChecks.csproj" />
     <Project Path="tools/AlphaQuant.SourceCapture/AlphaQuant.SourceCapture.csproj" />
   </Folder>
 </Solution>

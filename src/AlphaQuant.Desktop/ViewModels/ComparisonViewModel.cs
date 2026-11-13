@@ -39,7 +39,7 @@ public sealed class EvidenceFact
     public EvidenceFact(AnnualFact fact, long cik, ILinkOpener opener)
     {
         Label = fact.Label;
-        Value = Display.Money(fact.Value, fact.Unit);
+        Value = Display.FactValue(fact.Value, fact.Unit);
         Period = TestMetrics.PeriodText(fact);
         Source = $"{fact.Form} · Filed {fact.Filed:yyyy-MM-dd}\n{fact.Accession}\n{fact.Concept} · {fact.Unit}";
         var url = FilingLinks.TryBuild(cik, fact.Accession);

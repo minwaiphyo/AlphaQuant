@@ -53,7 +53,6 @@
           <Button Content="⌂   Overview" Classes="nav" Classes.active="{Binding IsHome}" Command="{Binding ShowHomeCommand}"/>
           <Button Content="⊞   Choose companies" Classes="nav" Classes.active="{Binding IsSearch}" Command="{Binding ShowSearchCommand}"/>
           <Button Content="⇄   Comparison" Classes="nav" Classes.active="{Binding IsComparison}" Command="{Binding ShowComparisonCommand}"/>
-          <Button Content="Financial analysis" Classes="nav" Command="{Binding ShowAnalysisCommand}"/>
           <TextBlock Text="PREFERENCES" Foreground="#9BACBF" FontSize="10" LetterSpacing="1.6" Margin="14,30,0,12"/>
           <Button Content="⚙   Data connections" Classes="nav" Classes.active="{Binding IsSettings}" Command="{Binding NavigateSettingsCommand}"/>
           <Button Content="○   Release notes" Classes="nav" Classes.active="{Binding IsReleaseNotes}" Command="{Binding ShowReleaseNotesCommand}"/>

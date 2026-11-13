@@ -38,6 +38,9 @@ public sealed record ValuationResult(string DefinitionVersion, FinancialValue Pr
 
 public sealed record ComparisonRow(CompanyRef Company, ComparisonFundamentals? Fundamentals,
     ValuationResult? Valuation, MarketConnectionState Connection, string? Error,
-    DateTimeOffset? FactsRetrievedAt, bool FactsStale);
+    DateTimeOffset? FactsRetrievedAt, bool FactsStale)
+{
+    public DataSourceErrorKind? FinancialErrorKind { get; init; }
+}
 
 public sealed record ComparisonSnapshot(IReadOnlyList<ComparisonRow> Rows);

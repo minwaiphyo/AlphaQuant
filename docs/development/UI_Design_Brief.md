@@ -1,6 +1,10 @@
 # UI Design Brief: Company Comparison and Valuation
 
-Updated: 2026-11-01. Audience: teammate owning UI design, navigation and interaction flows.
+Updated: 2026-11-13. Audience: teammate owning UI design, navigation and interaction flows.
+
+## S03 comparison consolidation (2026-11-13)
+
+The production Compare action now targets the approved comparison-1.1 workspace. Edit companies returns to selection. Numeric filtering/sorting uses raw approved metrics, latest annual or explicitly TTM, with missing values excluded from filters and sorted last. Prior snapshots, source evidence and filter context survive Settings. A single filter is supported initially. Legacy test-0 metrics remain isolated in the annual filing reference path. See the [S03 validation record](validation/S03_Comparison_Workspace.md) and [stage ledger](../roadmap/Stage_Ledger.json) for delivery/verification status. Live source reconciliation and OAuth deployment remain external gates.
 
 **Start here for UI work.** This is a shared design brief, not evidence that the backend exists or that financial formulas/authentication have been approved. The [proposal](../product/AlphaQuant_Proposal.md) owns approval status; [feature catalogue](../requirements/Financial_Analysis_Features.md) describes the longer-term ideas; [implementation plan](../requirements/Comparison_Implementation_Plan.md) records proposed backend contracts and open decisions.
 
