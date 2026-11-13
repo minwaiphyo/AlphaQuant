@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "library_version": "1.0",
+  "canonical_root": "docs/skills",
+  "discovery_root": ".agents/skills",
+  "skills": [
+    {
+      "name": "alphaquant-sec-evidence",
+      "purpose": "SEC fact selection and financial source reconciliation",
+      "path": "docs/skills/alphaquant-sec-evidence"
+    },
+    {
+      "name": "alphaquant-quant-models",
+      "purpose": "Versioned financial arithmetic and model verification",
+      "path": "docs/skills/alphaquant-quant-models"
+    },
+    {
+      "name": "alphaquant-avalonia-design",
+      "purpose": "Financial research UI and the Avalonia design system",
+      "path": "docs/skills/alphaquant-avalonia-design"
+    },
+    {
+      "name": "alphaquant-data-connections",
+      "purpose": "Browser OAuth and market-data stream lifecycle",
+      "path": "docs/skills/alphaquant-data-connections"
+    },
+    {
+      "name": "alphaquant-research-storage",
+      "purpose": "Durable research, migration, backup and recovery",
+      "path": "docs/skills/alphaquant-research-storage"
+    },
+    {
+      "name": "alphaquant-stage-verification",
+      "purpose": "Stage acceptance evidence and safe delivery",
+      "path": "docs/skills/alphaquant-stage-verification"
+    }
+  ],
+  "stage_skill_hints": {
+    "S01": [
+      "alphaquant-stage-verification"
+    ],
+    "S02": [
+      "alphaquant-sec-evidence",
+      "alphaquant-quant-models"
+    ],
+    "S03": [
+      "alphaquant-avalonia-design"
+    ],
+    "S04": [
+      "alphaquant-research-storage"
+    ],
+    "S05": [
+      "alphaquant-research-storage",
+      "alphaquant-avalonia-design"
+    ],
+    "S06": [
+      "alphaquant-sec-evidence",
+      "alphaquant-quant-models",
+      "alphaquant-avalonia-design"
+    ],
+    "S07": [
+      "alphaquant-data-connections"
+    ],
+    "S08": [
+      "alphaquant-data-connections",
+      "alphaquant-quant-models"
+    ],
+    "S09": [
+      "alphaquant-avalonia-design",
+      "alphaquant-research-storage"
+    ],
+    "S10": [
+      "alphaquant-avalonia-design"
+    ],
+    "S11": [
+      "alphaquant-stage-verification",
+      "alphaquant-data-connections",
+      "alphaquant-research-storage"
+    ],
+    "S12": [
+      "alphaquant-sec-evidence",
+      "alphaquant-quant-models"
+    ],
+    "S13": [
+      "alphaquant-quant-models",
+      "alphaquant-avalonia-design"
+    ],
+    "S14": [
+      "alphaquant-research-storage",
+      "alphaquant-avalonia-design"
+    ],
+    "S15": [
+      "alphaquant-quant-models",
+      "alphaquant-research-storage"
+    ],
+    "S16": [
+      "alphaquant-quant-models",
+      "alphaquant-research-storage"
+    ],
+    "S17": [
+      "alphaquant-quant-models",
+      "alphaquant-sec-evidence"
+    ],
+    "S18": [
+      "alphaquant-quant-models",
+      "alphaquant-avalonia-design"
+    ],
+    "S19": [
+      "alphaquant-sec-evidence",
+      "alphaquant-research-storage",
+      "alphaquant-data-connections"
+    ],
+    "S20": [
+      "alphaquant-stage-verification"
+    ]
+  },
+  "required_repository_paths": [
+    "docs/requirements/Financial_Definitions.md",
+    "docs/roadmap/Stage_Runbook.md",
+    "docs/roadmap/Stage_Ledger.json",
+    "src/AlphaQuant.Core/ComparisonAnalyzer.cs",
+    "src/AlphaQuant.Core/ComparisonValuation.cs",
+    "src/AlphaQuant.Infrastructure/OAuthSession.cs",
+    "src/AlphaQuant.Desktop/Styles/ResearchTheme.axaml"
+  ],
+  "evaluation_cases": "docs/skills/Evaluation_Cases.md",
+  "notes": "Hints are selective, not an instruction to load all skills. Stage delivery uses the verification skill when relevant. No roadmap stage is activated by installing skills."
+}

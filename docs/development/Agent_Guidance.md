@@ -10,6 +10,8 @@ Distinguish proposed, approved, deferred, rejected, superseded, implemented and 
 
 ### Start of every task
 
+For domain work, load the relevant project skills from [the routing guide](../skills/Skill_Routing.md). Canonical `docs/skills/alphaquant-*/SKILL.md` files are tracked and portable. `tools/Install-ProjectSkills.ps1` creates scoped ignored discovery links without overwriting existing skills. Missing native discovery is not a reason to skip the canonical instructions. Do not load unrelated skills, activate a draft stage or expand permissions merely because a skill exists.
+
 For a roadmap instruction such as "proceed with the next stage", read [the execution runbook](../roadmap/Stage_Runbook.md), [stage plan](../roadmap/Development_Plan.md) and [ledger](../roadmap/Stage_Ledger.json) first. They contain the 2026-11-13 owner choices for delegated definitions, local SQLite, bounded configured live validation, autonomous Git delivery and blocked-stage fallback. A reviewed stage invocation accepts the draft operational plan and authorizes its bounded work. Do not ask to re-plan an unchanged accepted stage. Record real progress/checkpoints and preserve external gates. Reading a draft is not permission to start application changes.
 
 1. Read `docs/product/AlphaQuant_Proposal.md` and `README.md`, then inspect relevant source, tests and recent commits. Start with sections 17 through 19 for the current state; consult earlier sections for definitions and constraints.
@@ -65,6 +67,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Workflow decisions
 
+- AQ-W006, 2026-11-13: at the owner's request, encode reusable financial evidence, quant models, Avalonia design, connection lifecycle, storage/recovery and stage verification methods as six repository-owned skills. Use progressive references and meaningful deterministic helpers, with selective stage routing and actual validation evidence. This supersedes the earlier deferral of project-specific skills. No subagent spawning or application-stage activation is implied.
+
 - AQ-W005, 2026-11-13: use docs/roadmap/Stage_Runbook.md and Stage_Ledger.json for accepted stage invocations. The owner's selected policy permits commit/push/PR/normal merge after checks/self-review, delegated in-scope definitions, local SQLite and bounded configured live validation. Existing accepted stages do not need another planning approval. Preserve checkpoints and continue independent work if external access blocks a package. The roadmap remains draft until accepted/invoked after review. Planning-document delivery is not application-stage activation.
 
 - 2026-10-31: user removed local PDF synchronization from the documentation workflow. Maintain the tracked Markdown documents directly.
@@ -79,6 +83,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 - AQ-W004, 2026-10-26, decided: do not vendor third-party agent-skill catalogues (for example LLMQuant/skills) into this repository. They target research workflows and a hosted data source, which conflicts with the SEC-only v1 decision (AQ-D009) and the no-recommendation principle, and unreviewed instructions loaded by every agent are a supply-chain risk. Project-specific skills (metric definition review, SEC data quirks, Avalonia and testing conventions) were considered and deferred by the user; revisit when agents repeatedly repeat the same project-specific mistakes.
 
 ## Current handoff
+
+- 2026-11-13 quality layer: six project skills in docs/skills, selective routing/catalog, a standard-library Decimal numeric reference with 19 regression tests, scoped discovery installer and collision checks, official manifest validation and CI skill-tool checks. The numeric helper is not production logic or proof of source/price eligibility. Forward-evaluation task fixtures are provided but no independent agent trial or financial certification is claimed. No src/tests application files were changed and the roadmap remains draft with no active stage. See Skill_Routing.md for installation/use and keep skills aligned with versioned definitions and actual design tokens.
 
 - 2026-11-13: documentation-only autonomous full-product roadmap drafted in docs/roadmap. Twenty stage contracts, a resumable execution runbook and a machine-readable ledger record prerequisites, 83 work packages, blockers, validation and Git delivery. The owner selected automatic commit/push/merge after checks, independent fallback on external blockers, delegated versioned finance definitions, local SQLite and bounded configured live calls. No stage implementation has started. Plan acceptance or a reviewed stage invocation is the next step, followed by S01. Earlier dated delivery evidence below remains historical, not a claim of a new test run.
 

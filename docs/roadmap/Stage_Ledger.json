@@ -1291,5 +1291,7 @@
       "date": "2026-11-13",
       "event": "Draft roadmap created after owner selected full-product scope, automatic Git delivery, independent blocker fallback, delegated finance definitions, SQLite and bounded configured live validation. No application stage has started."
     }
-  ]
+  ],
+  "quality_skill_catalog": "../skills/skill_catalog.json",
+  "quality_skill_routing": "../skills/Skill_Routing.md"
 }

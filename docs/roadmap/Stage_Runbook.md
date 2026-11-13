@@ -22,6 +22,7 @@ An invocation starts work in the current active agent/session. Documents do not 
 ## Startup, every time
 
 1. Read README, this runbook, the plan, the ledger, developer guidance and proposal current-state/decision sections. Read the selected stage's detailed definition and relevant finance/UI specs.
+   Use [the skill routing guide](../skills/Skill_Routing.md) and [catalog](../skills/skill_catalog.json) to load the relevant specialized `SKILL.md` files and only the references needed by this package. If native discovery links are missing, create them with the scoped project installer when permitted, or read canonical files directly. Do not demand global configuration changes or load all six skills indiscriminately.
 2. Inspect local changes, branch, remote, current PRs and available tools. Fetch safely. Preserve other people's work. Never reset, clean or force-push to obtain an apparently clean baseline.
    Check that CI runners, artifact retention and any chosen execution/deployment service meet the zero-required-cost constraint before enabling usage. Never assume a repository/service still has the same billing eligibility as an earlier run.
 3. Reconcile ledger against source, Git and CI. The prior 203-test result is historical evidence. Reuse unchanged verified work but do not invent a new run or assume an artifact exists on this laptop.
@@ -36,7 +37,7 @@ For each package:
 
 1. Verify prerequisites and write a brief actionable approach against its acceptance criteria. Read relevant code/tests, not every file in the repository.
 2. Implement a small coherent increment. Preserve teammate changes and layer boundaries. Choose routine engineering details within standing authority.
-3. For financial changes, write/update a versioned definition before behavior changes. Record formula, units, period/ownership/scope, source mappings, exclusions, invalid/missing treatment and an independently recomputed example. Test the definition, not a copy of production arithmetic. Do not fabricate independent certification.
+3. For financial changes, apply the evidence/quant skills as relevant and write/update a versioned definition before behavior changes. Record formula, units, period/ownership/scope, source mappings, exclusions, invalid/missing treatment and an independently recomputed example. The reference arithmetic helper checks supplied numbers, not eligibility or data freshness. Test the definition, not a copy of production arithmetic. Do not fabricate independent certification.
 4. For persistence, migrations, auth or provider changes, exercise meaningful failure/recovery cases with isolated fixtures. No production data reset or weakened security.
 5. Validate the changed behavior. Run appropriate tests and the full required solution/CI checks before merge. Use relevant document/spreadsheet/PDF/computer-use skills when their artifacts require it. Read their instructions and comply with platform approvals.
 6. Self-review the diff for correctness, scope, financial meaning, cancellation/lifetime behavior, secret leakage, persistence safety and user-facing clarity. Fix material findings before delivery.
@@ -54,6 +55,7 @@ Known failures or uncertainty
 Non-secret external blocker IDs and unblock action
 Next exact command/file/package to work on
 Owner/run identity and current state
+Applied skill names/library version and relevant domain evidence
 PR/CI/artifact references, including merge state
 ```
 
