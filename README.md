@@ -1,6 +1,6 @@
 # AlphaQuant
 
-**Continue development:** read the [autonomous development roadmap](docs/roadmap/Development_Plan.md), [execution runbook](docs/roadmap/Stage_Runbook.md) and [stage ledger](docs/roadmap/Stage_Ledger.json). The full roadmap is a draft pending owner acceptance or a stage invocation after review. "Proceed with the next stage" then supplies the execution scope and standing Git/validation policy. It does not imply that external accounts, rights or deployment gates are already complete.
+**Continue development:** read the [approved autonomous development roadmap](docs/roadmap/Development_Plan.md), [execution runbook](docs/roadmap/Stage_Runbook.md) and [stage ledger](docs/roadmap/Stage_Ledger.json). Stage execution was approved on 2026-11-13. "Proceed with the next stage" supplies the scope and standing Git/validation policy. External accounts, rights and deployment gates still require actual evidence.
 
 **Specialized agent skills:** the [project skill library](docs/skills/Skill_Routing.md) covers SEC evidence, quantitative models, Avalonia design, data connections, research storage and stage verification. Run `powershell -File tools/Install-ProjectSkills.ps1` for local Codex discovery links, or read the canonical `SKILL.md` files directly in another agent. The stage runbook routes only the skills relevant to each package. Installing skills does not start development stages.
 

@@ -12,7 +12,7 @@ public sealed class ComparisonIntegrationTests
             new CompanyFacts("Synthetic", ComparisonBackendTests.ReviewedSample(), 0,
                 DateTimeOffset.Parse("2026-10-28T12:00:00Z"), false));
     }
-    private sealed class Feed(TimeProvider clock) : IMarketDataProvider
+    private sealed class Feed(TimeProvider clock, bool complete = false, MarketConnectionState? terminal = null) : IMarketDataProvider
     {
         public MarketCapabilities Capabilities => new("fake", "fixture", "Synthetic only", true, true);
         public bool Stopped;
@@ -28,6 +28,8 @@ public sealed class ComparisonIntegrationTests
                 foreach (var symbol in symbols)
                     yield return new(MarketConnectionState.Connected, symbol,
                         new(symbol, 60m, "USD", "fake", "fixture", clock.GetUtcNow(), clock.GetUtcNow(), "1"));
+                if (terminal is { } terminalState) yield return new(terminalState, Message: "Explicit terminal state.");
+                if (complete) yield break;
                 await Task.Delay(Timeout.Infinite, token);
             }
             finally { Stopped = true; }
@@ -55,6 +57,35 @@ public sealed class ComparisonIntegrationTests
             Assert.Equal(20m, row.Valuation!.PriceEarnings.Value);
             Assert.Null(row.Valuation.EnterpriseValueSales.Value); // No invented capital claims.
         });
+    }
+
+    [Fact]
+    public async Task CompletedProducerInvalidatesValuationAndPreservesDatedQuote()
+    {
+        var clock = new FixedClock(); var feed = new Feed(clock, complete: true);
+        var companies = new[] { new CompanyRef(1, "ONE", "One"), new CompanyRef(2, "TWO", "Two") };
+        var basis = companies.ToDictionary(c => c.Cik, c => new EquityBasisEvidence(c.Cik, c.Ticker,
+            new(2026, 10, 28), "synthetic-basis", true));
+        ComparisonSnapshot? final = null;
+        await foreach (var snapshot in new ComparisonService(new Facts(), feed, clock).WatchAsync(companies, equityBasis: basis)) final = snapshot;
+        Assert.True(feed.Stopped);
+        Assert.All(final!.Rows, row =>
+        {
+            Assert.Equal(MarketConnectionState.Disconnected, row.Connection);
+            Assert.NotNull(row.Valuation!.Price);
+            Assert.Null(row.Valuation.PriceEarnings.Value);
+            Assert.Contains("ended", row.Error);
+        });
+    }
+
+    [Fact]
+    public async Task CompletedProducerPreservesExplicitFailureReason()
+    {
+        var clock = new FixedClock();
+        ComparisonSnapshot? final = null;
+        await foreach (var snapshot in new ComparisonService(new Facts(), new Feed(clock, true, MarketConnectionState.Failed), clock)
+            .WatchAsync([new(1, "ONE", "One"), new(2, "TWO", "Two")])) final = snapshot;
+        Assert.All(final!.Rows, row => { Assert.Equal(MarketConnectionState.Failed, row.Connection); Assert.Equal("Explicit terminal state.", row.Error); });
     }
 
     [Fact]
