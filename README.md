@@ -1,5 +1,12 @@
 # AlphaQuant
 
+**Current work:** feature development and PR24 are paused while Windows trust and
+distribution are prepared. See the [Windows signing/distribution status and
+diagnostic instructions](docs/development/Windows_Distribution.md). Current ZIPs
+are unsigned development artifacts; they are not trusted recruiter releases.
+The [code signing policy](docs/development/Windows_Distribution.md#code-signing-policy)
+records the inactive signing status and approval gates.
+
 **Continue development:** read the [approved autonomous development roadmap](docs/roadmap/Development_Plan.md), [execution runbook](docs/roadmap/Stage_Runbook.md) and [stage ledger](docs/roadmap/Stage_Ledger.json). Stage execution was approved on 2026-11-13. "Proceed with the next stage" supplies the scope and standing Git/validation policy. External accounts, rights and deployment gates still require actual evidence.
 
 **Specialized agent skills:** the [project skill library](docs/skills/Skill_Routing.md) covers SEC evidence, quantitative models, Avalonia design, data connections, research storage and stage verification. Run `powershell -File tools/Install-ProjectSkills.ps1` for local Codex discovery links, or read the canonical `SKILL.md` files directly in another agent. The stage runbook routes only the skills relevant to each package. Installing skills does not start development stages.
@@ -44,6 +51,10 @@ The tests use synthetic fixtures and never contact the SEC. Verified on Windows 
 
 ## Contributing
 
+Owner-controlled project code is available under the [MIT license](LICENSE).
+Dependencies, fonts and financial data retain their own terms; see
+[third-party licensing evidence and remaining review](THIRD-PARTY-NOTICES.md).
+
 Read [developer and agent guidance](docs/development/Agent_Guidance.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
 
 ## UI design collaboration
@@ -71,7 +82,7 @@ Provider selection planning: [price-aware comparison and provider evaluation](do
 
 The native UI (AQ-D023) and browser-OAuth/comparison-1 backend (AQ-D022) are merged and integrated through PR #18. Financial analysis consumes ComparisonBackend for peer summaries, annual/TTM history, price status, source evidence and guarded valuation. The existing annual test-0 workspace remains separately labelled. Data connections supports browser OAuth, access tests and session-only reviewed equity/capital inputs. No trading or token persistence is implemented.
 
-Read [First preview setup, limitations and reviewed evidence schema](docs/development/First_Preview.md). Build a self-contained Windows ZIP with `powershell -File tools/Publish-Preview.ps1`. No SDK is needed on the receiving PC; the unsigned build may still be blocked by Windows policy. Do not disable security controls. Set the public `AQ_OAUTH_BROKER_ORIGIN` environment variable before launch after the operator has registered/deployed the broker.
+Read [First preview setup, limitations and reviewed evidence schema](docs/development/First_Preview.md). Build a self-contained unsigned development Windows ZIP with `powershell -File tools/Publish-Preview.ps1` (Python 3 is required for notice collection). No SDK is needed on the receiving PC; the unsigned build may still be blocked by Windows policy. Do not disable security controls. Recruiter distribution remains gated on signing, license clearance and Windows acceptance; see the [distribution workflow](docs/development/Windows_Distribution.md). Set the public `AQ_OAUTH_BROKER_ORIGIN` environment variable before launch after the operator has registered/deployed the broker.
 
 Delivery evidence (2026-11-01): 203 synthetic/fake-provider tests pass; the full Release build and [Windows CI/package run](https://github.com/minwaiphyo/AlphaQuant/actions/runs/41314939340) passed. The downloaded CI ZIP checksum was verified and its executable started on this laptop. Synthetic native analysis/evidence/Settings checks used isolated data; no live SEC/Alpaca acceptance is claimed. A draft v0.1.0-preview.3 package is retained in GitHub Releases, pending external setup and distribution gates.
 

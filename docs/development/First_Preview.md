@@ -1,5 +1,9 @@
 # AlphaQuant first preview
 
+Current builds are explicitly labelled **unsigned development**. Recruiter
+distribution and trusted local Windows execution remain blocked; see
+[Windows distribution](Windows_Distribution.md) for diagnostics and release gates.
+
 This Windows x64 preview supports company selection, SEC annual comparisons, and comparison-1 financial research. It is a research tool; it does not trade or produce buy/sell recommendations.
 
 ## Run
@@ -29,7 +33,7 @@ Connect with Alpaca opens your browser for data-only consent. Select your peers,
 
 ## Build and deployment
 
-From the repository: dotnet test AlphaQuant.slnx, then powershell -File tools/Publish-Preview.ps1. The script produces a self-contained win-x64 ZIP and SHA256 file under ignored artifacts. It refuses to overwrite an existing version. Publish the OAuth broker separately; never put its environment secrets into the desktop ZIP. The GitHub workflow builds and uploads short-retention preview artifacts; it does not deploy a host, register OAuth or publish a production release.
+From the repository: dotnet test AlphaQuant.slnx, then powershell -File tools/Publish-Preview.ps1 (Python 3 is required). The script produces a self-contained win-x64 unsigned-development ZIP and SHA256 file under ignored artifacts, with dependency license evidence and a file-hash manifest. It refuses to overwrite an existing version and rejects `-Distribution Recruiter` while trust/license gates remain unresolved. The project MIT license does not relicense third-party dependencies or financial data. Publish the OAuth broker separately; never put its environment secrets into the desktop ZIP. The GitHub workflow builds and uploads short-retention development artifacts; it does not deploy a host, register OAuth or publish a production release.
 
 First-version acceptance: clean build/tests; inspected UI with fake sources; install/run smoke on a supported Windows machine; trusted distribution decision; real SEC reconciliation; registered/deployed OAuth and entitlement verification for a connected preview. Pending external gates must stay explicit.
 

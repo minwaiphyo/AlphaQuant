@@ -343,6 +343,22 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Distribution checkpoint, 2026-11-13 (AQ-D028): feature stages and PR24 are paused by
+the owner while a zero-cost trusted Windows workflow is investigated. MIT licensing
+is approved with contributor permission confirmed. Read-only Windows evidence
+collection, actual-publish dependency/upstream license evidence, unsigned-development
+ZIP labels, build manifests and fail-closed recruiter packaging are implemented
+locally. Live Microsoft/SignPath sites return CONNECT 403, but official GitHub
+sources were inspected: SignPath Foundation requires acceptance/verifiable origin
+and release approval; the new Store onboarding describes zero registration fees.
+Signing integration is blocked on project/provider acceptance and technical fit;
+local Smart App Control execution
+and clean-Windows recruiter acceptance remain unverified. No signing identity,
+security exception or purchase exists. See [Windows distribution](../development/Windows_Distribution.md).
+Next: collect the affected PC's diagnostic report, apply saved documentation-domain
+settings and obtain provider eligibility/technical confirmation before enabling signing. Earlier stage
+continuation guidance below is historical and does not override this pause.
+
 Stage checkpoint, 2026-11-13: S01 merged through PR #22 (1e3b11b), with 206 tests passing on clean CI and a clean local compile. Fixed finite-stream completion leaving active valuation and disabled SEC redirects. Local runtime is blocked by OS policy. S02 prepares real-source capture and independently expected synthetic cases, and corrects ambiguous prior-FY TTM selection under comparison-1.1. No saved/process SEC contact exists, so live retrieval/reconciliation stays blocked and no real issuer values are claimed. S03 is the independent continuation after deterministic S02 delivery. See ledger and validation reports for exact status.
 
 Execution update, 2026-11-13 (AQ-D027): the owner approved roadmap 1.0 and requested the next few stages autonomously. S01-S03 are the initial execution set, with approved blocker fallback. Routine implementation/checks/Git delivery and domain defaults remain delegated. Follow the ledger for live stage state, not the earlier draft notes. External release gates are not implicitly closed by this approval.
@@ -367,6 +383,7 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 
 | ID and date | Status | Decision and reason | Source |
 |---|---|---|---|
+| AQ-D028 2026-11-13 | Approved; partial distribution tooling implemented, trust gates blocked | Prepare zero-cost MIT portfolio distribution and exact local Windows `dotnet run` with Smart App Control/Defender enabled. Owner confirmed permission for all project contributions. Signing integration waits for verified provider eligibility; if no free routine-development signing route qualifies, report the local-command blocker. Keep PR24/features paused and live financial requests, purchases and credentials outside this work. | Owner accepted the signing/distribution plan and confirmed contributor licensing permission. |
 | AQ-D027 2026-11-13 | Approved stage execution | Accept roadmap 1.0 and begin the next few stages autonomously under its quality skills, checks, normal Git delivery and independent blocker fallback. Initial set S01-S03. No new spending, account creation, trading or fabricated gate evidence. | Owner's explicit proceed instruction after roadmap/skill review. |
 | AQ-D026 2026-11-13 | Implemented reusable quality layer | Add project-owned specialized skills for evidence, quantitative models, design, data connections, storage/recovery and stage acceptance. Use concise instructions, relevant references, deterministic numeric tooling, selective discovery/routing and explicit validation limits. Preserve existing scope, stage approval and external gates. | Owner requested reusable domain/design/calculation skills before continuing development. |
 | AQ-D025 2026-11-13 | Planning policies confirmed, stage contracts draft | Full-product resumable roadmap through forecasts/DCF/scenarios. Stage invocations authorize autonomous implementation and normal Git delivery after checks. Continue independent stages on external blockers. Delegate documented finance definitions, adopt SQLite/recovery, permit bounded configured SEC and explicitly connected Alpaca validation. Preserve zero required cost and no trading/recommendations. No application changes begin until plan acceptance/invocation. | Owner planning request and two GUI decision rounds. |
@@ -400,6 +417,7 @@ Decision records include status, rationale, affected software scope and referenc
 
 | Date | Work and verification | Remaining |
 |---|---|---|
+| 2026-11-13 | Windows distribution preparation on `chore/windows-distribution`: MIT license, third-party inventory and pinned upstream texts, read-only diagnostic collector, explicit unsigned ZIP/evidence and recruiter-mode rejection; Windows CI gains distribution-tool checks. Cloud Release build has zero warnings/errors and 210 synthetic tests pass. Python skill checks and isolated PowerShell skill-installation checks pass. Official Microsoft/SignPath GitHub sources inspected despite live-site blocks. No application feature files changed. Detailed tool/package evidence is in Windows_Distribution.md and the distribution checkpoint in the ledger. | Provider acceptance/technical fit, Windows diagnostic execution, trusted local rebuilds and signed downloaded-package acceptance pending. License clearance remains a release gate. No PR24 merge, live financial requests, signing or publication. |
 | 2026-10-28 | feat/alpaca-oauth-comparison: implemented browser-OAuth client/server broker, IEX adapter, financial comparison-1 baseline and UI-independent ComparisonBackend facade. Extended parser and added synthetic/security/stream/end-to-end tests. Solution build 0 warnings/errors; 170 tests passed. Loopback broker HTTP smoke passed with no provider calls. No Desktop files changed. Documentation/setup instructions added; local PDF not refreshed. | Teammate screen wiring, OAuth registration/HTTPS preview deployment, eligibility/rights, real login/quotes/filing reconciliation and independent finance review. |
 | 2026-10-28 | Revision 0.20: consolidated current scope, added UI_Design_Brief.md for teammate-owned screens/fields/states and linked all planning records. Documentation only; financial definitions/authentication remain unapproved. No application build/tests or provider calls. Documentation checks passed (33 local links, root placement, story preservation and diff/privacy checks); local private source/PDF synchronized and all pages visually inspected. Private artifacts excluded from Git. | Prototype synthetic UI flow, agree shared contracts/authentication and approve financial definitions/first increment. |
 | 2026-10-28 | Clarified that provider credential permissions do not introduce trading features. Recorded session-only storage and limited verifiable valuation coverage; authentication remains undecided. Documentation-only, no application/live tests. PDF/source revision 0.19 pending. | Settle supported authentication and accept bounded plan. |

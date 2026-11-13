@@ -22,6 +22,11 @@ jobs:
         run: python tools/Validate-ProjectSkills.py
       - name: Test independent skill reference arithmetic
         run: python -m unittest discover -s docs/skills/tests -v
+      - name: Test distribution license evidence collection
+        run: python -m unittest discover -s tools/tests -v
+      - name: Test distribution guards and PowerShell syntax
+        shell: pwsh
+        run: ./tools/Test-DistributionTools.ps1
       - name: Test isolated skill discovery installation
         shell: pwsh
         run: ./tools/Test-ProjectSkillInstallation.ps1
@@ -31,12 +36,13 @@ jobs:
         run: dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal
       - name: Validate source-capture configuration preflight without network
         run: dotnet run --project tools/AlphaQuant.SourceCapture -c Release --no-build -- --preflight
-      - name: Publish self-contained Windows preview
+      # No signing credentials or elevated signing job in this PR workflow.
+      - name: Publish unsigned self-contained Windows development preview
         shell: pwsh
         run: ./tools/Publish-Preview.ps1
       - uses: actions/upload-artifact@v4
         with:
-          name: AlphaQuant-Windows-preview
+          name: AlphaQuant-Windows-unsigned-development
           path: |
             artifacts/*.zip
             artifacts/*.sha256

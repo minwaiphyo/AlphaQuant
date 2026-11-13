@@ -3,6 +3,56 @@
   "plan_version": "1.0",
   "updated_on": "2026-11-13",
   "plan_status": "approved",
+  "execution_hold": {
+    "date": "2026-11-13",
+    "scope": "Feature stages and PR24 remain paused; only approved Windows distribution preparation is active.",
+    "source": "Owner's cloud setup and signing/distribution implementation instructions; supersedes earlier stage continuation for this task."
+  },
+  "distribution_checkpoint": {
+    "status": "partial_blocked",
+    "branch": "chore/windows-distribution",
+    "baseline_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
+    "license": "MIT approved; owner confirmed contributor permission on 2026-11-13",
+    "implemented": [
+      "Read-only Windows policy/event/signature collector with local-only output",
+      "Actual published dependency and runtime license evidence, including pinned upstream MIT and Inter OFL texts",
+      "Explicit unsigned-development ZIP, source/SDK/file-hash manifest and recruiter-mode rejection",
+      "Distribution tool checks in existing Windows CI; no privileged signing job",
+      "Public-facts provider inquiry prepared for owner submission; no external application sent"
+    ],
+    "validation": [
+      "Cloud Linux: Release solution build 0 warnings/errors; 210 synthetic .NET tests passed, 0 skipped",
+      "19 Python reference tests and 5 distribution notice tests passed",
+      "4 PowerShell distribution checks passed; isolated project-skill installation checks passed",
+      "Actual self-contained win-x64 development ZIP created and checksum/manifest/notices inspected; final package details in Windows_Distribution.md",
+      "Source-capture preflight reported missing SEC configuration without requests"
+    ],
+    "blockers": [
+      {
+        "id": "DIST-001",
+        "evidence": "Live sites returned CONNECT 403; official Microsoft and SignPath GitHub sources were inspected instead. SignPath requires project acceptance, verifiable origin and manual release approval; no permission for routine local development signing is established. Store new onboarding describes zero registration fees but supplies no local build signing identity.",
+        "next_action": "Owner obtains SignPath project acceptance and profile/artifact/timestamp/quota/development-origin confirmation. Apply saved documentation-domain settings to cross-check live requirements."
+      },
+      {
+        "id": "DIST-002",
+        "evidence": "Affected personal Windows PC is not accessible from the Linux cloud instance; Smart App Control is owner-reported and prior DLL block 0x800711C7 is historical.",
+        "next_action": "Run tools/Get-WindowsTrustDiagnostics.ps1 on the affected PC; review local report before sharing relevant evidence."
+      },
+      {
+        "id": "DIST-003",
+        "evidence": "No verified signing identity, completed release-license clearance, signed package or Windows trust acceptance exists.",
+        "next_action": "Resolve provider and artifact obligations, then implement eligible signing and perform fresh local rebuild and clean Windows download acceptance."
+      }
+    ],
+    "unverified": [
+      "Actual Windows event collection and policy attribution",
+      "Signed local dotnet run and fresh rebuild",
+      "Certificate chain, timestamp, revoked identity and signed-artifact tamper behavior",
+      "Windows GitHub Actions on the final change and separate clean-Windows download/run acceptance"
+    ],
+    "publication": "Not published; no PR24 merge, signing credentials, purchases or live SEC/Alpaca requests",
+    "next_action": "Collect affected-PC diagnostics, apply live-documentation domain draft and obtain provider eligibility/technical confirmation before signing integration."
+  },
   "approval": {
     "status": "approved",
     "instruction_reference": "Owner: Proceed with next few stages and continue developing autonomously.",
