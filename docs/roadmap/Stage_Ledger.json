@@ -2,11 +2,11 @@
   "schema_version": 1,
   "plan_version": "1.0",
   "updated_on": "2026-11-13",
-  "plan_status": "draft",
+  "plan_status": "approved",
   "approval": {
-    "status": "awaiting_owner_acceptance_or_stage_invocation",
-    "instruction_reference": null,
-    "date": null
+    "status": "approved",
+    "instruction_reference": "Owner: Proceed with next few stages and continue developing autonomously.",
+    "date": "2026-11-13"
   },
   "baseline": {
     "planning_commit": "13ec3af",
@@ -23,14 +23,33 @@
     "currency": "USD",
     "automatic_subagents": false
   },
-  "active_run": null,
+  "active_run": {
+    "run_id": "20261113-initial-stages",
+    "owner": "primary-developer-agent",
+    "stage": "S01",
+    "package": "S01.4",
+    "branch": "codex/stage01-baseline",
+    "baseline_commit": "36f4a8a",
+    "scope": [
+      "S01",
+      "S02",
+      "S03"
+    ],
+    "skills": [
+      "alphaquant-stage-verification",
+      "alphaquant-data-connections"
+    ],
+    "next_action": "Await required CI on S01 PR, merge normally, record SHA, then proceed S02."
+  },
   "next_recommended_stage": "S01",
   "external_gates": [
     {
       "id": "E01",
       "name": "Configured SEC contact",
-      "status": "not_verified",
-      "evidence": [],
+      "status": "blocked",
+      "evidence": [
+        "2026-11-13: no saved secContact or process AQ_SEC_CONTACT candidate was found. No configured value was printed and no live request sent."
+      ],
       "owner_action": "Configure a valid local contact if absent. Standing bounded SEC call authority was selected on 2026-11-13."
     },
     {
@@ -69,12 +88,50 @@
       "owner_action": "Only if needed, make unavailable SDK/container/native UI or platform capability available through approved means."
     }
   ],
-  "blockers": [],
+  "blockers": [
+    {
+      "id": "BL-001",
+      "stage_ids": [
+        "S02"
+      ],
+      "package_ids": [
+        "S02.2",
+        "S02.4"
+      ],
+      "category": "E01",
+      "status": "open",
+      "first_checked": "2026-11-13",
+      "last_checked": "2026-11-13",
+      "evidence": [
+        "No saved secContact or process AQ_SEC_CONTACT candidate found. No real SEC request sent."
+      ],
+      "unblock_action": "Configure a valid SEC contact through Settings or approved environment, without posting it in chat.",
+      "independent_work": "S02 matrix/independent synthetic cases and S03 UI integration remain executable."
+    },
+    {
+      "id": "BL-002",
+      "stage_ids": [
+        "S01",
+        "S02",
+        "S03"
+      ],
+      "package_ids": [],
+      "category": "E06",
+      "status": "open_local_alternative_available",
+      "first_checked": "2026-11-13",
+      "last_checked": "2026-11-13",
+      "evidence": [
+        "Local project DLL loads rejected by Windows Application Control 0x800711C7. Builds pass."
+      ],
+      "unblock_action": "Use clean remote Windows CI and isolated rendering artifacts. Do not change OS security.",
+      "independent_work": "Compilation, source review, deterministic checks on CI and artifact inspection."
+    }
+  ],
   "stages": [
     {
       "id": "S01",
       "title": "Baseline audit and execution readiness",
-      "status": "planned",
+      "status": "verifying",
       "depends_on": [],
       "completion_requires": [],
       "effort_developer_days": {
@@ -82,49 +139,73 @@
         "max": 2
       },
       "contract": "Development_Plan.md#s01-baseline-audit-and-execution-readiness",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
-      "baseline_commit": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261113-initial-stages",
+      "branch": "codex/stage01-baseline",
+      "baseline_commit": "36f4a8a",
       "work_packages": [
         {
           "id": "S01.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S01_Baseline_Audit.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S01.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S01_Baseline_Audit.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S01.3",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S01_Baseline_Audit.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S01.4",
-          "status": "planned",
+          "status": "verifying",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S01_Baseline_Audit.md"
+          ],
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S01 contract, verify prerequisites and start S01.1 after plan acceptance.",
-      "validation": [],
-      "self_review": null,
+      "next_action": "Await required CI on S01 PR, merge normally, record SHA, then proceed S02.",
+      "validation": [
+        {
+          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal",
+          "result": "passed, zero warnings/errors, SDK 10.0.403"
+        },
+        {
+          "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
+          "result": "execution blocked by Windows Application Control 0x800711C7, not a functional assertion result"
+        },
+        {
+          "command": "python tools/Validate-ProjectSkills.py",
+          "result": "passed, six skills and 20 stage routes"
+        }
+      ],
+      "self_review": "Reviewed finite stream termination, explicit failure preservation, SEC redirect boundary and deferred S02/S03 findings. Remote exact-head regressions required before merge.",
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,
       "artifacts": [],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-13",
+        "summary": "Approval recorded. Baseline compiled. BA-01 stream completion and BA-02 redirect boundary fixed with regressions. Source/UI findings assigned to S02/S03."
+      }
     },
     {
       "id": "S02",
@@ -1290,6 +1371,10 @@
     {
       "date": "2026-11-13",
       "event": "Draft roadmap created after owner selected full-product scope, automatic Git delivery, independent blocker fallback, delegated finance definitions, SQLite and bounded configured live validation. No application stage has started."
+    },
+    {
+      "date": "2026-11-13",
+      "event": "Owner accepted roadmap and authorized autonomous execution of next stages. S01 claimed on codex/stage01-baseline."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
