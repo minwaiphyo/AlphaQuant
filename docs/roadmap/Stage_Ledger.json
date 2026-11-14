@@ -30,12 +30,12 @@
     "package": "final_hardening_and_gate_report",
     "branch": "chore/release-hardening",
     "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
-    "phase": "verifying",
+    "phase": "independent_work_complete_external_gates_open",
     "scope": [
       "S02 remaining verification",
       "S07-S20"
     ],
-    "next_action": "Deliver final hardening record through CI, then report consolidated gate actions. No remaining independent package is silently deferred.",
+    "next_action": "Finalize normal delivery of PR31 after required checks, then resolve consolidated external gates only. No independent roadmap package remains intentionally postponed.",
     "constraints": [
       "No purchases/accounts/vendor messages",
       "No credential extraction or secret values in chat",
@@ -829,40 +829,68 @@
       "work_packages": [
         {
           "id": "S08.1",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         }
       ],
       "next_action": "Registration, permitted host and explicit eligible account connection unavailable (E02/E03). Existing synthetic lifecycle tests are not live acceptance.",
@@ -953,14 +981,19 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+      ],
       "merge_commit": null,
       "artifacts": [
         "docs/development/Windows_Distribution.md"
       ],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-14",
+        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+      }
     },
     {
       "id": "S10",
@@ -1066,39 +1099,59 @@
       "work_packages": [
         {
           "id": "S11.1",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03",
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03",
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         }
       ],
       "next_action": "Connected pilot awaits live SEC/provider acceptance and trusted Windows installation; no release publication.",
@@ -1873,7 +1926,7 @@
           ]
         }
       ],
-      "next_action": "Finish hardening exact-head CI/package evidence. Full-product release awaits consolidated live/provider/trusted Windows/historical gates; do not mark S20 done.",
+      "next_action": "Resolve consolidated external gates; exact-head checks and delivery status are recorded in PR31. Full-product release cannot be marked complete.",
       "validation": [
         {
           "command": "Full Release tests/build and NuGet audit",
@@ -1885,15 +1938,20 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+      ],
       "merge_commit": null,
       "artifacts": [
         "docs/development/validation/S20_Traceability.md",
         "docs/development/Roadmap_Blockers.md"
       ],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-14",
+        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+      }
     }
   ],
   "history": [
@@ -1928,6 +1986,10 @@
     {
       "date": "2026-11-14",
       "event": "S13-S18 independent research/model engineering and S19 manual monitoring delivered through PR30 after exact-head Windows CI. S09 unsigned distribution and S20 independent hardening prepared; live/provider/trusted Windows/historical release gates remain open."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Independent engineering through S20 completed/prepared under PR31; remaining S02/S07/S08/S09/S11/S12/S19/S20 acceptance is explicitly externally gated. No full release or fabricated live/Windows/historical acceptance."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

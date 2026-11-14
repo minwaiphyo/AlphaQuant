@@ -62,3 +62,7 @@ trusted provider/signing acceptance remain open. See Windows_Distribution.md.
 
 The consolidated gate/action report is Roadmap_Blockers.md. No environment or full
 product release publication is part of these checks.
+
+Container build contexts now exclude artifacts/diagnostics, local credentials,
+research databases, caches and logs, in addition to existing secret/key patterns.
+No private local artifact should be uploaded merely to build the broker.
