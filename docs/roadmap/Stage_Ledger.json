@@ -26,16 +26,16 @@
   "active_run": {
     "run_id": "20261114-through-S20",
     "owner": "primary-developer-agent",
-    "stage": "S10",
+    "stage": "S12",
     "package": "delivery",
-    "branch": "feat/safe-diagnostics",
+    "branch": "feat/expanded-fundamentals",
     "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
     "phase": "in_progress",
     "scope": [
       "S02 remaining verification",
       "S07-S20"
     ],
-    "next_action": "Deliver safe diagnostics, then continue S09 preparation and S12-S20 independent research work.",
+    "next_action": "Deliver expanded metrics; implement S13 screening and S14 thesis/model persistence.",
     "constraints": [
       "No purchases/accounts/vendor messages",
       "No credential extraction or secret values in chat",
@@ -919,7 +919,7 @@
     {
       "id": "S10",
       "title": "Pilot usability, diagnostics and feedback",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S03",
         "S05",
@@ -985,9 +985,11 @@
         }
       ],
       "self_review": "Allowlisted metadata excludes raw errors, headers, settings, paths and research. Export requires preview and atomically creates a new local file; feedback draft never auto-sends.",
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/28",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43542006273"
+      ],
+      "merge_commit": "e4b41c6e1b19ff23e616d6a3b3612ccab265a651",
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": null
@@ -1066,7 +1068,7 @@
     {
       "id": "S12",
       "title": "Expanded fundamentals and efficiency metrics",
-      "status": "planned",
+      "status": "delivering",
       "depends_on": [
         "S03",
         "S04"
@@ -1077,43 +1079,58 @@
         "max": 6
       },
       "contract": "Development_Plan.md#s12-expanded-fundamentals-and-efficiency-metrics",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-through-S20",
+      "branch": "feat/expanded-fundamentals",
       "baseline_commit": null,
       "work_packages": [
         {
           "id": "S12.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/requirements/Expanded_Fundamentals.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S12.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/requirements/Expanded_Fundamentals.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S12.3",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/requirements/Expanded_Fundamentals.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S12.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/requirements/Expanded_Fundamentals.md"
+          ],
+          "remaining_acceptance": [
+            "Synthetic independent checks passed; real SEC source reconciliation awaits E01/S02."
+          ]
         }
       ],
-      "next_action": "Read the S12 contract, verify prerequisites and start S12.1 after plan acceptance.",
-      "validation": [],
-      "self_review": null,
+      "next_action": "Finish expanded render inspection and exact-head CI; real-source reconciliation remains blocked on S02.",
+      "validation": [
+        {
+          "command": "Release solution tests",
+          "result": "298 passed, zero failures/skips; independent rational/compound examples, conflicts, future facts, missing debt, overflow and old snapshot replay."
+        }
+      ],
+      "self_review": "Every required measure implemented with missing issuer data explicit. Separate expanded-1 definitions; no overlap-tag sums, hidden tax benefit or current class/price claim. Source inputs and versions persist.",
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,

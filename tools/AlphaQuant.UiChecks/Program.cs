@@ -149,6 +149,9 @@ internal static class Program
         if (!vm.Title.Contains("mixed definitions") || !vm.FilterDescription.Contains("disabled")) throw new InvalidOperationException("Mixed-definition guards were not visible");
         window.Content = view;
         Capture("mixed-definition-offline-dark", 648, 560, ThemeVariant.Dark);
+        vm.Companies[0].Metrics.First(m => m.Name == "Net margin").InspectCommand.Execute(null);
+        window.Content = view;
+        Capture("expanded-net-margin-evidence-dark", 648, 560, ThemeVariant.Dark);
         var helpVm = new ReleaseNotesViewModel(() => { });
         helpVm.PreviewDiagnosticsCommand.Execute(null);
         var helpView = new ReleaseNotesView { DataContext = helpVm };
@@ -187,7 +190,7 @@ internal sealed class FixtureBackend : IResearchBackend
         foreach (var year in Enumerable.Range(2021, 5))
         {
             void Add(string concept, string unit, decimal value) => facts.Add(new(concept, unit, value, new(year, 1, 1), new(year, 12, 31), "10-K", new(year + 1, 2, 1), "0000000001-26-000001"));
-            Add("Revenues", "USD", (year - 2020) * 1000000m); Add("OperatingIncomeLoss", "USD", 250000m);
+            Add("Revenues", "USD", (year - 2020) * 1000000m); Add("OperatingIncomeLoss", "USD", 250000m); Add("GrossProfit", "USD", 400000m); Add("NetIncomeLoss", "USD", 200000m);
             Add("NetCashProvidedByUsedInOperatingActivities", "USD", 300000m); Add("EarningsPerShareDiluted", "USD/shares", 0.0046m);
         }
         var fundamentals = ComparisonAnalyzer.Analyze(facts, new(2026, 3, 1));

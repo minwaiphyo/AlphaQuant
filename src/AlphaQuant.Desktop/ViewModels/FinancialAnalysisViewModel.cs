@@ -65,7 +65,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
     private readonly Dictionary<long, ResearchCompany> _companies = [];
     private IReadOnlyList<CompanyRef> _selected = [];
     private IReadOnlyList<ResearchCompany> _rendered = [];
-    public IReadOnlyList<string> MetricChoices { get; } = ["Annual revenue", "Annual revenue growth", "Annual operating margin", "Annual operating cash flow", "TTM revenue", "TTM operating margin", "TTM operating cash flow", "TTM diluted EPS", "Cash and cash equivalents", "Reviewed interest-bearing debt", "Trailing P/E", "EV / TTM sales"];
+    public IReadOnlyList<string> MetricChoices { get; } = ["Annual revenue", "Annual revenue growth", "Annual operating margin", "Annual operating cash flow", "TTM revenue", "TTM operating margin", "TTM operating cash flow", "TTM diluted EPS", "Cash and cash equivalents", "Reviewed interest-bearing debt", "Trailing P/E", "EV / TTM sales", .. ExpandedFundamentals.Names];
     public IReadOnlyList<string> Operators { get; } = [">=", "<=", ">", "<"];
     [ObservableProperty] private string _selectedMetric = "Annual revenue";
     [ObservableProperty] private string _selectedOperator = ">=";
@@ -262,13 +262,13 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         foreach (var row in snapshot.Rows)
         {
             var metrics = new List<ResearchMetric>();
-            void Add(FinancialValue value, string basis)
+            void Add(FinancialValue value, string basis, string? definitionOverride = null)
             {
-                var definition = row.FinancialDefinitionVersion;
+                var definition = definitionOverride ?? row.FinancialDefinitionVersion;
                 var period = value.End is null ? basis : value.Start is null ? $"{basis} · at {value.End:yyyy-MM-dd}"
                     : $"{basis} · {value.Start:yyyy-MM-dd} to {value.End:yyyy-MM-dd}";
                 metrics.Add(new(value.Name, Format(value), period, value.Reason ?? string.Empty,
-                    new RelayCommand(() => Inspect(row, value, period, definition)), value.Available ? value.Value : null));
+                    new RelayCommand(() => Inspect(row, value, period, definition)), value.Available && (definition == ComparisonAnalyzer.DefinitionVersion || definition == ExpandedFundamentals.Version) ? value.Value : null));
             }
             var f = row.Fundamentals;
             if (f is not null)
@@ -278,6 +278,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
                     Add(year.Revenue, "Annual"); Add(year.RevenueGrowth, "Annual");
                     Add(year.OperatingMargin, "Annual"); Add(year.OperatingCashFlow, "Annual");
                 }
+                foreach (var expanded in f.Expanded.OrderByDescending(item => item.Result.End)) Add(expanded.Result, expanded.DefinitionVersion + " Annual", expanded.DefinitionVersion);
                 Add(f.TtmRevenue, "TTM"); Add(f.TtmOperatingMargin, "TTM"); Add(f.TtmOperatingCashFlow, "TTM");
                 Add(f.TtmDilutedEps, "TTM"); Add(f.CashBalance, "Balance sheet"); Add(f.DebtBalance, "Reviewed balance sheet");
             }
@@ -314,7 +315,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         Evidence = new()
         {
             Company = row.Company.Name, Title = value.Name, Value = value.Available ? Display.FactValue(value.Value!.Value, value.Unit) : "Unavailable",
-            Formula = definition != ComparisonAnalyzer.DefinitionVersion ? definition + " · Saved result; stored inputs shown without re-evaluating this older or unknown definition."
+            Formula = definition == ExpandedFundamentals.Version ? ExpandedFundamentals.Formula(value.Name) : definition != ComparisonAnalyzer.DefinitionVersion ? definition + " · Saved result; stored inputs shown without re-evaluating this older or unknown definition."
                 : definition + " · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
                 : value.Name == "EV / TTM sales" ? "(Price × actual outstanding shares + debt + preferred equity + non-controlling interests − cash) / TTM revenue."
                 : value.Name.Contains("margin", StringComparison.OrdinalIgnoreCase)
