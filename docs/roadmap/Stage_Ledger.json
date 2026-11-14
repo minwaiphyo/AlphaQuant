@@ -24,29 +24,23 @@
     "automatic_subagents": false
   },
   "active_run": {
-    "run_id": "20261114-research-delivery",
+    "run_id": "20261114-through-S20",
     "owner": "primary-developer-agent",
-    "stage": "S04-S06",
-    "package": "review_and_delivery",
-    "branch": "feat/reviewed-valuation-inputs",
-    "baseline_commit": "e34e8a576d1fa7715c1dfac99bf29296c0b20cc5",
+    "stage": "S07",
+    "package": "S07.1",
+    "branch": "feat/broker-operations",
+    "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
+    "phase": "in_progress",
     "scope": [
-      "S03 delivery reconciliation",
-      "S04",
-      "S05",
-      "S06"
+      "S02 remaining verification",
+      "S07-S20"
     ],
-    "skills": [
-      "alphaquant-stage-verification",
-      "alphaquant-research-storage",
-      "alphaquant-avalonia-design"
-    ],
-    "phase": "delivered",
-    "next_action": "Start S07.1 broker operational/security audit under its approved contract. S02 live source validation and Windows signing/owner-PC acceptance remain blocked.",
+    "next_action": "Audit broker and container; continue independent roadmap packages; consolidate external blockers at end.",
     "constraints": [
-      "No live SEC/Alpaca calls",
-      "No purchases or signing/financial credentials",
-      "Windows signing/owner-PC acceptance remain pending"
+      "No purchases/accounts/vendor messages",
+      "No credential extraction or secret values in chat",
+      "No weakening OS trust",
+      "Live account acceptance requires explicit user connection"
     ]
   },
   "next_recommended_stage": "S07",
@@ -153,6 +147,28 @@
       ],
       "unblock_action": "Resolved; no credential extraction or new secret needed.",
       "independent_work": "Cloud implementation, synthetic tests, headless rendering and unsigned cross-publish completed. Windows signing/PC checks remain separately pending."
+    },
+    {
+      "id": "BL-004",
+      "stage_ids": [
+        "S07",
+        "S08",
+        "S11",
+        "S20"
+      ],
+      "package_ids": [
+        "S07.2",
+        "S07.3"
+      ],
+      "category": "E06/E03",
+      "status": "open",
+      "first_checked": "2026-11-14",
+      "last_checked": "2026-11-14",
+      "evidence": [
+        "Managed Docker build denied at centralus.data.mcr.microsoft.com before compilation. Official Render/Alpaca documentation requests denied at render.com and docs.alpaca.markets. Native .NET broker smoke passed."
+      ],
+      "unblock_action": "Permit required registry/documentation destinations and retry verified build/current free-tier/provider review; then supply approved hosting and registration through secure settings.",
+      "independent_work": "S10 and offline research/modeling work."
     }
   ],
   "stages": [
@@ -696,7 +712,7 @@
     {
       "id": "S07",
       "title": "OAuth broker operational readiness",
-      "status": "planned",
+      "status": "blocked",
       "depends_on": [
         "S01"
       ],
@@ -706,47 +722,66 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s07-oauth-broker-operational-readiness",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
-      "baseline_commit": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-through-S20",
+      "branch": "feat/broker-operations",
+      "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
       "work_packages": [
         {
           "id": "S07.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Broker_Operations.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S07.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Broker_Operations.md"
+          ],
+          "remaining_acceptance": [
+            "Container runtime or current provider/host evidence unavailable; see BL-004."
+          ]
         },
         {
           "id": "S07.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Broker_Operations.md"
+          ],
+          "remaining_acceptance": [
+            "Container runtime or current provider/host evidence unavailable; see BL-004."
+          ]
         },
         {
           "id": "S07.4",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Broker_Operations.md"
+          ],
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S07 contract, verify prerequisites and start S07.1 after plan acceptance.",
-      "validation": [],
+      "next_action": "Container image pull and current provider/host documentation require permitted egress; independent broker audit/native smoke passed. Continue S10 and research stages.",
+      "validation": [
+        {
+          "command": "Release solution tests/build and python tools/Test-BrokerSmoke.py",
+          "result": "279 tests passed; zero-warning/error build; synthetic native broker smoke passed."
+        }
+      ],
       "self_review": null,
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,
-      "artifacts": [],
+      "artifacts": [
+        "docs/development/Broker_Operations.md"
+      ],
       "blocker_ids": [],
       "checkpoint": null
     },
@@ -1585,6 +1620,14 @@
     {
       "date": "2026-11-14",
       "event": "S04-S06 delivered through PR25, merge fcc2dc432f47071dd43d545f0bc41a29dbed0321, after exact-head Windows CI 43540146614 and local 274-test/render verification. Next independent stage S07; external live/trust gates remain open."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner requested completion through S20 with consolidated blockers afterward. Start S07 audit; continue all independent work without fabricating external acceptance."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "S07 audit and native broker smoke passed; container and current host/provider evidence blocked by egress. Continue independent work through S20."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

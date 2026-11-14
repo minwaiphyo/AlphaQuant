@@ -343,6 +343,11 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Through-S20 execution started on 2026-11-14 at owner request. S07 broker audit
+and synthetic process smoke passed; container/image and current host/provider
+research are blocked by egress, not a completed deployment. Continue independent
+S10 and research/modeling stages; consolidate actual external gaps at completion.
+
 Research delivery complete, 2026-11-14: S04–S06 merged through PR25
 (`fcc2dc4`) after exact-head Windows CI 43540146614 and local synthetic
 verification. Saved research/recovery, offline financial snapshots and structured

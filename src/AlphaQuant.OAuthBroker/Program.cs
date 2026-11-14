@@ -17,7 +17,8 @@ builder.Services.AddRateLimiter(options =>
 string Required(string name) => Environment.GetEnvironmentVariable(name) is { Length: > 0 } value ? value
     : throw new InvalidOperationException($"Missing required server configuration: {name}.");
 var redirect = new Uri(Required("AQ_OAUTH_REDIRECT_URI"));
-var broker = new OAuthBrokerService(AlpacaMarketDataProvider.CreateHttpClient(), Required("AQ_ALPACA_CLIENT_ID"),
+using var brokerHttp = AlpacaMarketDataProvider.CreateHttpClient();
+var broker = new OAuthBrokerService(brokerHttp, Required("AQ_ALPACA_CLIENT_ID"),
     Required("AQ_ALPACA_CLIENT_SECRET"), redirect);
 builder.Services.AddSingleton(broker);
 builder.Services.AddHostedService<SessionExpiry>();
