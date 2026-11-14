@@ -1935,9 +1935,13 @@
         {
           "command": "Replay/recovery/export/render/package checks",
           "result": "Independent models, 100 revisions, corrupt backup preservation, safe diagnostics, 29 UI PNG states, PDF/CSV/XLSX and unsigned Windows package inspected."
+        },
+        {
+          "command": "Final suite/build and isolated native Linux startup",
+          "result": "323 tests pass; zero warnings/errors. New XDG data root remains absolute; native workbench loaded/rendered; no checkout-relative data or source request."
         }
       ],
-      "self_review": null,
+      "self_review": "Reviewed source/definition provenance, immutable replay/restore, bounded model/solver domains, safe text exports, package exclusions/licenses and actual native startup. Fixed the native missing-data-root fallback; no known independent engineering defect left open. External release gates remain explicit.",
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
       "ci_runs": [
         "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"

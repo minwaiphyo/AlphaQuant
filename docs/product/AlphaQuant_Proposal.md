@@ -343,6 +343,11 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Final S20 native check, 2026-11-14: fixed missing-XDG-root fallback so settings,
+cache and research never silently become checkout-relative. Repeated native Linux
+workbench startup with a nonexistent isolated data root passed; 323 tests and
+zero-warning build pass. Final PR31 delivery/CI and external gate resolution remain.
+
 Through-S20 checkpoint, 2026-11-14: independent research/model functionality is
 merged through PR30. S13–S18 engineering is delivered; S19 manual monitoring and
 sourced fundamentals work, while historical valuation remains blocked. S09 adds

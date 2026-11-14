@@ -24,7 +24,7 @@ completion. Scope remains the approved roadmap.
 
 ## Verification and supported bounds
 
-Release suite: 319 tests, zero failed/skipped. Full Release build zero warnings/errors.
+Release suite: 323 tests, zero failed/skipped. Full Release build zero warnings/errors.
 NuGet audit of all transitive dependencies reports none vulnerable from current
 configured sources; signatures/TLS were not bypassed. PDFsharp exact package
 6.2.4 is MIT; DejaVu license retained, patched Pkcs 10.0.15 selected. Actual published
@@ -66,3 +66,19 @@ product release publication is part of these checks.
 Container build contexts now exclude artifacts/diagnostics, local credentials,
 research databases, caches and logs, in addition to existing secret/key patterns.
 No private local artifact should be uploaded merely to build the broker.
+
+## Native Linux path regression fixed
+
+Final isolated native startup found that an absent XDG data directory caused the
+OS folder lookup to return empty, making settings/cache/research paths relative to
+the checkout. LocalDataPaths now requests the absolute OS path without requiring
+preexistence and fails closed if no absolute root exists. Settings, cache and
+research share that root. Four regression cases cover missing/relative roots and
+a new absolute directory. The suite now passes 323 tests with zero build warnings.
+
+Repeated native startup used deliberately nonexistent isolated XDG directories,
+opened Research and models, loaded schema-4 history and visibly rendered the page.
+The research DB appeared under the configured absolute data directory and no
+checkout-relative folder was created. No source/provider request was made. The
+empty owned smoke reproduction was preserved outside the checkout; user data was
+not reset or automatically migrated. Native Windows acceptance is still separate.
