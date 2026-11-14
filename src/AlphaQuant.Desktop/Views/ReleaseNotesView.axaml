@@ -3,6 +3,20 @@
     <Button DockPanel.Dock="Top" Content="Back" Command="{Binding BackCommand}" HorizontalAlignment="Left"/>
     <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" Classes="h1" Margin="0,16,0,16"/>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="16">
+      <TextBlock Text="{Binding BuildIdentity}" TextWrapping="Wrap" AutomationProperties.Name="Application build identity"/>
+      <Border Classes="panel"><StackPanel Spacing="10">
+        <TextBlock Text="Help and safe diagnostics" Classes="h2"/>
+        <TextBlock Text="Start with 2–5 companies, inspect comparison source evidence, save a named set and capture financials separately. Saved snapshots open offline. Review inputs in Data connections are session-only. Missing SEC contact, broker configuration, reviewed evidence or eligible price leaves the corresponding feature unavailable." TextWrapping="Wrap"/>
+        <Button Content="Preview safe diagnostics" Command="{Binding PreviewDiagnosticsCommand}" HorizontalAlignment="Left"/>
+        <TextBox Text="{Binding DiagnosticPreview}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="100" AutomationProperties.Name="Diagnostics preview"/>
+        <TextBox Text="{Binding ExportPath}" PlaceholderText="New local output file path" AutomationProperties.Name="Diagnostics output file"/>
+        <Button Content="Export displayed diagnostics locally" Command="{Binding ExportDiagnosticsCommand}" HorizontalAlignment="Left"/>
+        <TextBlock Text="{Binding DiagnosticStatus}" TextWrapping="Wrap"/>
+        <TextBlock Text="Feedback draft — copy, review and submit yourself" FontWeight="SemiBold"/>
+        <TextBox Text="{Binding FeedbackPreview}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="140" AutomationProperties.Name="Feedback draft"/>
+        <TextBlock Text="Submit through github.com/minwaiphyo/AlphaQuant/issues after reviewing the draft. No issue, email or telemetry is sent by this app." TextWrapping="Wrap" Classes="muted small"/>
+      </StackPanel></Border>
       <ItemsControl ItemsSource="{Binding Entries}">
         <ItemsControl.ItemTemplate>
           <DataTemplate x:DataType="vm:ReleaseNoteEntry">
@@ -23,6 +37,7 @@
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>
+      </StackPanel>
     </ScrollViewer>
   </DockPanel>
 </UserControl>

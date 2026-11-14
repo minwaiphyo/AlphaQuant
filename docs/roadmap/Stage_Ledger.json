@@ -26,16 +26,16 @@
   "active_run": {
     "run_id": "20261114-through-S20",
     "owner": "primary-developer-agent",
-    "stage": "S07",
-    "package": "S07.1",
-    "branch": "feat/broker-operations",
+    "stage": "S10",
+    "package": "delivery",
+    "branch": "feat/safe-diagnostics",
     "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
     "phase": "in_progress",
     "scope": [
       "S02 remaining verification",
       "S07-S20"
     ],
-    "next_action": "Audit broker and container; continue independent roadmap packages; consolidate external blockers at end.",
+    "next_action": "Deliver safe diagnostics, then continue S09 preparation and S12-S20 independent research work.",
     "constraints": [
       "No purchases/accounts/vendor messages",
       "No credential extraction or secret values in chat",
@@ -776,9 +776,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/27",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43541637140"
+      ],
+      "merge_commit": "62d3051964f8266286381b1b1f9284fb27c71e37",
       "artifacts": [
         "docs/development/Broker_Operations.md"
       ],
@@ -788,7 +790,7 @@
     {
       "id": "S08",
       "title": "Real OAuth and IEX acceptance",
-      "status": "planned",
+      "status": "blocked",
       "depends_on": [
         "S03",
         "S07"
@@ -842,7 +844,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S08 contract, verify prerequisites and start S08.1 after plan acceptance.",
+      "next_action": "Registration, permitted host and explicit eligible account connection unavailable (E02/E03). Existing synthetic lifecycle tests are not live acceptance.",
       "validation": [],
       "self_review": null,
       "pr_url": null,
@@ -917,7 +919,7 @@
     {
       "id": "S10",
       "title": "Pilot usability, diagnostics and feedback",
-      "status": "planned",
+      "status": "delivering",
       "depends_on": [
         "S03",
         "S05",
@@ -929,43 +931,60 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s10-pilot-usability-diagnostics-and-feedback",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-through-S20",
+      "branch": "feat/safe-diagnostics",
       "baseline_commit": null,
       "work_packages": [
         {
           "id": "S10.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Diagnostics.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S10.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Diagnostics.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S10.3",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Diagnostics.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S10.4",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Diagnostics.md"
+          ],
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S10 contract, verify prerequisites and start S10.1 after plan acceptance.",
-      "validation": [],
-      "self_review": null,
+      "next_action": "Exact-head CI and normal merge; then continue independent research stages.",
+      "validation": [
+        {
+          "command": "dotnet test AlphaQuant.slnx -c Release",
+          "result": "284 passed, zero failed/skipped."
+        },
+        {
+          "command": "UI harness",
+          "result": "21 synthetic states including help/diagnostics; focus checks passed. Minimum dark diagnostics render inspected."
+        }
+      ],
+      "self_review": "Allowlisted metadata excludes raw errors, headers, settings, paths and research. Export requires preview and atomically creates a new local file; feedback draft never auto-sends.",
       "pr_url": null,
       "ci_runs": [],
       "merge_commit": null,
@@ -976,7 +995,7 @@
     {
       "id": "S11",
       "title": "Connected pilot release",
-      "status": "planned",
+      "status": "blocked",
       "depends_on": [
         "S02",
         "S03",
@@ -1034,7 +1053,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Read the S11 contract, verify prerequisites and start S11.1 after plan acceptance.",
+      "next_action": "Connected pilot awaits live SEC/provider acceptance and trusted Windows installation; no release publication.",
       "validation": [],
       "self_review": null,
       "pr_url": null,
