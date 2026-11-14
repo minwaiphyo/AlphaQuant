@@ -29,6 +29,8 @@ jobs:
         run: dotnet test AlphaQuant.slnx -c Release --verbosity minimal
       - name: Build all projects including broker
         run: dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal
+      - name: Smoke broker with synthetic loopback configuration
+        run: python tools/Test-BrokerSmoke.py
       - name: Validate source-capture configuration preflight without network
         run: dotnet run --project tools/AlphaQuant.SourceCapture -c Release --no-build -- --preflight
       - name: Render isolated comparison states and check evidence keyboard focus

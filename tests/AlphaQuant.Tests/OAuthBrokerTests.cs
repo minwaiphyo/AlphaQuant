@@ -73,6 +73,51 @@ public sealed class OAuthBrokerTests
         Assert.Empty(handler.Requests);
     }
 
+    [Fact]
+    public void CapacityIsBoundedAndExpiredSessionsReleaseSlots()
+    {
+        var clock = new FakeTime(); var broker = Broker(new FakeHandler(), clock);
+        for (var i = 0; i < 256; i++) broker.Start(Challenge(Verifier('a')));
+        Assert.Throws<InvalidOperationException>(() => broker.Start(Challenge(Verifier('a'))));
+        clock.Advance(TimeSpan.FromMinutes(5));
+        Assert.NotNull(broker.Start(Challenge(Verifier('a'))));
+    }
+
+    [Fact]
+    public async Task CancellationDuringExchangeCannotResurrectSession()
+    {
+        var handler = new DeferredExchange(); var broker = Broker(handler);
+        var start = broker.Start(Challenge(Verifier('a')));
+        var exchange = broker.CompleteAsync(start.SessionId, "synthetic-code", false, default);
+        await handler.Started.Task;
+        broker.Cancel(start.SessionId, Verifier('a'));
+        handler.Response.SetResult(new HttpResponseMessage(HttpStatusCode.OK)
+        { Content = new StringContent("""{"token_type":"bearer","scope":"data","access_token":"late-synthetic-token"}""") });
+        await exchange;
+        Assert.Equal(OAuthPollState.Missing, broker.Poll(start.SessionId, Verifier('a')).State);
+    }
+
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("{\"token_type\":123}")]
+    [InlineData("not json")]
+    public async Task MalformedExchangeNeverDeliversTokenOrProviderDetails(string json)
+    {
+        var broker = Broker(new FakeHandler().EnqueueOk(Encoding.UTF8.GetBytes(json)));
+        var start = broker.Start(Challenge(Verifier('a')));
+        await broker.CompleteAsync(start.SessionId, "code", false, default);
+        Assert.Equal(OAuthPollState.Failed, broker.Poll(start.SessionId, Verifier('a')).State);
+        Assert.Equal(OAuthPollState.Missing, broker.Poll(start.SessionId, Verifier('a')).State);
+    }
+
+    private sealed class DeferredExchange : HttpMessageHandler
+    {
+        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource<HttpResponseMessage> Response { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token)
+        { Started.SetResult(); return Response.Task; }
+    }
+
     [Theory]
     [InlineData("http://example.com/oauth/callback")]
     [InlineData("https://user:secret@example.com/oauth/callback")]

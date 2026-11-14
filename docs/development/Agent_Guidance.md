@@ -84,6 +84,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
+- 2026-11-14: owner authorized all independent work through S20 and requested one consolidated blocker report afterward. S07 audit/process smoke passed; container image and current host/provider research blocked by egress (BL-004). Continue independent S10/research stages; use dated ledger evidence, preserve all external release gates. No subagent authority added.
+
 - 2026-11-14 delivery complete: S04–S06 merged through PR25 (`fcc2dc4`). Exact-head Windows CI 43540146614 passed all checks/package; Linux 274 tests, 19 reference tests, zero-warning build and 19 synthetic UI render/focus states passed, with relevant layouts inspected. Next: S07.1 broker operational/security audit. Live SEC/Alpaca, OAuth registration/deployment, provider rights, Windows signing and owner-PC acceptance remain pending. No new stage was started during delivery.
 
 - 2026-11-14 resumption: owner requested continued development. PR24 is merged; API access works. History cleanup preserved file trees and remapped commit IDs/branch names; use current refs in the ledger. Resume cumulative `feat/reviewed-valuation-inputs` for S04–S06 review, exact-head Windows CI and normal delivery before new stages. Keep live finance requests, purchases and Windows signing/owner-PC work pending. Earlier dated hold/API statements below are historical and superseded by this checkpoint.

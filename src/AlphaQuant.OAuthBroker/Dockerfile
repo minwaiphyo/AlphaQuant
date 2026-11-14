@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /source
+COPY global.json ./
 COPY src/AlphaQuant.Core/ src/AlphaQuant.Core/
 COPY src/AlphaQuant.Infrastructure/ src/AlphaQuant.Infrastructure/
 COPY src/AlphaQuant.OAuthBroker/ src/AlphaQuant.OAuthBroker/
