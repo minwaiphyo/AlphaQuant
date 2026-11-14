@@ -29,12 +29,12 @@
     "stage": "S09",
     "package": "S09.4",
     "branch": "docs/windows-publisher-triage",
-    "phase": "awaiting_affected_pc_evidence",
+    "phase": "local_linux_gui_workflow_preparation",
     "scope": [
       "Diagnose publisher/DLL block on personal Windows 11 Home",
       "Resolve exact local dotnet run workflow using supported trust/signing route"
     ],
-    "next_action": "Obtain exact block text, SmartAppControlState and relevant CodeIntegrity 3077 on affected PC; identify every blocked artifact before selecting signing integration.",
+    "next_action": "Inspect owner-PC WSL status; prepare supported WSL2/WSLg Linux GUI development workflow. Native Windows signing remains deferred; do not claim the DLL trust issue fixed.",
     "constraints": [
       "Keep Smart App Control and Defender enabled",
       "No exclusions, trust-marker removal or self-signed trust-root workaround",
@@ -2012,6 +2012,10 @@
     {
       "date": "2026-11-14",
       "event": "Owner prioritized Windows publisher block over SEC configuration. Reports personal Windows 11 Home and Desktop DLL block during dotnet run. Requested read-only local evidence. Current live Microsoft guidance supports both RSA/ECC; provider signing eligibility and actual enforcement remain unverified."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner supplied SAC On and CodeIntegrity3077 blocking project Desktop Debug DLL. Owner only needs local development viewing/testing and defers signing/distribution. Investigate supported WSL2/WSLg Linux GUI workflow; no security changes or Windows-native acceptance inferred."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

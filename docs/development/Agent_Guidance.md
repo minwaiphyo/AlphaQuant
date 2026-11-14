@@ -84,6 +84,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
+- 2026-11-14 Windows triage clarification: read-only owner evidence confirms SAC On and CodeIntegrity3077 for the project-owned Desktop Debug DLL. Owner needs local viewing/testing only and explicitly defers signing/distribution. Inspect WSL status and prepare supported WSL2/WSLg Linux GUI setup; preserve all Windows security and existing distributions/source. This does not fix Windows DLL trust or close native Windows acceptance. Do not insist on fresh Debug signing as the immediate goal.
+
 - 2026-11-14 current priority: owner cannot execute local `dotnet run --project src/AlphaQuant.Desktop` on personal Windows 11 Home because Windows Security reports a Desktop DLL publisher cannot be verified. Diagnose the exact policy/file using read-only local evidence before signing work; release signing is not automatically local Debug signing. Live Microsoft guidance now supports trusted RSA and ECC certificates. Keep security enabled; no purchases/provider submissions/publication are authorized by this triage.
 
 - 2026-11-14 through-S20 checkpoint: owner requested completion of all independent work and one consolidated blocker report. PR27–PR30 delivered broker audit, diagnostics, expanded metrics and the integrated research/models/reports/manual-monitoring workbench. S13–S18 done; S02/S07/S08/S09/S11/S12/S19/S20 retain explicit external gates. Final hardening/distribution record in progress; see Roadmap_Blockers.md and S20_Traceability.md. Do not restart stages or claim full release/live/Windows acceptance. No remaining independent stage is intentionally postponed.

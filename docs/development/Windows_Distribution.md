@@ -14,16 +14,20 @@ are not relicensed by the repository license.
 
 Owner reports Windows 11 Home on a personal PC. The block occurs during
 `dotnet run --project src/AlphaQuant.Desktop` and refers to a Desktop DLL whose
-publisher cannot be verified. Exact dialog, blocked path and enforcing policy
-have not yet been captured. This suggests application-control enforcement, but
-Smart App Control attribution still requires evidence; do not treat it as a
-SmartScreen EXE warning or claim a diagnosis from memory alone.
+publisher cannot be verified. Owner evidence now shows SmartAppControlState On and enforced CodeIntegrity
+event3077 when the Desktop host loads the project-owned Debug/net10.0/
+AlphaQuant.Desktop.dll, policy0283ac0f-fff1-49ae-ada1-8a933130cad6. This confirms
+a DLL code-integrity block, not the usual downloaded-EXE SmartScreen warning.
+The generic Enterprise signing-level wording does not establish corporate management.
+No personal filesystem path or whole event log is retained here.
 
 Reproduce once, then collect the read-only SmartAppControlState and relevant
 CodeIntegrity event 3077. Identify the named blocked DLL and its signature status
 before choosing a remedy. A signed CI/release executable does not establish that
-fresh local Debug assemblies will be permitted. The exact local command remains
-the target; no security controls, file trust markers or trust stores are changed.
+fresh local Debug assemblies will be permitted. The owner clarified that the immediate goal is to view/test development, not
+execute each fresh Windows Debug build. Native Windows signing/distribution can
+wait until release preparation. No security controls, file trust markers or trust
+stores are changed.
 
 Live Microsoft/SignPath documentation is now reachable. Checked on 2026-11-14:
 Microsoft currently states Smart App Control supports BOTH RSA and ECC trusted
@@ -152,7 +156,7 @@ not a reliable Smart App Control solution. Do not ask recruiters to install one.
 
 ## Implemented development-package workflow
 
-### Provider inquiry ready for owner submission
+### Prior provider inquiry draft (fresh-Debug requirement superseded)
 
 Use the official [SignPath Foundation application](https://signpath.org/apply)
 after reviewing current terms. This brief contains public project facts only;
@@ -176,11 +180,11 @@ or chat.
 > contains upstream Avalonia/native and Microsoft runtime files. We will not
 > re-sign upstream files using the project's signing identity.
 >
-> We need two distinct capabilities: (1) approved public release signing and
-> (2) signing fresh local Debug builds before the exact command
-> `dotnet run --project src/AlphaQuant.Desktop` executes on a personal Windows
-> PC with Smart App Control enabled. We require zero incremental cost and will
-> keep Windows security protections enabled.
+> Current scope is approved release signing when distribution is ready. Fresh
+> local Windows Debug signing is not an immediate requirement after the owner
+> clarified on2026-11-14 that viewing/testing progress is sufficient. A supported
+> Linux build through WSLg can be used for development without claiming Windows
+> native acceptance. Zero incremental cost and enabled Windows security remain.
 >
 > Please confirm:
 > 1. Does this project qualify, and what public-release/reputation, identity,
@@ -322,3 +326,25 @@ or generally trusted identity. No release is published by these scripts.
 Upstream notice bytes are retained exactly and SHA256-verified; .gitattributes
 prevents checkout newline conversion and exempts only their upstream trailing
 whitespace from cosmetic checks. Application source retains normal checks.
+
+## Development viewing without native Windows signing
+
+The owner prefers to defer distribution signing and use the app to inspect/test
+progress now. Microsoft's supported WSL2/WSLg Linux-GUI route is a candidate on
+Windows11 Home; it runs a Linux build of the same Avalonia source, does not load
+the blocked Windows DLL and does not change its Windows trust status. It is not
+a completed Windows-native test or signing fix. Keep Windows security enabled.
+
+First inspect `wsl --status` and `wsl --list --verbose`; preserve any existing
+distributions/work. GUI support requires WSL2. If setup is absent, follow the
+official install flow, then use a separate Linux checkout and Linux SDK/runtime
+dependencies. Do not unregister distributions, discard local source work or
+blindly shut down unrelated WSL processes. Actual owner-PC WSLg operation has
+not yet been verified.
+
+Current official references checked2026-11-14:
+- https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps
+- https://learn.microsoft.com/en-us/windows/wsl/install
+
+This changes the immediate development-viewing approach only. Trusted Windows
+release/signing and native clean-PC acceptance remain pending at S09/S11/S20.
