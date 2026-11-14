@@ -292,3 +292,7 @@ PDFsharp 6.2.4 is MIT by inspected NuGet metadata; transitive Pkcs is pinned to 
 10.0.15. Package inventory is generated from the actual published dependency graph,
 not an old static list. Audit output is evidence for review, not provider signing
 or generally trusted identity. No release is published by these scripts.
+
+Upstream notice bytes are retained exactly and SHA256-verified; .gitattributes
+prevents checkout newline conversion and exempts only their upstream trailing
+whitespace from cosmetic checks. Application source retains normal checks.
