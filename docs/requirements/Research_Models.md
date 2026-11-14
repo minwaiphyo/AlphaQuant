@@ -112,3 +112,17 @@ and is not silently substituted. System.Security.Cryptography.Pkcs is pinned to
 Sensitivity/solver inputs can be included explicitly in a saved model revision.
 Frozen reports replay those exact grids/drivers/target bounds and record invalid
 cells, residuals and evaluation counts. They never substitute a current price.
+
+## DCF scope guard — dcf-1.1
+
+New workbench models now use dcf-1.1. Formulas are unchanged, but computing
+per-share results requires an explicit supported domestic non-financial USD/simple
+common-class/complete-capital assertion and a non-future actual-share/capital review
+date. No class/scope eligibility is inferred from a ticker or numeric fields.
+The model review date belongs to an absolute user-assumption model, not a current
+market quote; current-price upside still requires separate eligible price evidence.
+
+Original dcf-1 saved models replay under that original definition and carry a
+legacy scope limitation in reports. Loading an old model does not auto-confirm
+new scope/date fields; the workbench requires explicit review to create a new
+dcf-1.1 revision. Stored history is not relabelled or silently recomputed.

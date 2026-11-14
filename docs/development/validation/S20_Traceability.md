@@ -24,7 +24,7 @@ completion. Scope remains the approved roadmap.
 
 ## Verification and supported bounds
 
-Release suite: 323 tests, zero failed/skipped. Full Release build zero warnings/errors.
+Release suite: 324 tests, zero failed/skipped. Full Release build zero warnings/errors.
 NuGet audit of all transitive dependencies reports none vulnerable from current
 configured sources; signatures/TLS were not bypassed. PDFsharp exact package
 6.2.4 is MIT; DejaVu license retained, patched Pkcs 10.0.15 selected. Actual published
@@ -82,3 +82,7 @@ The research DB appeared under the configured absolute data directory and no
 checkout-relative folder was created. No source/provider request was made. The
 empty owned smoke reproduction was preserved outside the checkout; user data was
 not reset or automatically migrated. Native Windows acceptance is still separate.
+
+Final model review added dcf-1.1 scope/date guards with explicit legacy dcf-1
+replay/label preservation. New unsupported or future-reviewed models are rejected;
+no silent evidence upgrade. 324 tests and the updated model-editor harness pass.

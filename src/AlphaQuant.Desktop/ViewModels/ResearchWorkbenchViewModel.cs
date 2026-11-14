@@ -87,6 +87,8 @@ public partial class ResearchWorkbenchViewModel:ObservableObject
     [ObservableProperty]private string _preferred="";
     [ObservableProperty]private string _nci="";
     [ObservableProperty]private string _actualShares="";
+    [ObservableProperty]private bool _capitalScopeConfirmed;
+    [ObservableProperty]private string _capitalAsOf="";
     [ObservableProperty]private string _capitalNote="";
     [ObservableProperty]private string _modelOutput="No calculated model. All amounts and percentages must be explicitly entered; no WACC or tax assumption is inferred.";
     [ObservableProperty]private string _sensitivityWacc="";
@@ -130,6 +132,7 @@ public partial class ResearchWorkbenchViewModel:ObservableObject
     [RelayCommand]private void ClearLinks(){LinkedSnapshots.Clear();_conditionReviews.Clear();Status="Draft links and pending condition reviews cleared; saved history unchanged.";}
     private void ResetModelFields()
     {
+        CapitalScopeConfirmed=false;CapitalAsOf="";
         IncludeExploration=false;SensitivityWacc=SensitivityGrowth=DriverGrowths=TargetPrice=LowerGrowth=UpperGrowth=Tolerance="";
         BaseRevenue=BaseWorkingCapital=BasisNote=Wacc=TerminalGrowth=NextFcff=TerminalPolicy=Cash=OtherAssets=Debt=Preferred=Nci=ActualShares=CapitalNote="";
         Years.Clear();Years.Add(new(1));Scenario="Base";
@@ -150,7 +153,7 @@ public partial class ResearchWorkbenchViewModel:ObservableObject
     private ResearchModel BuildModel()
     {
         var forecast=new ForecastInput(ForecastEngine.Version,Number(BaseRevenue,"Base revenue"),Number(BaseWorkingCapital,"Base OWC"),Years.Select(y=>new ForecastYearAssumption(Number(y.Growth,"Growth %")/100,Number(y.Margin,"Margin %")/100,Number(y.Tax,"Tax %")/100,Number(y.Depreciation,"D&A %")/100,Number(y.Capex,"Capex %")/100,Number(y.WorkingCapital,"OWC %")/100)).ToArray(),BasisNote);
-        var dcf=new DcfAssumptions(DcfEngine.Version,Number(Wacc,"WACC %")/100,Number(TerminalGrowth,"Terminal growth %")/100,Number(NextFcff,"Next FCFF"),TerminalPolicy,new(Number(Cash,"Excess cash"),Number(OtherAssets,"Other assets"),Number(Debt,"Debt"),Number(Preferred,"Preferred"),Number(Nci,"NCI"),Number(ActualShares,"Actual shares"),CapitalNote));
+        var dcf=new DcfAssumptions(DcfEngine.Version,Number(Wacc,"WACC %")/100,Number(TerminalGrowth,"Terminal growth %")/100,Number(NextFcff,"Next FCFF"),TerminalPolicy,new(Number(Cash,"Excess cash"),Number(OtherAssets,"Other assets"),Number(Debt,"Debt"),Number(Preferred,"Preferred"),Number(Nci,"NCI"),Number(ActualShares,"Actual shares"),CapitalNote,CapitalScopeConfirmed,DateOnly.TryParseExact(CapitalAsOf,"yyyy-MM-dd",CultureInfo.InvariantCulture,DateTimeStyles.None,out var reviewed)?reviewed:null));
         ModelExploration? exploration=null;
         if(IncludeExploration)
         {
@@ -181,7 +184,7 @@ public partial class ResearchWorkbenchViewModel:ObservableObject
             else SensitivityWacc=SensitivityGrowth=DriverGrowths=TargetPrice=LowerGrowth=UpperGrowth=Tolerance="";
             Scenario=m.Scenario;BaseRevenue=NumberText(m.Forecast.BaseRevenue);BaseWorkingCapital=NumberText(m.Forecast.BaseWorkingCapital);BasisNote=m.Forecast.BasisNote;Years.Clear();
             foreach(var y in m.Forecast.Years)Years.Add(new(Years.Count+1){Growth=NumberText(y.RevenueGrowth*100),Margin=NumberText(y.OperatingMargin*100),Tax=NumberText(y.TaxRate*100),Depreciation=NumberText(y.DepreciationRate*100),Capex=NumberText(y.CapexRate*100),WorkingCapital=NumberText(y.WorkingCapitalRate*100)});
-            var d=m.Dcf;Wacc=NumberText(d.Wacc*100);TerminalGrowth=NumberText(d.TerminalGrowth*100);NextFcff=NumberText(d.NextFcff);TerminalPolicy=d.TerminalPolicy;Cash=NumberText(d.Capital.ExcessCash);OtherAssets=NumberText(d.Capital.OtherAssets);Debt=NumberText(d.Capital.Debt);Preferred=NumberText(d.Capital.Preferred);Nci=NumberText(d.Capital.Nci);ActualShares=NumberText(d.Capital.ActualShares);CapitalNote=d.Capital.ReviewNote;
+            var d=m.Dcf;Wacc=NumberText(d.Wacc*100);TerminalGrowth=NumberText(d.TerminalGrowth*100);NextFcff=NumberText(d.NextFcff);TerminalPolicy=d.TerminalPolicy;Cash=NumberText(d.Capital.ExcessCash);OtherAssets=NumberText(d.Capital.OtherAssets);Debt=NumberText(d.Capital.Debt);Preferred=NumberText(d.Capital.Preferred);Nci=NumberText(d.Capital.Nci);ActualShares=NumberText(d.Capital.ActualShares);CapitalNote=d.Capital.ReviewNote;CapitalScopeConfirmed=d.Capital.SupportedSimpleDomesticNonFinancialUsd;CapitalAsOf=d.Capital.ReviewedAsOf?.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture)??"";
         }
         OnPropertyChanged(nameof(EditingIdentity));Status="Loaded the selected saved revision into the editor. Save a new copy for an independent scenario, or a new revision against the observed revision. No autosave.";
     }

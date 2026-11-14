@@ -3,7 +3,7 @@ namespace AlphaQuant.Tests;
 public sealed class ResearchModelTests
 {
     public static ForecastInput Input()=>new(ForecastEngine.Version,1000,100,[new(.1m,.2m,.25m,.02m,.03m,.1m),new(.1m,.2m,.25m,.02m,.03m,.1m)],"Synthetic historical basis; explicit assumptions");
-    public static DcfAssumptions Dcf()=>new(DcfEngine.Version,.1m,.03m,124.63m,"Explicit sustainable year N+1 FCFF; fixture policy",new(20,0,100,10,5,100,"Explicit synthetic actual shares and claims"));
+    public static DcfAssumptions Dcf()=>new(DcfEngine.Version,.1m,.03m,124.63m,"Explicit sustainable year N+1 FCFF; fixture policy",new(20,0,100,10,5,100,"Explicit synthetic actual shares and claims",true,new(2026,3,1)));
     [Fact]public void Independent_forecast_bridge_and_loss_tax_policy()
     {
         var years=ForecastEngine.Calculate(Input());Assert.Equal(1100,years[0].Revenue);Assert.Equal(220,years[0].Ebit);Assert.Equal(55,years[0].Tax);Assert.Equal(144,years[0].Fcff);Assert.Equal(158.4m,years[1].Fcff);
@@ -43,6 +43,13 @@ public sealed class ResearchModelTests
         Assert.Equal("uncertain",DcfEngine.ReverseGrowth(model,1,-.9m,1,.001m).State);
         using var c=new CancellationTokenSource();c.Cancel();Assert.ThrowsAny<OperationCanceledException>(()=>DcfEngine.RevenueSensitivity(model,[0,.1m],c.Token));
         var driver=DcfEngine.RevenueSensitivity(new("Base",Input(),Dcf()),[.1m,.2m]);Assert.Equal(DcfEngine.Calculate(Input(),Dcf()).PerShare,driver[0].PerShare);Assert.True(driver[1].PerShare>driver[0].PerShare);
+    }
+    [Fact]public void New_dcf_requires_supported_scope_and_dated_claims_while_legacy_replay_is_labelled()
+    {
+        var unreviewed=Dcf() with{Capital=Dcf().Capital with{SupportedSimpleDomesticNonFinancialUsd=false}};
+        Assert.Throws<ArgumentException>(()=>DcfEngine.Calculate(Input(),unreviewed));
+        Assert.Throws<ArgumentException>(()=>DcfEngine.Calculate(Input(),Dcf() with{Capital=Dcf().Capital with{ReviewedAsOf=DateOnly.MaxValue}}));
+        var old=unreviewed with{Version=DcfEngine.LegacyVersion};var replay=DcfEngine.Calculate(Input(),old);Assert.Equal(DcfEngine.LegacyVersion,replay.Version);
     }
     [Fact]public void Missing_rule_inputs_never_improve_rank_and_weights_are_visible()
     {

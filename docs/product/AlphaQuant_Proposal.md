@@ -343,6 +343,11 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Final model hardening, 2026-11-14: dcf-1.1 adds explicit supported simple issuer/
+class/USD scope and dated actual-share/capital assertions before new per-share
+results. Legacy dcf-1 history stays readable/replayable with its original limitation;
+loading never silently confirms new evidence. 324 tests and updated UI harness pass.
+
 Final S20 native check, 2026-11-14: fixed missing-XDG-root fallback so settings,
 cache and research never silently become checkout-relative. Repeated native Linux
 workbench startup with a nonexistent isolated data root passed; 323 tests and

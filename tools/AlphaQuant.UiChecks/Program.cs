@@ -176,7 +176,7 @@ internal static class Program
             workVm.AddYearCommand.Execute(null);
             foreach (var year in workVm.Years) { year.Growth = "10"; year.Margin = "20"; year.Tax = "25"; year.Depreciation = "2"; year.Capex = "3"; year.WorkingCapital = "10"; }
             workVm.Wacc = "10"; workVm.TerminalGrowth = "3"; workVm.NextFcff = "124.63"; workVm.TerminalPolicy = "Synthetic explicit next-year sustainable FCFF policy";
-            workVm.Cash = "20"; workVm.OtherAssets = "0"; workVm.Debt = "100"; workVm.Preferred = "10"; workVm.Nci = "5"; workVm.ActualShares = "100"; workVm.CapitalNote = "Synthetic reviewed actual shares and claims";
+            workVm.Cash = "20"; workVm.OtherAssets = "0"; workVm.Debt = "100"; workVm.Preferred = "10"; workVm.Nci = "5"; workVm.ActualShares = "100"; workVm.CapitalNote = "Synthetic reviewed actual shares and claims"; workVm.CapitalScopeConfirmed = true; workVm.CapitalAsOf = DateTime.UtcNow.ToString("yyyy-MM-dd");
             workVm.IncludeModel = workVm.IncludeRules = true; Complete(workVm.CalculateCommand.ExecuteAsync(null)); Complete(workVm.SaveRevisionCommand.ExecuteAsync(null));
             if (workVm.Revisions.Count != 1) throw new InvalidOperationException("Workbench revision was not saved");
             var workView = new ResearchWorkbenchView { DataContext = workVm }; window.Content = workView;

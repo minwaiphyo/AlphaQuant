@@ -1939,6 +1939,10 @@
         {
           "command": "Final suite/build and isolated native Linux startup",
           "result": "323 tests pass; zero warnings/errors. New XDG data root remains absolute; native workbench loaded/rendered; no checkout-relative data or source request."
+        },
+        {
+          "command": "DCF scope/date guard and legacy replay regression; final UI harness",
+          "result": "324 tests pass; current model version dcf-1.1 requires explicit supported scope/date. Original dcf-1 history replays with limitation and is not auto-upgraded."
         }
       ],
       "self_review": "Reviewed source/definition provenance, immutable replay/restore, bounded model/solver domains, safe text exports, package exclusions/licenses and actual native startup. Fixed the native missing-data-root fallback; no known independent engineering defect left open. External release gates remain explicit.",
@@ -1994,6 +1998,10 @@
     {
       "date": "2026-11-14",
       "event": "Independent engineering through S20 completed/prepared under PR31; remaining S02/S07/S08/S09/S11/S12/S19/S20 acceptance is explicitly externally gated. No full release or fabricated live/Windows/historical acceptance."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Final independent hardening fixed absent local-data-root fallback and added explicit dcf-1.1 supported-scope/date assertions while preserving legacy replay. Final suite 324 tests; PR31 carries final exact-head checks."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
