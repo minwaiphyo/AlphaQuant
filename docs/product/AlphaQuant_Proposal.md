@@ -343,6 +343,13 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+S12 expanded-1, 2026-11-14: all required measure groups now have versioned
+calculations and per-issuer missing/conflict reasons, including margins, liquidity,
+growth/CAGR, FCF/cash conversion, returns/turnover, debt/coverage/maturities and
+share/payout measures. comparison-1.1 stays unchanged. Independent synthetic
+examples and boundaries pass (298 suite tests); actual source reconciliation
+remains blocked on S02. S10 is delivered through PR28. Next: screening and thesis.
+
 S10 implementation, 2026-11-14: contextual help/build identity, explicit safe
 diagnostics preview/local export and user-submitted feedback drafts are implemented.
 284 synthetic tests and new help/diagnostics render/focus checks pass. No telemetry,

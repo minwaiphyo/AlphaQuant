@@ -441,9 +441,10 @@ public sealed class SqliteResearchStore : IResearchStore
             ValidCompany(company.Company);
             ValidName(company.DefinitionVersion ?? snapshot.DefinitionVersion);
             if (company.Fundamentals is not { } f) continue;
-            if (f.History is null || f.History.Count > 5 || f.History.Any(h => h is null) || f.Warnings is null)
+            if (f.Expanded is null || f.Expanded.Count > 130 || f.Expanded.Any(item => item is null || string.IsNullOrWhiteSpace(item.DefinitionVersion) || item.Result is null) || f.History is null || f.History.Count > 5 || f.History.Any(h => h is null) || f.Warnings is null)
                 throw Failure(ResearchStorageFailure.Validation, "A financial snapshot needs valid history/warnings and supports up to five annual periods.");
             var values = f.History.SelectMany(h => new[] { h.Revenue, h.RevenueGrowth, h.OperatingMargin, h.OperatingCashFlow })
+                .Concat(f.Expanded.Select(item => item.Result))
                 .Concat(new[] { f.TtmRevenue, f.TtmOperatingIncome, f.TtmOperatingMargin, f.TtmOperatingCashFlow, f.TtmDilutedEps, f.CashBalance, f.DebtBalance });
             foreach (var value in values)
                 if (value is null || string.IsNullOrWhiteSpace(value.Name) || string.IsNullOrWhiteSpace(value.Unit) || value.Inputs is null || value.EvidenceReferences is null

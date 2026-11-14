@@ -6,7 +6,7 @@ public static class ComparisonConcepts
     public const string OperatingCashFlow = "NetCashProvidedByUsedInOperatingActivities";
     public const string DilutedEps = "EarningsPerShareDiluted";
     public static IReadOnlySet<string> All { get; } = new HashSet<string>(
-        [.. ConceptMap.All, OperatingIncome, OperatingCashFlow, DilutedEps,
+        [.. ExpandedFundamentals.Tags, .. ConceptMap.All, OperatingIncome, OperatingCashFlow, DilutedEps,
             "CashAndCashEquivalentsAtCarryingValue", "LongTermDebtCurrent", "LongTermDebtNoncurrent",
             "ShortTermBorrowings", "CommonStockSharesOutstanding", "StockholdersEquity",
             "MinorityInterest", "PreferredStockValue"], StringComparer.Ordinal);
@@ -69,6 +69,7 @@ public static class ComparisonAnalyzer
         return new(history, ttmRev, ttmOp, Ratio("TTM operating margin", ttmOp, ttmRev, "%", 100m),
             ttmCf, eps, warnings.Distinct().ToArray())
         {
+            Expanded = ExpandedFundamentals.Analyze(facts, asOf, history),
             CashBalance = cash is null || cash.Value < 0 ? Missing("Cash and cash equivalents", "USD", "A valid cash fact at the latest financial period end is missing.")
                 : Value("Cash and cash equivalents", [new(cash)], "USD")
         };

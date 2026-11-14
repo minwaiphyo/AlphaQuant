@@ -16,6 +16,7 @@ public sealed record ComparisonFundamentals(IReadOnlyList<AnnualFundamentals> Hi
     FinancialValue TtmRevenue, FinancialValue TtmOperatingIncome, FinancialValue TtmOperatingMargin,
     FinancialValue TtmOperatingCashFlow, FinancialValue TtmDilutedEps, IReadOnlyList<string> Warnings)
 {
+    public IReadOnlyList<ExpandedFinancialMetric> Expanded { get; init; } = [];
     public FinancialValue CashBalance { get; init; } = ComparisonAnalyzer.Missing("Cash and cash equivalents", "USD", "A compatible balance-sheet fact is missing.");
     public FinancialValue DebtBalance { get; init; } = ComparisonAnalyzer.Missing("Reviewed interest-bearing debt", "USD", "Total debt composition requires explicit reviewed evidence; components are not silently summed.");
 }
