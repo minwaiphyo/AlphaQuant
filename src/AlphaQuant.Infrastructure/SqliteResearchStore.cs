@@ -10,10 +10,11 @@ using Microsoft.Data.Sqlite;
 namespace AlphaQuant.Infrastructure;
 
 /// <summary>Local-only, short-lived SQLite connections. Never resets an unreadable file.</summary>
-public sealed class SqliteResearchStore : IResearchStore
+public sealed partial class SqliteResearchStore : IResearchStore
 {
     internal const int ApplicationId = 0x41515253;
-    internal const int CurrentVersion = 3;
+    internal const int CurrentVersion = 4;
+    private const string Schema4Changes = "CREATE TABLE research_documents(id TEXT NOT NULL, revision INTEGER NOT NULL CHECK(revision>=1), payload TEXT NOT NULL, PRIMARY KEY(id,revision));";
     private const string Schema2Changes = "ALTER TABLE research_sets ADD COLUMN revision INTEGER NOT NULL DEFAULT 1 CHECK(revision>=1); ALTER TABLE research_sets ADD COLUMN deleted_utc TEXT;";
     private const string Schema3Changes = "ALTER TABLE research_sets ADD COLUMN preset_json TEXT; CREATE TABLE financial_snapshots(id TEXT PRIMARY KEY, set_id TEXT NOT NULL REFERENCES research_sets(id), captured_utc TEXT NOT NULL, payload_schema INTEGER NOT NULL, payload TEXT NOT NULL); CREATE INDEX snapshots_by_set ON financial_snapshots(set_id,captured_utc);";
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -46,7 +47,7 @@ public sealed class SqliteResearchStore : IResearchStore
         if (!exists)
         {
             using var tx = db.BeginTransaction();
-            Execute(db, $"PRAGMA application_id={ApplicationId};" + Schema1 + Schema2Changes + Schema3Changes + $"PRAGMA user_version={CurrentVersion};", tx);
+            Execute(db, $"PRAGMA application_id={ApplicationId};" + Schema1 + Schema2Changes + Schema3Changes + Schema4Changes + $"PRAGMA user_version={CurrentVersion};", tx);
             token.ThrowIfCancellationRequested();
             tx.Commit();
         }
@@ -220,6 +221,7 @@ public sealed class SqliteResearchStore : IResearchStore
     private static void ValidateContent(SqliteConnection db, CancellationToken token, SqliteTransaction? transaction = null)
     {
         foreach (var set in ReadSets(db, true, token, transaction)) _ = ReadSnapshots(db, set.Id, token, transaction);
+        _ = ReadDocuments(db, token, transaction);
     }
 
     public Task RestoreAsync(string backupPath, CancellationToken token = default) => AccessAsync<object?>(() =>
@@ -328,6 +330,7 @@ public sealed class SqliteResearchStore : IResearchStore
         using var tx = db.BeginTransaction();
         if (version < 2) Execute(db, Schema2Changes, tx);
         if (version < 3) Execute(db, Schema3Changes, tx);
+        if (version < 4) Execute(db, Schema4Changes, tx);
         Execute(db, $"PRAGMA user_version={CurrentVersion};", tx);
         ValidateContent(db, token, tx);
         token.ThrowIfCancellationRequested();

@@ -131,3 +131,13 @@ viewport, scrolled members, backup controls and offline evidence were inspected;
 keyboard focus/Escape checks passed. These are synthetic Linux rendering checks,
 not native Windows accessibility/scaling certification. Remote CI/delivery remains
 pending GitHub API access; PR24 itself remains unmerged.
+
+## Schema 4 research revisions
+
+The research_documents table stores append-only thesis/rule/model revisions with
+optimistic concurrency and soft archive/recovery. Models and source snapshot IDs
+are typed and validated before commit; saved scenario assumptions replay under
+forecast-1/dcf-1. Manual condition reviews retain their snapshot/time/rule evidence.
+Current backups validate revision continuity, payload shape, models and links.
+Supported schema 1–3 migrations create verified backups and run transactionally.
+See Research_Workbench.md and the versioned research-model contract.

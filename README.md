@@ -102,3 +102,18 @@ Read [First preview setup, limitations and reviewed evidence schema](docs/develo
 Delivery evidence (2026-11-01): 203 synthetic/fake-provider tests pass; the full Release build and [Windows CI/package run](https://github.com/minwaiphyo/AlphaQuant/actions/runs/41314939340) passed. The downloaded CI ZIP checksum was verified and its executable started on this laptop. Synthetic native analysis/evidence/Settings checks used isolated data; no live SEC/Alpaca acceptance is claimed. A draft v0.1.0-preview.3 package is retained in GitHub Releases, pending external setup and distribution gates.
 
 Before a connected pilot: complete [Alpaca registration and zero-cost HTTPS broker setup](docs/development/Alpaca_OAuth_Setup.md), confirm eligibility/permitted use, reconcile real financial data and establish trusted distribution. Nothing has been deployed to a live OAuth host. Imported review assertions are not finance certification; missing or incompatible inputs remain unavailable.
+
+## Research and models
+
+Open **Research and models** for explicit-save thesis revisions, editable screening
+rules, 1–10-year user forecasts, end-year DCF, bounded sensitivity/reverse modeling,
+frozen CSV/XLSX/PDF reports and manual snapshot-change review. Model fields start
+unknown: enter and review every assumption, including terminal policy and actual
+shares. Rules are investigation prompts, not investment recommendations.
+
+Link saved financial snapshots; preserve independent Bear/Base/Bull copies or
+append immutable revisions. Preview/export uses a selected saved revision and
+never unsaved edits. Nothing is uploaded or monitored in the background.
+See [the workbench guide](docs/development/Research_Workbench.md) and
+[versioned definitions](docs/requirements/Research_Models.md). Historical valuation,
+live-provider acceptance and trusted Windows distribution remain pending gates.

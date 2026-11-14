@@ -38,6 +38,8 @@ public sealed class ResearchStorageException(ResearchStorageFailure kind, string
 /// <summary>Typed research state only. No contact, market-session or credential objects.</summary>
 public interface IResearchStore
 {
+    Task<ResearchDocumentRevision> SaveDocumentAsync(ResearchDocumentDraft draft, CancellationToken token = default) => throw new NotSupportedException("Research documents unsupported by this store.");
+    Task<IReadOnlyList<ResearchDocumentRevision>> ListDocumentRevisionsAsync(CancellationToken token = default) => throw new NotSupportedException("Research documents unsupported by this store.");
     Task InitializeAsync(CancellationToken token = default);
     Task<IReadOnlyList<SavedResearchSet>> ListSetsAsync(bool includeDeleted = false, CancellationToken token = default);
     Task<SavedResearchSet> SaveSetAsync(ResearchSetDraft draft, CancellationToken token = default);
