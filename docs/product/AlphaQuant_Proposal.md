@@ -343,6 +343,13 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Research delivery complete, 2026-11-14: S04–S06 merged through PR25
+(`fcc2dc4`) after exact-head Windows CI 43540146614 and local synthetic
+verification. Saved research/recovery, offline financial snapshots and structured
+session-only valuation reviews are now on main. Next: S07.1 broker operational/
+security audit. Live source reconciliation, OAuth deployment/rights, Windows signing
+and owner-PC acceptance remain pending; no connected-pilot release is claimed.
+
 Delivery resumption, 2026-11-14: PR24 is merged and GitHub API access is working.
 The owner resumed development after the history cleanup. S04–S06 remain on the
 cumulative `feat/reviewed-valuation-inputs` branch; finish their review, exact-head
@@ -422,6 +429,12 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 Decision records include status, rationale, affected software scope and references to superseded decisions.
 
 ## 19 Work log and release record
+
+2026-11-14 delivery: PR25 merged as `fcc2dc432f47071dd43d545f0bc41a29dbed0321`. S04–S06 checks passed:
+274 Linux tests, 19 Python tests, zero-warning/error Release build, skill/installer
+checks, 19 synthetic UI states/focus checks and exact-head Windows CI/package run
+43540146614. Relevant saved/recovery/review/offline images inspected. Live and
+Windows trust/PC acceptance gates remain open.
 
 2026-11-14: PR24 merged after exact-head Windows job/security checks and local
 render inspection. API policy blocker resolved. Resumed cumulative S04–S06 review

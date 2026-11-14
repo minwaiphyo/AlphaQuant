@@ -38,8 +38,11 @@ skipped; solution build zero warnings/errors. Skill validation passed for six
 skills, 20 routes and eight resources. All 19 Python tests and isolated PowerShell
 installer checks passed. UI harness generated 19 PNG states and passed keyboard/
 focus checks. SourceCapture preflight reported missing SEC contact and sent no
-requests. Required exact-head Windows CI/packaging remains a pre-merge gate;
-the stage ledger records the current PR and run.
+requests. Exact-head Windows CI [43540146614](https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614) passed tests, build, skill/installer checks,
+source preflight, UI rendering/focus and self-contained Windows ZIP packaging at
+`826f6e80f8c3dca8611a56a48a29f8b6b856a699`. Security checks also passed.
+[PR25](https://github.com/minwaiphyo/AlphaQuant/pull/25) merged as `fcc2dc432f47071dd43d545f0bc41a29dbed0321`.
+No native Windows user acceptance or trusted signing is implied.
 
 ## Remaining gates
 
