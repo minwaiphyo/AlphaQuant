@@ -161,6 +161,41 @@ internal static class Program
         var preview = helpView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Diagnostics preview");
         preview.Focus(); Dispatcher.UIThread.RunJobs();
         if (!preview.IsFocused) throw new InvalidOperationException("Diagnostics preview keyboard focus failed");
+        var workRoot = Path.Combine(Path.GetTempPath(), "aq-ui-work-" + Guid.NewGuid().ToString("N"));
+        var workStore = new SqliteResearchStore(Path.Combine(workRoot, "research.db"));
+        var workVm = new ResearchWorkbenchViewModel(workStore, () => vm.ResearchRows);
+        try
+        {
+            Complete(workVm.ReloadCommand.ExecuteAsync(null));
+            var setTask = workStore.SaveSetAsync(new("Synthetic model evidence", ResearchSetKind.PeerSet, peers)); Complete(setTask);
+            var snapshotTask = workStore.SaveSnapshotAsync(vm.CaptureFinancials(setTask.Result.Id, setTask.Result.Revision)); Complete(snapshotTask);
+            Complete(workVm.ReloadCommand.ExecuteAsync(null)); workVm.SelectedSnapshot = workVm.Snapshots.First(); workVm.LinkSnapshotCommand.Execute(null);
+            workVm.DocumentTitle = "Synthetic α thesis and explicit model"; workVm.Thesis = "User-authored fixture thesis; no real company or recommendation.";
+            workVm.Risks = "Synthetic data and unsupported live gates"; workVm.Invalidation = "Review source changes manually"; workVm.Horizon = "Two explicit years";
+            workVm.BaseRevenue = "1000"; workVm.BaseWorkingCapital = "100"; workVm.BasisNote = "Synthetic historical basis, explicit assumptions";
+            workVm.AddYearCommand.Execute(null);
+            foreach (var year in workVm.Years) { year.Growth = "10"; year.Margin = "20"; year.Tax = "25"; year.Depreciation = "2"; year.Capex = "3"; year.WorkingCapital = "10"; }
+            workVm.Wacc = "10"; workVm.TerminalGrowth = "3"; workVm.NextFcff = "124.63"; workVm.TerminalPolicy = "Synthetic explicit next-year sustainable FCFF policy";
+            workVm.Cash = "20"; workVm.OtherAssets = "0"; workVm.Debt = "100"; workVm.Preferred = "10"; workVm.Nci = "5"; workVm.ActualShares = "100"; workVm.CapitalNote = "Synthetic reviewed actual shares and claims";
+            workVm.IncludeModel = workVm.IncludeRules = true; Complete(workVm.CalculateCommand.ExecuteAsync(null)); Complete(workVm.SaveRevisionCommand.ExecuteAsync(null));
+            if (workVm.Revisions.Count != 1) throw new InvalidOperationException("Workbench revision was not saved");
+            var workView = new ResearchWorkbenchView { DataContext = workVm }; window.Content = workView;
+            Capture("workbench-thesis-light", 1200, 760, ThemeVariant.Light); Capture("workbench-thesis-minimum-dark", 648, 560, ThemeVariant.Dark);
+            var tabs = workView.FindControl<TabControl>("ResearchTabs")!; tabs.SelectedIndex = 1;
+            workVm.EvaluateRulesCommand.Execute(null); Capture("workbench-rules-dark", 648, 560, ThemeVariant.Dark);
+            tabs.SelectedIndex = 2; Capture("workbench-model-inputs-dark", 648, 560, ThemeVariant.Dark);
+            var growthField = workView.GetVisualDescendants().OfType<TextBox>().First(t => AutomationProperties.GetName(t) == "Revenue growth %"); growthField.Focus(); Dispatcher.UIThread.RunJobs(); if (!growthField.IsFocused) throw new InvalidOperationException("Forecast input focus failed");
+            var modelResult = workView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Model calculation bridge"); modelResult.BringIntoView();
+            Capture("workbench-model-bridge-dark", 648, 560, ThemeVariant.Dark);
+            workVm.PreviewReportCommand.Execute(null);
+            if (!workVm.ReportPreview.Contains("forecast-1")) throw new InvalidOperationException("Frozen model report missing");
+            foreach (var format in new[] { "CSV", "XLSX", "PDF" }) { workVm.ReportFormat = format; workVm.ReportPath = Path.Combine(output, "synthetic-research." + format.ToLowerInvariant()); Complete(workVm.ExportReportCommand.ExecuteAsync(null)); if (!File.Exists(workVm.ReportPath)) throw new InvalidOperationException("Frozen report export failed"); }
+            tabs.SelectedIndex = 3; workVm.ChartCik = "1"; workVm.PlotHistoryCommand.Execute(null);
+            Capture("workbench-report-preview-dark", 648, 560, ThemeVariant.Dark);
+            var plot = workView.GetVisualDescendants().OfType<ItemsControl>().Single(c => c.ItemsSource == workVm.ChartSegments); plot.BringIntoView();
+            Capture("workbench-sourced-history-dark", 648, 560, ThemeVariant.Dark);
+        }
+        finally { workVm.Shutdown(); if (Directory.Exists(workRoot)) Directory.Delete(workRoot, true); }
         window.Close();
         File.WriteAllText(Path.Combine(output, "scope.txt"), "Synthetic services only. Real Avalonia layout/rendering and evidence Escape/focus checked. Viewport 648x560 approximates the research area at the 900x720 shell minimum. Not a native accessibility or live-provider certification.\n");
         Console.WriteLine("UI fixture rendering and evidence keyboard checks passed.");

@@ -117,6 +117,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
     [ObservableProperty][NotifyPropertyChangedFor(nameof(Title))] private string _definitionVersion = ComparisonAnalyzer.DefinitionVersion;
     [ObservableProperty] private bool _isOffline;
     private SavedFinancialSnapshot? _offlineSnapshot;
+    public IReadOnlyList<AlphaQuant.Core.ComparisonRow> ResearchRows => _snapshot?.Rows ?? [];
     public string Title => "Company comparison · " + DefinitionVersion;
     public ResearchScreenPreset CapturePreset() => new(DefinitionVersion, SelectedMetric, Descending,
         _filter?.Metric, _filter?.Operator, _filter?.Threshold);

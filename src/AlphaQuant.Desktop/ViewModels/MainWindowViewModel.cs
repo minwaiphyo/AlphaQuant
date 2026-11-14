@@ -23,6 +23,9 @@ public partial class MainWindowViewModel : ObservableObject
     public FinancialAnalysisViewModel? Analysis { get; }
     public MarketConnectionViewModel? Market { get; }
     public SavedResearchViewModel? SavedResearch { get; }
+    public ResearchWorkbenchViewModel? Workbench { get; }
+    public bool HasWorkbench => Workbench is not null;
+    public bool IsWorkbench => Workbench is not null && CurrentPage == Workbench;
     public bool HasSavedResearch => SavedResearch is not null;
     private CompanyDetailViewModel? _detail;
     private ObservableObject? _settingsReturnPage;
@@ -64,6 +67,7 @@ public partial class MainWindowViewModel : ObservableObject
         if (researchStore is not null && Analysis is not null)
             SavedResearch = new SavedResearchViewModel(researchStore, () => Comparison.Peers.Select(p => p.Company).ToArray(), Analysis,
                 CompareSavedMembers, OpenSavedSnapshotAsync);
+        if (researchStore is not null && Analysis is not null) Workbench = new ResearchWorkbenchViewModel(researchStore, () => Analysis.ResearchRows);
         _currentPage = _home;
     }
 
@@ -73,7 +77,7 @@ public partial class MainWindowViewModel : ObservableObject
     public bool IsSettings => CurrentPage == _settings;
     public bool IsReleaseNotes => CurrentPage == _releaseNotes;
     public bool IsSavedResearch => SavedResearch is not null && CurrentPage == SavedResearch;
-    public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : IsSavedResearch ? "Saved research" : "Release notes";
+    public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : IsSavedResearch ? "Saved research" : IsWorkbench ? "Research and models" : "Release notes";
 
     partial void OnCurrentPageChanging(ObservableObject value)
     {
@@ -85,7 +89,7 @@ public partial class MainWindowViewModel : ObservableObject
     }
     partial void OnCurrentPageChanged(ObservableObject value)
     {
-        foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(IsSavedResearch), nameof(PageTitle) }) OnPropertyChanged(name);
+        foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(IsSavedResearch), nameof(IsWorkbench), nameof(PageTitle) }) OnPropertyChanged(name);
     }
     [RelayCommand] private void ShowHome() => CurrentPage = _home;
     [RelayCommand]
@@ -99,8 +103,10 @@ public partial class MainWindowViewModel : ObservableObject
     public void Shutdown()
     {
         Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); SavedResearch?.CancelOperations();
+        Workbench?.Shutdown();
         _sessionEvidence?.Clear(); _settings.Review?.ClearDraftCommand.Execute(null);
     }
+    [RelayCommand] private void ShowWorkbench() { if (Workbench is null) return; CurrentPage = Workbench; Workbench.ReloadCommand.Execute(null); }
     [RelayCommand]
     private void ShowSavedResearch()
     {

@@ -343,6 +343,15 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Research/model implementation, 2026-11-14: S13–S18 now have integrated editable
+rules, immutable thesis/scenario revisions, frozen CSV/XLSX/PDF reports, explicit
+annual forecasts, end-year DCF and bounded sensitivity/reverse modeling. S19 adds
+manual condition reviews, snapshot changes and sourced fundamentals plots;
+historical valuation remains blocked on rights/point-in-time data. 319 synthetic
+tests and zero-warning build pass; report readers and desktop renders inspected.
+Continue exact-head CI, S09 distribution preparation and S20 hardening. No live
+provider, trusted Windows or full-catalogue release acceptance is inferred.
+
 S12 expanded-1, 2026-11-14: all required measure groups now have versioned
 calculations and per-issuer missing/conflict reasons, including margins, liquidity,
 growth/CAGR, FCF/cash conversion, returns/turnover, debt/coverage/maturities and
