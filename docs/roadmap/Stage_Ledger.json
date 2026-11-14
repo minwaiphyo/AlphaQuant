@@ -41,8 +41,8 @@
       "alphaquant-research-storage",
       "alphaquant-avalonia-design"
     ],
-    "phase": "local_verified_awaiting_remote_ci",
-    "next_action": "Run cumulative local checks, inspect synthetic renders and deliver through exact-head Windows CI and normal PR merge.",
+    "phase": "delivered",
+    "next_action": "Start S07.1 broker operational/security audit under its approved contract. S02 live source validation and Windows signing/owner-PC acceptance remain blocked.",
     "constraints": [
       "No live SEC/Alpaca calls",
       "No purchases or signing/financial credentials",
@@ -397,7 +397,7 @@
     {
       "id": "S04",
       "title": "SQLite storage and recovery",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S01"
       ],
@@ -449,7 +449,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
+      "next_action": "Delivered in cumulative PR25. S07 is the next independent engineering stage; live and Windows trust gates stay open.",
       "validation": [
         {
           "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
@@ -470,23 +470,32 @@
         {
           "command": "SourceCapture --preflight",
           "result": "SEC configuration required. No requests sent."
+        },
+        {
+          "command": "Windows exact-head CI 43540146614 at 826f6e80f8c3dca8611a56a48a29f8b6b856a699",
+          "result": "Required Windows tests/build, skill/installer checks, source preflight, UI rendering/focus and self-contained ZIP packaging passed."
         }
       ],
       "self_review": "Reviewed typed-only payloads, revision conflicts, online backup integrity, malformed/foreign/corrupt/future files, cancellation before commits, rollback of later migration steps, read-only and noncooperating locks. Fresh schemas are initialized directly; migrations run explicit statements inside a transaction.",
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
-      "artifacts": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/25",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
+      "merge_commit": "fcc2dc432f47071dd43d545f0bc41a29dbed0321",
+      "artifacts": [
+        "docs/development/validation/S04-S06_Research_Delivery.md",
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
+        "summary": "Cumulative PR25 merged after self-review, local Linux checks/render inspection and exact-head Windows/security checks. No live financial request, release publication or Windows trust acceptance claimed."
       }
     },
     {
       "id": "S05",
       "title": "Saved peers, watchlists and offline research",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S03",
         "S04"
@@ -539,7 +548,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
+      "next_action": "Delivered in cumulative PR25. S07 is the next independent engineering stage; live and Windows trust gates stay open.",
       "validation": [
         {
           "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
@@ -560,23 +569,32 @@
         {
           "command": "SourceCapture --preflight",
           "result": "SEC configuration required. No requests sent."
+        },
+        {
+          "command": "Windows exact-head CI 43540146614 at 826f6e80f8c3dca8611a56a48a29f8b6b856a699",
+          "result": "Required Windows tests/build, skill/installer checks, source preflight, UI rendering/focus and self-contained ZIP packaging passed."
         }
       ],
       "self_review": "Reviewed immutable typed snapshots, no quote/session-error serialization, schema2 migration backup, original source dates/unknown definitions, revision checks, selection races and offline Settings return.",
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
-      "artifacts": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/25",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
+      "merge_commit": "fcc2dc432f47071dd43d545f0bc41a29dbed0321",
+      "artifacts": [
+        "docs/development/validation/S04-S06_Research_Delivery.md",
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
+        "summary": "Cumulative PR25 merged after self-review, local Linux checks/render inspection and exact-head Windows/security checks. No live financial request, release publication or Windows trust acceptance claimed."
       }
     },
     {
       "id": "S06",
       "title": "Reviewed valuation inputs without JSON editing",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S03"
       ],
@@ -632,7 +650,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
+      "next_action": "Delivered in cumulative PR25. S07 is the next independent engineering stage; live and Windows trust gates stay open.",
       "validation": [
         {
           "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
@@ -653,17 +671,26 @@
         {
           "command": "SourceCapture --preflight",
           "result": "SEC configuration required. No requests sent."
+        },
+        {
+          "command": "Windows exact-head CI 43540146614 at 826f6e80f8c3dca8611a56a48a29f8b6b856a699",
+          "result": "Required Windows tests/build, skill/installer checks, source preflight, UI rendering/focus and self-contained ZIP packaging passed."
         }
       ],
       "self_review": "Reviewed explicit zeros/scope/date/source assertions, independent baseline examples, atomic company replacement, session clear, per-issuer legacy/mixed definition provenance, staged logical restore validation and exclusion of reviewed-debt values/notes from snapshots. Current payload schema2 requires per-issuer versions; schema1 retains original outer provenance. Restores validate staged logical payloads, and snapshot-load failures cannot be overwritten by success status.",
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
-      "artifacts": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/25",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
+      "merge_commit": "fcc2dc432f47071dd43d545f0bc41a29dbed0321",
+      "artifacts": [
+        "docs/development/validation/S04-S06_Research_Delivery.md",
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43540146614"
+      ],
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
+        "summary": "Cumulative PR25 merged after self-review, local Linux checks/render inspection and exact-head Windows/security checks. No live financial request, release publication or Windows trust acceptance claimed."
       }
     },
     {
@@ -1554,6 +1581,10 @@
     {
       "date": "2026-11-14",
       "event": "Owner requested continued development after PR24 merge and history cleanup. Reconciled delivered S03 and resolved API blocker; resumed existing cumulative S04-S06 for review and delivery before new stages."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "S04-S06 delivered through PR25, merge fcc2dc432f47071dd43d545f0bc41a29dbed0321, after exact-head Windows CI 43540146614 and local 274-test/render verification. Next independent stage S07; external live/trust gates remain open."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
