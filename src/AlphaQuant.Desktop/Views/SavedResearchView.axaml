@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:core="using:AlphaQuant.Core" x:Class="AlphaQuant.Desktop.Views.SavedResearchView" x:DataType="vm:SavedResearchViewModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Spacing="18">
+      <TextBlock Text="Workspace / Saved research" Classes="muted small"/>
+      <TextBlock Text="Saved research" Classes="h1"/>
+      <TextBlock Text="Keep peer sets, watchlists and filing evidence locally. Saved snapshots work offline; prices and connection credentials are not retained." TextWrapping="Wrap" Classes="muted"/>
+      <Border Classes="notice"><TextBlock Text="{Binding Status}" TextWrapping="Wrap" AutomationProperties.Name="Saved research status"/></Border>
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"/>
+      <Border Classes="panel" IsEnabled="{Binding !IsBusy}">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Name the current company selection" Classes="h2"/>
+          <TextBox Text="{Binding InputName, Mode=TwoWay}" MaxLength="80" PlaceholderText="For example, cash-flow research" AutomationProperties.Name="Research name"/>
+          <CheckBox Content="Save as a watchlist (one or more companies)" IsChecked="{Binding SaveAsWatchlist, Mode=TwoWay}"/>
+          <WrapPanel>
+            <Button Content="Save new set" Command="{Binding SaveNewCommand}" Classes="primary" Margin="0,0,8,8"/>
+            <Button Content="Reload local research" Command="{Binding ReloadCommand}" Margin="0,0,8,8"/>
+          </WrapPanel>
+          <TextBlock Text="Saving keeps the applied numeric filter and sort preset. Capture a financial snapshot separately after loading a comparison." TextWrapping="Wrap" Classes="muted small"/>
+        </StackPanel>
+      </Border>
+      <Border Classes="panel" IsEnabled="{Binding !IsBusy}">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Peer sets and watchlists" Classes="h2"/>
+          <CheckBox Content="Include deleted sets" IsChecked="{Binding IncludeDeleted, Mode=TwoWay}"/>
+          <ComboBox ItemsSource="{Binding Sets}" SelectedItem="{Binding SelectedSet, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Saved research set">
+            <ComboBox.ItemTemplate><DataTemplate x:DataType="core:SavedResearchSet"><TextBlock Text="{Binding Name}" TextWrapping="Wrap"/></DataTemplate></ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock Text="{Binding SelectedDetails}" TextWrapping="Wrap" Classes="muted small"/>
+          <WrapPanel>
+            <Button Content="Rename using name above" Command="{Binding RenameCommand}" Margin="0,0,8,8"/>
+            <Button Content="{Binding UpdateMembersLabel}" Command="{Binding UpdateMembersCommand}" Margin="0,0,8,8"/>
+            <Button Content="Move to deleted" Command="{Binding DeleteCommand}" Margin="0,0,8,8"/>
+            <Button Content="Recover selected set" Command="{Binding RecoverCommand}" Margin="0,0,8,8"/>
+          </WrapPanel>
+          <ItemsControl ItemsSource="{Binding Members}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:SavedMemberChoice">
+                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,3">
+                  <TextBlock Text="{Binding Label}" TextWrapping="Wrap"/>
+                </CheckBox>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <TextBlock Text="{Binding SelectionDetails}" Classes="muted small" TextWrapping="Wrap"/>
+          <Button Content="Compare selected members (refresh sources)" Command="{Binding CompareMembersCommand}" HorizontalAlignment="Left"/>
+          <Button Content="Remove checked members from watchlist" Command="{Binding RemoveMembersCommand}" HorizontalAlignment="Left"/>
+        </StackPanel>
+      </Border>
+      <Border Classes="panel" IsEnabled="{Binding !IsBusy}">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Immutable financial snapshots" Classes="h2"/>
+          <Button Content="Capture current comparison for selected set" Command="{Binding CaptureCommand}" HorizontalAlignment="Left"/>
+          <ComboBox ItemsSource="{Binding Snapshots}" SelectedItem="{Binding SelectedSnapshot, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Saved financial snapshot">
+            <ComboBox.ItemTemplate><DataTemplate x:DataType="core:SavedFinancialSnapshot"><TextBlock Text="{Binding Label}" TextWrapping="Wrap"/></DataTemplate></ComboBox.ItemTemplate>
+          </ComboBox>
+          <Button Content="Open saved snapshot offline" Command="{Binding OpenOfflineCommand}" Classes="primary" HorizontalAlignment="Left"/>
+          <TextBlock Text="Offline opening does not contact SEC or Alpaca. Original values, periods, definitions and evidence remain frozen. Refresh creates a new request and never rewrites an old snapshot." Classes="muted small" TextWrapping="Wrap"/>
+        </StackPanel>
+      </Border>
+      <Expander Header="Research backup and recovery" HorizontalAlignment="Stretch" IsEnabled="{Binding !IsBusy}">
+        <StackPanel Spacing="12" Margin="0,12">
+          <Button Content="Create verified research backup" Command="{Binding BackupCommand}" HorizontalAlignment="Left"/>
+          <TextBox Text="{Binding BackupPath, Mode=TwoWay}" AutomationProperties.Name="Local research backup file path" PlaceholderText="Local research backup file"/>
+          <CheckBox IsChecked="{Binding ConfirmRestore, Mode=TwoWay}"><TextBlock Text="Replace current research from this backup; preserve a verified copy first" TextWrapping="Wrap"/></CheckBox>
+          <Button Content="Restore verified research backup" Command="{Binding RestoreCommand}" HorizontalAlignment="Left"/>
+          <TextBlock Text="Unreadable databases are preserved. To recover a corrupt file, restore to a new location using the documented recovery procedure; do not delete the original." Classes="muted small" TextWrapping="Wrap"/>
+        </StackPanel>
+      </Expander>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

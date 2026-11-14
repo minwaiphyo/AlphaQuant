@@ -3,6 +3,9 @@ using AlphaQuant.Desktop.Services;
 using AlphaQuant.Infrastructure;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AlphaQuant.Desktop.ViewModels;
 
@@ -15,9 +18,12 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ReleaseNotesViewModel _releaseNotes;
     private readonly SearchViewModel _search;
     private readonly SettingsViewModel _settings;
+    private readonly ReviewedEvidenceStore? _sessionEvidence;
     public ComparisonViewModel Comparison { get; }
     public FinancialAnalysisViewModel? Analysis { get; }
     public MarketConnectionViewModel? Market { get; }
+    public SavedResearchViewModel? SavedResearch { get; }
+    public bool HasSavedResearch => SavedResearch is not null;
     private CompanyDetailViewModel? _detail;
     private ObservableObject? _settingsReturnPage;
 
@@ -28,9 +34,11 @@ public partial class MainWindowViewModel : ObservableObject
         ICompanyDirectory directory,
         ICompanyFactsSource facts,
         ContactSettings contactSettings,
-        ILinkOpener linkOpener, IResearchBackend? research = null, ReviewedEvidenceStore? evidence = null)
+        ILinkOpener linkOpener, IResearchBackend? research = null, ReviewedEvidenceStore? evidence = null,
+        IResearchStore? researchStore = null)
     {
         _facts = facts;
+        _sessionEvidence = evidence;
         _linkOpener = linkOpener;
         _home = new HomeViewModel(ShowSearch, OpenSettingsFromHome, ShowReleaseNotes);
         _releaseNotes = new ReleaseNotesViewModel(ShowHome);
@@ -43,10 +51,19 @@ public partial class MainWindowViewModel : ObservableObject
             Market = new MarketConnectionViewModel(research, () => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Ticker)), evidence);
             Market.Disconnected += Analysis.StopWatching;
             _settings.Market = Market;
+            if (evidence is not null)
+            {
+                _settings.Review = new ValuationReviewViewModel(evidence, () => Comparison.Peers.Select(p => p.Company).ToArray(),
+                    Analysis.ReviewInputs, linkOpener, Analysis.StopWatching);
+                Market.ReviewedInputsChanged += () => { Analysis.StopWatching(); _settings.Review.RefreshAppliedStatus(); };
+            }
         }
         _search.Workspace = Comparison;
         _search.CompareAction = ShowComparison;
         Comparison.SelectionChangedEvent += _search.UpdateSelection;
+        if (researchStore is not null && Analysis is not null)
+            SavedResearch = new SavedResearchViewModel(researchStore, () => Comparison.Peers.Select(p => p.Company).ToArray(), Analysis,
+                CompareSavedMembers, OpenSavedSnapshotAsync);
         _currentPage = _home;
     }
 
@@ -55,7 +72,8 @@ public partial class MainWindowViewModel : ObservableObject
     public bool IsComparison => CurrentPage == Comparison || (Analysis is not null && CurrentPage == Analysis);
     public bool IsSettings => CurrentPage == _settings;
     public bool IsReleaseNotes => CurrentPage == _releaseNotes;
-    public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : "Release notes";
+    public bool IsSavedResearch => SavedResearch is not null && CurrentPage == SavedResearch;
+    public string PageTitle => IsHome ? "Overview" : IsSearch ? "Company research" : IsComparison ? "Comparison" : IsSettings ? "Data connections" : IsSavedResearch ? "Saved research" : "Release notes";
 
     partial void OnCurrentPageChanging(ObservableObject value)
     {
@@ -67,7 +85,7 @@ public partial class MainWindowViewModel : ObservableObject
     }
     partial void OnCurrentPageChanged(ObservableObject value)
     {
-        foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(PageTitle) }) OnPropertyChanged(name);
+        foreach (var name in new[] { nameof(IsHome), nameof(IsSearch), nameof(IsComparison), nameof(IsSettings), nameof(IsReleaseNotes), nameof(IsSavedResearch), nameof(PageTitle) }) OnPropertyChanged(name);
     }
     [RelayCommand] private void ShowHome() => CurrentPage = _home;
     [RelayCommand]
@@ -78,7 +96,30 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentPage = Analysis;
         _ = Analysis.LoadAsync(System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(Comparison.Peers, p => p.Company)));
     }
-    public void Shutdown() { Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); }
+    public void Shutdown()
+    {
+        Analysis?.StopWatching(); Market?.DisconnectCommand.Execute(null); SavedResearch?.CancelOperations();
+        _sessionEvidence?.Clear(); _settings.Review?.ClearDraftCommand.Execute(null);
+    }
+    [RelayCommand]
+    private void ShowSavedResearch()
+    {
+        if (SavedResearch is null) return;
+        CurrentPage = SavedResearch;
+        SavedResearch.ReloadCommand.Execute(null);
+    }
+    private void CompareSavedMembers(IReadOnlyList<CompanyRef> companies)
+    {
+        Comparison.ReplaceSelection(companies);
+        ShowAnalysis();
+    }
+    private async Task<bool> OpenSavedSnapshotAsync(SavedFinancialSnapshot saved, ResearchScreenPreset? preset)
+    {
+        if (Analysis is null || !await Analysis.ShowSavedSnapshotAsync(saved, preset)) return false;
+        Comparison.ReplaceSelection(saved.Companies.Select(c => c.Company).ToArray());
+        CurrentPage = Analysis;
+        return true;
+    }
     [RelayCommand]
     private void ShowComparison()
     {
@@ -143,7 +184,7 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentPage = target;
 
         // Retry whatever setup was blocking, now that the contact may have changed.
-        if (Analysis is not null && ReferenceEquals(target, Analysis)) ShowAnalysis();
+        if (Analysis is not null && ReferenceEquals(target, Analysis)) { if (!Analysis.IsOffline) ShowAnalysis(); }
         else if (ReferenceEquals(target, Comparison))
         {
             _ = Comparison.LoadAsync(false, contactOnly: true);

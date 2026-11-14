@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:core="using:AlphaQuant.Core" x:Class="AlphaQuant.Desktop.Views.ValuationReviewView" x:DataType="vm:ValuationReviewViewModel">
+  <Border Classes="panel">
+    <StackPanel Spacing="14">
+      <TextBlock Text="Review valuation inputs" Classes="h2"/>
+      <TextBlock Text="Session-only analyst inputs · comparison-1.1" Classes="eyebrow"/>
+      <TextBlock Text="Review filings independently. A ticker, extracted fact or checked box does not certify issuer/class scope or financial accuracy. Edits are drafts until Apply; invalid input retains every previous applied review." Classes="muted" TextWrapping="Wrap"/>
+      <ComboBox ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Company for valuation review">
+        <ComboBox.ItemTemplate><DataTemplate x:DataType="core:CompanyRef"><TextBlock Text="{Binding Name}" TextWrapping="Wrap"/></DataTemplate></ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock Text="{Binding CompanyIdentity}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+      <TextBlock Text="{Binding TodayLabel}" Classes="muted small" TextWrapping="Wrap"/>
+      <Border Classes="notice"><TextBlock Text="{Binding Status}" TextWrapping="Wrap"/></Border>
+      <StackPanel Spacing="12" IsEnabled="{Binding HasCompany}">
+        <TextBlock Text="SEC filing accession (0000000000-00-000000)" TextWrapping="Wrap"/>
+        <TextBox Text="{Binding FilingAccession, Mode=TwoWay}" MaxLength="20" AutomationProperties.Name="Review filing accession"/>
+        <Button Content="Open this SEC filing" Command="{Binding OpenFilingCommand}" HorizontalAlignment="Left"/>
+        <TextBlock Text="Review/source note: identify pages, class, split checks, additional filings and capital composition" TextWrapping="Wrap"/>
+        <TextBox Text="{Binding ReviewReference, Mode=TwoWay}" MaxLength="500" AutomationProperties.Name="Valuation review source note"/>
+        <CheckBox IsChecked="{Binding ScopeConfirmed, Mode=TwoWay}"><TextBlock Text="I reviewed US domestic non-financial US-GAAP/USD issuer scope; unsupported industries or currencies are not covered" TextWrapping="Wrap"/></CheckBox>
+        <CheckBox IsChecked="{Binding ClassConfirmed, Mode=TwoWay}"><TextBlock Text="I reviewed the simple common-share class, compatible diluted EPS and split basis; these are not inferred from the ticker" TextWrapping="Wrap"/></CheckBox>
+        <TextBlock Text="Split basis reviewed through (yyyy-MM-dd, today's UTC date)" TextWrapping="Wrap"/>
+        <TextBox Text="{Binding SplitThrough, Mode=TwoWay}" MaxLength="10" AutomationProperties.Name="Split basis review date"/>
+        <CheckBox Content="Also replace reviewed capital inputs for EV/sales" IsChecked="{Binding IncludeCapital, Mode=TwoWay}"/>
+        <TextBlock Text="Equity-only Apply explicitly clears this issuer's prior capital review. EV/sales stays unavailable. Other issuer reviews are retained." Classes="warning small" TextWrapping="Wrap"/>
+        <StackPanel Spacing="12" IsVisible="{Binding IncludeCapital}">
+          <TextBlock Text="Capital bridge: eligible current price × actual outstanding common shares + debt + preferred equity + non-controlling interests − approved cash. Current shares are not diluted weighted-average EPS shares. No price is supplied by this form." Classes="muted small" TextWrapping="Wrap"/>
+          <TextBlock Text="Actual outstanding common shares (individual shares, not millions)" TextWrapping="Wrap"/>
+          <TextBox Text="{Binding OutstandingShares, Mode=TwoWay}" AutomationProperties.Name="Actual outstanding common shares"/>
+          <TextBlock Text="Actual-share observation date (yyyy-MM-dd)"/>
+          <TextBox Text="{Binding SharesDate, Mode=TwoWay}" MaxLength="10" AutomationProperties.Name="Actual share date"/>
+          <TextBlock Text="Balance-sheet date (yyyy-MM-dd)"/>
+          <TextBox Text="{Binding BalanceSheetDate, Mode=TwoWay}" MaxLength="10" AutomationProperties.Name="Capital balance sheet date"/>
+          <TextBlock Text="Complete reviewed interest-bearing debt (USD)" TextWrapping="Wrap"/>
+          <TextBox Text="{Binding Debt, Mode=TwoWay}" AutomationProperties.Name="Reviewed debt USD"/>
+          <TextBlock Text="Cash and cash equivalents (USD; exclude restricted cash and investments)" TextWrapping="Wrap"/>
+          <TextBox Text="{Binding Cash, Mode=TwoWay}" AutomationProperties.Name="Reviewed cash USD"/>
+          <TextBlock Text="Preferred equity claims (USD; unknown is not zero)" TextWrapping="Wrap"/>
+          <TextBox Text="{Binding PreferredEquity, Mode=TwoWay}" AutomationProperties.Name="Reviewed preferred equity USD"/>
+          <TextBlock Text="Non-controlling interests (USD; unknown is not zero)" TextWrapping="Wrap"/>
+          <TextBox Text="{Binding NonControllingInterests, Mode=TwoWay}" AutomationProperties.Name="Reviewed non-controlling interests USD"/>
+          <CheckBox IsChecked="{Binding CapitalClaimsConfirmed, Mode=TwoWay}"><TextBlock Text="I reviewed completeness, ownership, dates and units of every capital claim; any 0 is an explicit reviewed zero, not an absent disclosure" TextWrapping="Wrap"/></CheckBox>
+        </StackPanel>
+        <WrapPanel>
+          <Button Content="Apply reviewed inputs for session" Command="{Binding ApplyCommand}" Classes="primary" Margin="0,0,8,8"/>
+          <Button Content="Clear draft only" Command="{Binding ClearDraftCommand}" Margin="0,0,8,8"/>
+          <Button Content="Clear applied inputs for company" Command="{Binding ClearAppliedCommand}" Margin="0,0,8,8"/>
+        </WrapPanel>
+      </StackPanel>
+      <TextBlock Text="Applied session state" FontWeight="SemiBold"/>
+      <TextBlock Text="{Binding AppliedSummary}" TextWrapping="Wrap" Classes="muted small"/>
+      <Expander HorizontalAlignment="Stretch">
+        <Expander.Header><TextBlock Text="Selected calculation inputs and source filings (not automatic review)" TextWrapping="Wrap"/></Expander.Header>
+        <StackPanel Spacing="10" Margin="0,12">
+          <TextBlock Text="{Binding SourceStatus}" Classes="warning small" TextWrapping="Wrap"/>
+          <ItemsControl ItemsSource="{Binding SourceFacts}">
+            <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:EvidenceFact">
+              <Border BorderBrush="{DynamicResource AqLine}" BorderThickness="0,0,0,1" Padding="0,8">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="{Binding Label}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                  <TextBlock Text="{Binding Value}" TextWrapping="Wrap"/>
+                  <TextBlock Text="{Binding Period}" Classes="muted small" TextWrapping="Wrap"/>
+                  <TextBlock Text="{Binding Source}" Classes="muted small" TextWrapping="Wrap"/>
+                  <Button Content="Open source filing" Command="{Binding OpenFilingCommand}" HorizontalAlignment="Left"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate></ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Expander>
+    </StackPanel>
+  </Border>
+</UserControl>

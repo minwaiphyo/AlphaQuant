@@ -154,6 +154,14 @@ public partial class ComparisonViewModel : ObservableObject
     partial void OnSelectedSortChanged(SortChoice? value) => Rebuild();
 
     public bool Contains(long cik) => Peers.Any(p => p.Company.Cik == cik);
+    public void ReplaceSelection(IReadOnlyList<CompanyRef> companies)
+    {
+        if (companies.Count is < 2 or > 5 || companies.Select(c => c.Cik).Distinct().Count() != companies.Count)
+            throw new ArgumentException("Select two to five distinct companies.", nameof(companies));
+        CancelLoading(); Evidence = null; Peers.Clear();
+        foreach (var company in companies) Peers.Add(new PeerViewModel(company, Remove));
+        SelectionChanged();
+    }
     public void Toggle(CompanyRef company)
     {
         var existing = Peers.FirstOrDefault(p => p.Company.Cik == company.Cik);

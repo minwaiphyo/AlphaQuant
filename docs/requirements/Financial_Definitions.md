@@ -33,6 +33,11 @@ Status: implementation baseline finalized under the user's explicit delegation o
 
 ## Valuation evidence and freshness
 
+The S06 [structured review form](../development/Valuation_Review.md) presents these
+same guards with explicit source and zero-claim inputs; it does not change the
+comparison-1.1 formulas, certify assertions or persist reviewed-capital objects.
+Old financial snapshots retain their own definition version and source inputs.
+
 `CapitalStructureEvidence` is an explicit externally reviewed input. It must identify the CIK, matching symbol, filing reference, review reference, share date, balance-sheet date, split-adjustment date, coverage and simple-structure confirmation. Unknown preferred/NCI/debt/cash does not become zero. A zero is only supplied after review. Do not use diluted weighted-average EPS shares as current shares outstanding. The code does not yet automate review of these claims or extract current class-level capital structure from all SEC disclosures.
 
 The baseline limits shares/balance-sheet dates and the TTM end used for valuation to 135 days old; source dates remain visible. Split-basis review must be current to the UTC evaluation date. Unsupported or stale evidence leaves valuation unavailable while historical fundamentals remain available.

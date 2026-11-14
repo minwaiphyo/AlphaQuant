@@ -12,6 +12,25 @@ public sealed class ReviewedEvidenceStore
     public IReadOnlyDictionary<long, CapitalStructureEvidence> Capital { get; private set; } = new Dictionary<long, CapitalStructureEvidence>();
     public IReadOnlyDictionary<long, EquityBasisEvidence> Equity { get; private set; } = new Dictionary<long, EquityBasisEvidence>();
     public void Clear() { Capital = new Dictionary<long, CapitalStructureEvidence>(); Equity = new Dictionary<long, EquityBasisEvidence>(); }
+    public void ReplaceCompany(EquityBasisEvidence equity, CapitalStructureEvidence? capital)
+    {
+        if (capital is not null && (capital.Cik != equity.Cik || capital.Symbol != equity.Symbol))
+            throw new ArgumentException("Equity and capital identities must match.");
+        // Reuse the strict explicit-field parser and atomically replace both lists.
+        // Equity-only replacement explicitly removes this issuer's previous capital review.
+        Load(JsonSerializer.Serialize(new
+        {
+            Version = 1,
+            Equity = Equity.Values.Where(e => e.Cik != equity.Cik).Append(equity).ToArray(),
+            Capital = Capital.Values.Where(c => c.Cik != equity.Cik).Concat(capital is null ? [] : new[] { capital }).ToArray()
+        }));
+    }
+    public void RemoveCompany(long cik)
+    {
+        var capital = Capital.Where(pair => pair.Key != cik).ToDictionary(pair => pair.Key, pair => pair.Value);
+        var equity = Equity.Where(pair => pair.Key != cik).ToDictionary(pair => pair.Key, pair => pair.Value);
+        Capital = capital; Equity = equity;
+    }
     public void Load(string json)
     {
         if (string.IsNullOrWhiteSpace(json) || json.Length > 65536) throw new ArgumentException("Provide an evidence document under 64 KiB.");

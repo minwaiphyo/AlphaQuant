@@ -1,5 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" xmlns:views="using:AlphaQuant.Desktop.Views" x:Class="AlphaQuant.Desktop.MainWindow" x:DataType="vm:MainWindowViewModel" Title="AlphaQuant" Width="1440" Height="900" MinWidth="900" MinHeight="720">
   <Window.DataTemplates>
+    <DataTemplate DataType="vm:SavedResearchViewModel">
+      <views:SavedResearchView/>
+    </DataTemplate>
     <DataTemplate DataType="vm:FinancialAnalysisViewModel">
       <views:FinancialAnalysisView/>
     </DataTemplate>
@@ -53,6 +56,7 @@
           <Button Content="⌂   Overview" Classes="nav" Classes.active="{Binding IsHome}" Command="{Binding ShowHomeCommand}"/>
           <Button Content="⊞   Choose companies" Classes="nav" Classes.active="{Binding IsSearch}" Command="{Binding ShowSearchCommand}"/>
           <Button Content="⇄   Comparison" Classes="nav" Classes.active="{Binding IsComparison}" Command="{Binding ShowComparisonCommand}"/>
+          <Button Content="Saved research" Classes="nav" Classes.active="{Binding IsSavedResearch}" Command="{Binding ShowSavedResearchCommand}" IsVisible="{Binding HasSavedResearch}"/>
           <TextBlock Text="PREFERENCES" Foreground="#9BACBF" FontSize="10" LetterSpacing="1.6" Margin="14,30,0,12"/>
           <Button Content="⚙   Data connections" Classes="nav" Classes.active="{Binding IsSettings}" Command="{Binding NavigateSettingsCommand}"/>
           <Button Content="○   Release notes" Classes="nav" Classes.active="{Binding IsReleaseNotes}" Command="{Binding ShowReleaseNotesCommand}"/>

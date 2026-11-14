@@ -16,6 +16,7 @@ public partial class MarketConnectionViewModel(IResearchBackend backend, Func<IR
     public bool Configured => backend.Configured;
     public bool Authorized => backend.Authorized;
     public event Action? Disconnected;
+    public event Action? ReviewedInputsChanged;
     [ObservableProperty] private bool _busy;
     [ObservableProperty] private string _evidenceJson = string.Empty;
     [ObservableProperty] private string _evidenceStatus = "No reviewed valuation inputs loaded. Missing inputs remain unavailable.";
@@ -23,10 +24,12 @@ public partial class MarketConnectionViewModel(IResearchBackend backend, Func<IR
     private void LoadEvidence()
     {
         if (evidence is null) return;
-        try { evidence.Load(EvidenceJson); EvidenceJson = string.Empty; EvidenceStatus = $"Loaded {evidence.Capital.Count} capital and {evidence.Equity.Count} equity reviews for this session. Accuracy is not certified by parsing. Return to analysis to apply."; }
+        var changed = false;
+        try { evidence.Load(EvidenceJson); EvidenceJson = string.Empty; EvidenceStatus = $"Loaded {evidence.Capital.Count} capital and {evidence.Equity.Count} equity reviews for this session. Accuracy is not certified by parsing. Return to analysis to apply."; changed = true; }
         catch (Exception) { EvidenceStatus = "Invalid evidence document. All fields, explicit zeros, dates, unique identities and review references are required. Previous reviews retained. See the preview guide."; }
+        if (changed) ReviewedInputsChanged?.Invoke();
     }
-    [RelayCommand] private void ClearEvidence() { evidence?.Clear(); EvidenceJson = string.Empty; EvidenceStatus = "Reviewed inputs cleared. Return to analysis to refresh."; }
+    [RelayCommand] private void ClearEvidence() { evidence?.Clear(); EvidenceJson = string.Empty; EvidenceStatus = "Reviewed inputs cleared. Return to analysis to refresh."; ReviewedInputsChanged?.Invoke(); }
     [ObservableProperty] private string _status = backend.Configured
         ? "Disconnected. Connect with your eligible Alpaca account in the browser."
         : "Configuration required: the application operator must configure the HTTPS OAuth broker. Fundamentals work without it.";

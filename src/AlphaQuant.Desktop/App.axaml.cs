@@ -40,7 +40,8 @@ public partial class App : Application
             var backend = new ComparisonBackend(sec, brokerHttp, configured ? broker! : new Uri("https://not-configured.invalid/"),
                 marketHttp, new SystemBrowserLauncher());
             var evidence = new ReviewedEvidenceStore();
-            var main = new MainWindowViewModel(sec, sec, contact, new ShellLinkOpener(), new ResearchBackend(backend, configured, evidence), evidence);
+            var main = new MainWindowViewModel(sec, sec, contact, new ShellLinkOpener(), new ResearchBackend(backend, configured, evidence), evidence,
+                new SqliteResearchStore(SqliteResearchStore.DefaultPath));
             desktop.Exit += (_, _) => { main.Shutdown(); brokerHttp.Dispose(); marketHttp.Dispose(); };
             desktop.MainWindow = new MainWindow
             {

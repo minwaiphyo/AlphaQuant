@@ -41,6 +41,7 @@ public sealed record ComparisonRow(CompanyRef Company, ComparisonFundamentals? F
     DateTimeOffset? FactsRetrievedAt, bool FactsStale)
 {
     public DataSourceErrorKind? FinancialErrorKind { get; init; }
+    public string FinancialDefinitionVersion { get; init; } = ComparisonAnalyzer.DefinitionVersion;
 }
 
 public sealed record ComparisonSnapshot(IReadOnlyList<ComparisonRow> Rows);
