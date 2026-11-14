@@ -24,9 +24,10 @@ No personal filesystem path or whole event log is retained here.
 Reproduce once, then collect the read-only SmartAppControlState and relevant
 CodeIntegrity event 3077. Identify the named blocked DLL and its signature status
 before choosing a remedy. A signed CI/release executable does not establish that
-fresh local Debug assemblies will be permitted. The owner clarified that the immediate goal is to view/test development, not
-execute each fresh Windows Debug build. Native Windows signing/distribution can
-wait until release preparation. No security controls, file trust markers or trust
+fresh local Debug assemblies will be permitted. The owner subsequently confirmed native Windows viewing/testing is required and
+authorized addressing Windows signing now. WSL/Linux viewing was rejected. A
+trusted Windows development package can serve that goal; support for signing
+arbitrary fresh local Debug output is a separate provider capability. No security controls, file trust markers or trust
 stores are changed.
 
 Live Microsoft/SignPath documentation is now reachable. Checked on 2026-11-14:
@@ -141,72 +142,84 @@ Live Microsoft/SignPath pages were rechecked on 2026-11-14. Complete the remaini
   [SignPath Foundation](https://signpath.org/): eligibility, owner/contributor
   identity, eligible license/project hosting, fees, certificate compatibility,
   timestamping, quotas, artifact types, CI provenance and signing approval rules.
-  Specifically verify whether unreviewed fresh local **development builds** may
-  be signed. Eligibility for release signing is not eligibility for every build.
+  Specifically verify whether reviewed CI-built Windows **preview packages** may
+  be signed. Do not assume arbitrary fresh Debug output is eligible.
 - [Microsoft Store developer registration](https://learn.microsoft.com/en-us/windows/apps/publish/partner-center/open-a-developer-account): current individual
   enrollment cost, geography/identity requirements, packaging eligibility and
   signing/distribution conditions. Store distribution does not establish trust
   for local `dotnet run` output. Do not assume registration is free.
 
 Record checked URLs/date and provider answers before activating an integration.
-If no zero-cost route supports routine development signing, retain the exact
-Windows command as an unresolved requirement; do not silently substitute a paid
-provider or weaken Smart App Control. A self-signed development certificate is
+If no zero-cost route supports a trusted Windows preview package, report the
+provider gate as blocked; do not silently substitute a paid provider or weaken
+Smart App Control. A self-signed development certificate is
 not a reliable Smart App Control solution. Do not ask recruiters to install one.
 
 ## Implemented development-package workflow
 
-### Prior provider inquiry draft (fresh-Debug requirement superseded)
+### Native Windows signing application brief (2026-11-14)
 
-Use the official [SignPath Foundation application](https://signpath.org/apply)
-after reviewing current terms. This brief contains public project facts only;
-it has not been submitted, and does not claim project acceptance. Enter any
-required identity/account information directly with the provider, never in Git
-or chat.
+The owner requires native Windows viewing/testing and has rejected WSL/Linux as a
+substitute. Signing is now the immediate priority. The zero-incremental-cost
+constraint remains; no provider has accepted the project and no trusted signing
+identity is configured. No application, identity data or artifact has been sent.
 
-> Project: AlphaQuant — https://github.com/minwaiphyo/AlphaQuant
+The preferred zero-cost candidate is [SignPath Foundation](https://signpath.org/apply).
+Its [published terms](https://signpath.org/terms), checked on 2026-11-14, require an
+existing release in the form to be signed and provider acceptance. The repository
+has only a draft prerelease. Do not claim eligibility or publish it merely to
+satisfy that condition. Ask whether the existing draft/CI Windows package can be
+reviewed and what public-release prerequisite applies.
+
+Ready-to-review project brief for the owner to use with the provider:
+
+> AlphaQuant: https://github.com/minwaiphyo/AlphaQuant
 >
-> AlphaQuant is a C#/.NET 10 Avalonia desktop financial research application,
-> intended for a noncommercial portfolio. It does not trade. Owner-controlled
-> code is MIT-licensed; contributor licensing permission is confirmed. The
-> licensing changes are currently local and must be made available for your
-> review before an application can be assessed. Third-party terms are retained
-> separately, and release license clearance is not yet complete.
+> AlphaQuant is an actively developed C#/.NET 10 Avalonia desktop financial
+> research application, intended for a noncommercial portfolio. It does not trade.
+> Project-owned code is MIT-licensed, and contributor permission is confirmed.
+> Third-party notices are retained separately; package clearance is not complete.
 >
-> Existing Windows CI builds/tests a self-contained Windows x64 ZIP. Current
-> validation passed 325 synthetic .NET tests. No signed release or public-release
-> eligibility is claimed. Application-owned artifacts include the Desktop app
-> host and the Desktop, Core and Infrastructure assemblies; the bundle also
-> contains upstream Avalonia/native and Microsoft runtime files. We will not
-> re-sign upstream files using the project's signing identity.
+> We need a zero-cost trusted Windows development package for native Windows 11
+> testing with Smart App Control enabled. The observed enforced Code Integrity
+> event 3077 names AlphaQuant.Desktop.dll. Signing only the app host is insufficient.
+> A CI-built, reviewed Windows Release package is acceptable for viewing progress;
+> arbitrary fresh local Debug signing is not assumed to be permitted.
 >
-> Current scope is approved release signing when distribution is ready. Fresh
-> local Windows Debug signing is not an immediate requirement after the owner
-> clarified on 2026-11-14 that viewing/testing progress is sufficient. A supported
-> Linux build through WSLg can be used for development without claiming Windows
-> native acceptance. Zero incremental cost and enabled Windows security remain.
+> Existing CI builds/tests an unsigned self-contained Windows x64 ZIP. The
+> repository currently has a draft prerelease, not an existing public release.
+> Application-owned PE files include the Desktop app host and Desktop, Core and
+> Infrastructure assemblies. The bundle also contains upstream Avalonia/native
+> and Microsoft runtime files. We will not sign upstream files with the project
+> identity. No signing identity or provider acceptance is configured.
 >
 > Please confirm:
-> 1. Does this project qualify, and what public-release/reputation, identity,
->    MFA, review and approver requirements must be satisfied first?
-> 2. Are arbitrary fresh local development builds eligible? If so, what
->    verifiable-origin integration and approvals are required before each run?
->    If only CI/release builds qualify, please state that explicitly.
-> 3. Which free signing profile, RSA certificate chain, supported artifact
->    types and trusted timestamp service are supplied? What quotas or limits
->    apply, and is it compatible with Smart App Control for both EXE and DLL loads?
-> 4. How should unsigned upstream/native dependencies be handled under your
->    rules? Debug includes AvaloniaUI.DiagnosticsSupport, whose license evidence
->    is unresolved; we are not requesting eligibility by assumption.
+> 1. Can this project be accepted now, or must an unsigned public release exist
+>    first? What identity, reputation, role, MFA and approval requirements apply?
+> 2. Are reviewed CI-built development/preview Windows packages eligible? What
+>    verified-origin integration and per-build approvals are required?
+> 3. Which trusted certificate profile, timestamp service, artifact types and
+>    quotas are included at no cost? Can project-owned EXE and DLL files both be
+>    signed for Smart App Control compatibility?
+> 4. How should unsigned upstream/native dependencies be handled? Debug includes
+>    AvaloniaUI.DiagnosticsSupport with unresolved license evidence; the actual
+>    Release package omits that component.
 >
-> We will implement signing only after eligibility and technical requirements
-> are confirmed. We understand that signatures do not guarantee Defender or
-> all Windows policies will allow execution.
+> We understand that provider acceptance and a valid signature do not guarantee
+> execution under every Windows security policy.
 
-Keep provider responses locally until reviewed for personal/account information.
-Record the non-secret eligibility decision and technical restrictions here. If
-fresh local builds are unsupported, retain that requirement as blocked; do not
-substitute CI/release output and claim the exact local command has been fixed.
+Enter any required identity information directly with the provider, never in Git
+or chat. Review provider replies for private information before recording only
+non-secret eligibility and integration requirements. Do not send keys, tokens,
+certificate passwords or identity documents here.
+
+After acceptance: use the provider's supported authenticated CI workflow to sign
+project-owned PE files after the final build; verify signatures, certificate chain
+and trusted timestamps; then regenerate package hashes/evidence and the ZIP.
+Never rebuild after signing or re-sign upstream binaries as project-owned code.
+Test the signed package on the affected Windows PC with Smart App Control still
+On and correlate any new DLL blocks. Keep native acceptance open until that run
+succeeds. Do not add a generic build hook before the actual provider is known.
 
 ### Build the unsigned development package
 
@@ -295,9 +308,9 @@ on Linux, not Windows execution. Actual Windows Actions and diagnostic collectio
 have not run for this change; signed tamper/chain/timestamp tests remain pending.
 
 No paid fallback is authorized. No Windows acceptance or signed release has yet
-been verified. Next action: collect the affected PC's diagnostic report, apply
-the documentation-domain draft and obtain SignPath eligibility/technical answers
-through the owner's application before implementing a signing integration.
+been verified. Current next action: use the confirmed DLL enforcement evidence and obtain
+trusted signing access/provider eligibility before implementing integration.
+Do not reconfigure the cloud environment to address this owner-PC signing gate.
 
 ## Current upgrade and rollback procedure (2026-11-14)
 
@@ -327,24 +340,10 @@ Upstream notice bytes are retained exactly and SHA256-verified; .gitattributes
 prevents checkout newline conversion and exempts only their upstream trailing
 whitespace from cosmetic checks. Application source retains normal checks.
 
-## Development viewing without native Windows signing
+## Native Windows testing is required
 
-The owner prefers to defer distribution signing and use the app to inspect/test
-progress now. Microsoft's supported WSL2/WSLg Linux-GUI route is a candidate on
-Windows 11 Home; it runs a Linux build of the same Avalonia source, does not load
-the blocked Windows DLL and does not change its Windows trust status. It is not
-a completed Windows-native test or signing fix. Keep Windows security enabled.
-
-First inspect `wsl --status` and `wsl --list --verbose`; preserve any existing
-distributions/work. GUI support requires WSL2. If setup is absent, follow the
-official install flow, then use a separate Linux checkout and Linux SDK/runtime
-dependencies. Do not unregister distributions, discard local source work or
-blindly shut down unrelated WSL processes. Actual owner-PC WSLg operation has
-not yet been verified.
-
-Current official references checked 2026-11-14:
-- https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps
-- https://learn.microsoft.com/en-us/windows/wsl/install
-
-This changes the immediate development-viewing approach only. Trusted Windows
-release/signing and native clean-PC acceptance remain pending at S09/S11/S20.
+The owner rejected the proposed WSL/Linux viewing route on 2026-11-14 and asked
+to address Windows signing now. Do not request WSL setup or present Linux GUI
+execution as satisfying this requirement. Native Windows signing and owner-PC
+acceptance remain open at S09/S11/S20. The next dependency is an existing trusted
+signing identity or provider acceptance under the zero-cost constraint.

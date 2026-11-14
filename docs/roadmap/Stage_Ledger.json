@@ -29,12 +29,12 @@
     "stage": "S09",
     "package": "S09.4",
     "branch": "docs/windows-publisher-triage",
-    "phase": "local_linux_gui_workflow_preparation",
+    "phase": "native_windows_signing_provider_gate",
     "scope": [
-      "Diagnose publisher/DLL block on personal Windows 11 Home",
-      "Resolve exact local dotnet run workflow using supported trust/signing route"
+      "Resolve native Windows DLL publisher block with supported trusted signing",
+      "Prepare reviewed Windows preview package signing; no WSL/Linux substitute"
     ],
-    "next_action": "Inspect owner-PC WSL status; prepare supported WSL2/WSLg Linux GUI development workflow. Native Windows signing remains deferred; do not claim the DLL trust issue fixed.",
+    "next_action": "Determine whether owner has an existing trusted signing identity; otherwise obtain SignPath Foundation eligibility/acceptance for reviewed CI-built Windows preview packages. No signing identity, submission or public release is configured.",
     "constraints": [
       "Keep Smart App Control and Defender enabled",
       "No exclusions, trust-marker removal or self-signed trust-root workaround",
@@ -2016,6 +2016,10 @@
     {
       "date": "2026-11-14",
       "event": "Owner supplied SAC On and CodeIntegrity3077 blocking project Desktop Debug DLL. Owner only needs local development viewing/testing and defers signing/distribution. Investigate supported WSL2/WSLg Linux GUI workflow; no security changes or Windows-native acceptance inferred."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner rejected Linux/WSL viewing and requested native Windows signing now. Prepared updated provider brief and retained zero-cost/security constraints. Existing public release and provider acceptance remain unresolved; no submission/publication or signed Windows validation claimed."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
