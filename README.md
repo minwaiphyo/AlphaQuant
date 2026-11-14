@@ -16,7 +16,7 @@ Read the [project proposal](docs/product/AlphaQuant_Proposal.md) for business sc
 - Incremental, tested and documented releases.
 - Source-linked financial data and explicit calculation definitions.
 - Local processing and storage; start with one supported operating system.
-- First comparison backend combines fundamental history/current TTM with guarded P/E and EV/sales under the finalized comparison-1 baseline. DCF/scenarios remain deferred.
+- First comparison backend combines fundamental history/current TTM with guarded P/E and EV/sales under the finalized comparison-1 baseline. Explicit user-controlled forecast/DCF/scenario models now live in Research and models; they do not imply current-price upside or financial certification.
 - Selected direction: SEC EDGAR filing data plus Alpaca Basic IEX prices, using a replaceable market-data adapter. Pilot total incremental cost must be zero; no paid subscriptions. Users connect their own eligible free Alpaca accounts through browser OAuth (AQ-D022); a small server-side token broker protects the application secret. Registration/deployment/permitted use and live checks remain pending.
 
 The precise analyses and release-one scope remain subject to scope review.

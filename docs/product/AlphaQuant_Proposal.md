@@ -343,6 +343,15 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Through-S20 checkpoint, 2026-11-14: independent research/model functionality is
+merged through PR30. S13–S18 engineering is delivered; S19 manual monitoring and
+sourced fundamentals work, while historical valuation remains blocked. S09 adds
+unsigned package/inventory/notice/hash safeguards and documented upgrade/rollback;
+S20 traceability/hardening checks pass locally. Full completion/release still
+requires actual SEC reconciliation, provider registration/consent/host rights,
+container egress, trusted clean Windows/owner-PC acceptance and historical data
+rights. See ../development/Roadmap_Blockers.md for one consolidated action report.
+
 Research/model implementation, 2026-11-14: S13–S18 now have integrated editable
 rules, immutable thesis/scenario revisions, frozen CSV/XLSX/PDF reports, explicit
 annual forecasts, end-year DCF and bounded sensitivity/reverse modeling. S19 adds
@@ -456,6 +465,14 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 Decision records include status, rationale, affected software scope and references to superseded decisions.
 
 ## 19 Work log and release record
+
+2026-11-14 through-S20 work: PR27 broker audit/native smoke; PR28 safe diagnostics;
+PR29 expanded metrics; PR30 research workbench/models/reports/manual monitoring
+merged after exact-head Windows checks. 319 synthetic tests, zero-warning build,
+clean transitive NuGet audit, independent report readers and inspected native
+render artifacts. Unsigned Windows cross-publish/ZIP hash/x64 SQLite and notice
+inventory verified. No live/provider/trusted Windows or full release claimed;
+remaining gates consolidated in Roadmap_Blockers.md and the ledger.
 
 2026-11-14 delivery: PR25 merged as `fcc2dc432f47071dd43d545f0bc41a29dbed0321`. S04–S06 checks passed:
 274 Linux tests, 19 Python tests, zero-warning/error Release build, skill/installer

@@ -44,9 +44,10 @@ public partial class ReleaseNotesViewModel : ObservableObject
         { DiagnosticStatus = "Export failed. Choose a new file in a writable existing folder; previous files were preserved."; }
     }
 
-    // Static placeholder content until releases exist.
+    // Engineering capability notes; live/trusted release gates remain explicit.
     public IReadOnlyList<ReleaseNoteEntry> Entries { get; } =
     [
+        new ReleaseNoteEntry("Engineering preview", "2026-11-14", ["Expanded versioned source metrics, immutable thesis/scenario research and safe local diagnostics.", "Explicit forecasts/DCF, bounded sensitivity/reverse models and frozen CSV/XLSX/PDF reports.", "Manual snapshot/condition review and sourced fundamentals history; no background monitoring.", "Live/provider, trusted Windows and historical valuation gates remain pending; unsigned development build only."]),
         new ReleaseNoteEntry(
             "Unreleased",
             "2026-11-01",
