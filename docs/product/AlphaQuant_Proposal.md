@@ -343,6 +343,12 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+S10 implementation, 2026-11-14: contextual help/build identity, explicit safe
+diagnostics preview/local export and user-submitted feedback drafts are implemented.
+284 synthetic tests and new help/diagnostics render/focus checks pass. No telemetry,
+messages, contact, paths, credentials or research are collected. S08/S11 remain
+blocked on actual provider/host and Windows acceptance. Continue independent work.
+
 Through-S20 execution started on 2026-11-14 at owner request. S07 broker audit
 and synthetic process smoke passed; container/image and current host/provider
 research are blocked by egress, not a completed deployment. Continue independent

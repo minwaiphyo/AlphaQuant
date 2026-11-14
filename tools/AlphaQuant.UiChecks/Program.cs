@@ -149,6 +149,15 @@ internal static class Program
         if (!vm.Title.Contains("mixed definitions") || !vm.FilterDescription.Contains("disabled")) throw new InvalidOperationException("Mixed-definition guards were not visible");
         window.Content = view;
         Capture("mixed-definition-offline-dark", 648, 560, ThemeVariant.Dark);
+        var helpVm = new ReleaseNotesViewModel(() => { });
+        helpVm.PreviewDiagnosticsCommand.Execute(null);
+        var helpView = new ReleaseNotesView { DataContext = helpVm };
+        window.Content = helpView;
+        Capture("help-diagnostics-light", 1200, 760, ThemeVariant.Light);
+        Capture("help-diagnostics-minimum-dark", 648, 560, ThemeVariant.Dark);
+        var preview = helpView.GetVisualDescendants().OfType<TextBox>().Single(t => AutomationProperties.GetName(t) == "Diagnostics preview");
+        preview.Focus(); Dispatcher.UIThread.RunJobs();
+        if (!preview.IsFocused) throw new InvalidOperationException("Diagnostics preview keyboard focus failed");
         window.Close();
         File.WriteAllText(Path.Combine(output, "scope.txt"), "Synthetic services only. Real Avalonia layout/rendering and evidence Escape/focus checked. Viewport 648x560 approximates the research area at the 900x720 shell minimum. Not a native accessibility or live-provider certification.\n");
         Console.WriteLine("UI fixture rendering and evidence keyboard checks passed.");

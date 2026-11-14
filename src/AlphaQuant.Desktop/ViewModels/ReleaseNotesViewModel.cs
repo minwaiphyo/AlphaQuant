@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.IO;
+using AlphaQuant.Infrastructure;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -16,7 +20,29 @@ public partial class ReleaseNotesViewModel : ObservableObject
         _showHome = showHome;
     }
 
-    public string Title => "Release Notes";
+    public string Title => "Help, diagnostics and release notes";
+    public string BuildIdentity => typeof(ReleaseNotesViewModel).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "unknown";
+    [ObservableProperty] private string _diagnosticPreview = string.Empty;
+    [ObservableProperty] private string _feedbackPreview = string.Empty;
+    [ObservableProperty] private string _exportPath = string.Empty;
+    [ObservableProperty] private string _diagnosticStatus = "Preview safe metadata before exporting. No automatic telemetry or messages.";
+    [RelayCommand] private void PreviewDiagnostics()
+    {
+        DiagnosticPreview = SafeDiagnostics.Capture(BuildIdentity);
+        FeedbackPreview = SafeDiagnostics.FeedbackDraft(DiagnosticPreview);
+        DiagnosticStatus = "Preview ready. Only the displayed safe metadata is exported; feedback remains a draft for you to submit.";
+    }
+    [RelayCommand] private async Task ExportDiagnosticsAsync()
+    {
+        if (string.IsNullOrWhiteSpace(DiagnosticPreview)) { DiagnosticStatus = "Preview diagnostics before exporting."; return; }
+        try
+        {
+            await ResearchDocumentFile.SaveNewAsync(ExportPath, DiagnosticPreview);
+            DiagnosticStatus = "Diagnostics saved locally. Nothing uploaded or sent.";
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        { DiagnosticStatus = "Export failed. Choose a new file in a writable existing folder; previous files were preserved."; }
+    }
 
     // Static placeholder content until releases exist.
     public IReadOnlyList<ReleaseNoteEntry> Entries { get; } =
