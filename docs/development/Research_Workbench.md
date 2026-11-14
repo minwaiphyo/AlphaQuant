@@ -51,3 +51,8 @@ New per-share models use dcf-1.1: explicitly confirm supported simple domestic
 non-financial USD scope and complete claims, and enter the reviewed actual-share/
 capital date. Legacy dcf-1 revisions remain readable/replayable with a scope warning;
 loading them does not silently confirm new evidence. The final suite has 324 tests.
+
+PDF export rejects scripts outside the bundled basic Latin/Greek/Cyrillic and
+supported punctuation/math ranges before writing. Use CSV/XLSX for full Unicode
+(including Myanmar/CJK); the app reports this limitation without replacing output.
+The final suite has 325 tests including this no-partial-file case.

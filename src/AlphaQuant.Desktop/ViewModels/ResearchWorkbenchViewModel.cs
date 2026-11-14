@@ -115,7 +115,7 @@ public partial class ResearchWorkbenchViewModel:ObservableObject
         try{await work(_operation.Token);}
         catch(OperationCanceledException){Status="Cancelled. Previous saved revisions and output files were preserved.";}
         catch(Exception ex)when(ex is ResearchStorageException or ArgumentException or OverflowException or IOException or UnauthorizedAccessException or NotSupportedException or InvalidOperationException)
-        {Status=ex is ResearchStorageException r?r.Message:"Operation failed. Check explicit inputs, supported bounds and a new writable output path. Draft and saved revisions retained.";}
+        {Status=ex is ReportFontException?ex.Message:ex is ResearchStorageException r?r.Message:"Operation failed. Check explicit inputs, supported bounds and a new writable output path. Draft and saved revisions retained.";}
         finally{_operation.Dispose();_operation=null;IsBusy=false;}
     }
     [RelayCommand]private void Cancel()=>_operation?.Cancel();

@@ -7,6 +7,8 @@ using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 namespace AlphaQuant.Infrastructure;
+public sealed class ReportFontException() : ArgumentException("PDF font/script coverage is unsupported for some text. Use CSV or XLSX to retain full Unicode; no PDF file was written.");
+
 public static class ResearchReportExporter
 {
     static ResearchReportExporter(){if(GlobalFontSettings.FontResolver is null)GlobalFontSettings.FontResolver=new EmbeddedResearchFont();}
@@ -45,6 +47,14 @@ public static class ResearchReportExporter
     }
     public static byte[] Pdf(FrozenResearchReport report)
     {
+        // PDFsharp's basic embedded-font path is not a shaping engine for every
+        // Unicode script. Reject unsupported scripts before creating any output;
+        // CSV/XLSX retain the original Unicode without this PDF-only limitation.
+        foreach(var text in Rows(report).SelectMany(row=>row))foreach(var rune in text.EnumerateRunes())
+        {
+            var n=rune.Value;
+            if(!(n<=0x052f||n is >=0x1e00 and <=0x1eff||n is >=0x2000 and <=0x206f||n is >=0x20a0 and <=0x214f||n is >=0x2190 and <=0x22ff))throw new ReportFontException();
+        }
         using var document=new PdfDocument();document.Info.Title=report.Title;
         var font=new XFont("ResearchSans",10);XGraphics? graphics=null;double y=0;var pageCount=0;
         void NewPage(){graphics?.Dispose();if(++pageCount>100)throw new ArgumentException("PDF exceeds 100 supported pages.");var page=document.AddPage();page.Size=PdfSharp.PageSize.A4;graphics=XGraphics.FromPdfPage(page);y=44;}

@@ -1943,6 +1943,10 @@
         {
           "command": "DCF scope/date guard and legacy replay regression; final UI harness",
           "result": "324 tests pass; current model version dcf-1.1 requires explicit supported scope/date. Original dcf-1 history replays with limitation and is not auto-upgraded."
+        },
+        {
+          "command": "PDF Unicode failure safety and full suite",
+          "result": "325 tests pass. Unsupported PDF scripts fail before file creation; CSV/XLSX retain full Unicode. Original repository attributes preserved."
         }
       ],
       "self_review": "Reviewed source/definition provenance, immutable replay/restore, bounded model/solver domains, safe text exports, package exclusions/licenses and actual native startup. Fixed the native missing-data-root fallback; no known independent engineering defect left open. External release gates remain explicit.",

@@ -39,6 +39,14 @@ public sealed class ResearchReportTests
         using var zip=new ZipArchive(new MemoryStream(ResearchReportExporter.Xlsx(longReport)));using var stream=zip.GetEntry("xl/worksheets/sheet1.xml")!.Open();var sheet=XDocument.Load(stream);XNamespace ns="http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         var reconstructed=string.Concat(sheet.Descendants(ns+"row").Skip(2).Select(row=>row.Elements(ns+"c").ElementAt(2).Descendants(ns+"t").Single().Value));Assert.Equal(text,reconstructed);
     }
+    [Fact]public async Task Unsupported_PDF_scripts_fail_before_writing_while_text_formats_keep_unicode()
+    {
+        var report=new FrozenResearchReport("report-1","မြန်မာ",DateTimeOffset.UtcNow,[new("Thesis","Unicode","日本語", "", "", "")]);
+        Assert.Contains("日本語",ResearchReportExporter.Csv(report));Assert.NotEmpty(ResearchReportExporter.Xlsx(report));
+        var root=Path.Combine(Path.GetTempPath(),"aq-font-"+Guid.NewGuid());Directory.CreateDirectory(root);
+        try{await Assert.ThrowsAsync<ReportFontException>(()=>ResearchReportExporter.SaveNewAsync(Path.Combine(root,"report.pdf"),report,"PDF"));Assert.Empty(Directory.GetFiles(root));}
+        finally{Directory.Delete(root,true);}
+    }
     [Fact]public void Missing_link_prevents_falsely_complete_report()
     {var document=Document() with{SnapshotIds=[Guid.NewGuid()]};Assert.Throws<ArgumentException>(()=>ResearchReport.Capture(document,[]));}
 }
