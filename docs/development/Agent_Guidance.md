@@ -84,6 +84,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
+- 2026-11-14 SignPath application: owner confirmed no certificate/service and authorized pursuing the candidate. Copy-ready public project application is in SignPath_Application.md. Official page loads, but embedded HubSpot script/form endpoints return proxy CONNECT 403; no submission occurred. Owner must complete the official form directly, including required identity/account details and terms. Do not re-ask whether to pursue SignPath; await non-secret eligibility/integration reply. Do not publish a release to satisfy eligibility without authorization.
+
 - 2026-11-14 native Windows decision supersedes the WSL proposal below: owner requires native Windows testing and explicitly asks to address signing now. Do not request WSL setup. Prepare a reviewed CI-built Windows signing route; a trusted preview package is sufficient for viewing progress, without promising arbitrary fresh Debug signing. Zero incremental cost and enabled security remain required. Provider acceptance/trusted signing identity are external gates; no account, paid service, release or submission is implied.
 
 - 2026-11-14 Windows triage clarification: read-only owner evidence confirms SAC On and CodeIntegrity3077 for the project-owned Desktop Debug DLL. Owner needs local viewing/testing only and explicitly defers signing/distribution. Inspect WSL status and prepare supported WSL2/WSLg Linux GUI setup; preserve all Windows security and existing distributions/source. This does not fix Windows DLL trust or close native Windows acceptance. Do not insist on fresh Debug signing as the immediate goal.

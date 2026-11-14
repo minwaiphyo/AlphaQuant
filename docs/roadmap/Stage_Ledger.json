@@ -29,12 +29,12 @@
     "stage": "S09",
     "package": "S09.4",
     "branch": "docs/windows-publisher-triage",
-    "phase": "native_windows_signing_provider_gate",
+    "phase": "signpath_application_owner_handoff",
     "scope": [
       "Resolve native Windows DLL publisher block with supported trusted signing",
       "Prepare reviewed Windows preview package signing; no WSL/Linux substitute"
     ],
-    "next_action": "Determine whether owner has an existing trusted signing identity; otherwise obtain SignPath Foundation eligibility/acceptance for reviewed CI-built Windows preview packages. No signing identity, submission or public release is configured.",
+    "next_action": "Owner completes SignPath Foundation application using prepared SignPath_Application.md; embedded provider form is blocked by cloud proxy CONNECT HTTP 403. Await non-secret eligibility/integration reply. No application submitted, public release or signing identity configured.",
     "constraints": [
       "Keep Smart App Control and Defender enabled",
       "No exclusions, trust-marker removal or self-signed trust-root workaround",
@@ -2020,6 +2020,10 @@
     {
       "date": "2026-11-14",
       "event": "Owner rejected Linux/WSL viewing and requested native Windows signing now. Prepared updated provider brief and retained zero-cost/security constraints. Existing public release and provider acceptance remain unresolved; no submission/publication or signed Windows validation claimed."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner confirmed no signing service/certificate and authorized SignPath candidate. Prepared copy-ready application. SignPath page reachable; embedded HubSpot form/script and public form endpoint blocked by proxy CONNECT 403. No form submission, signing or release publication occurred."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

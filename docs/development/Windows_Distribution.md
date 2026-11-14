@@ -162,7 +162,11 @@ not a reliable Smart App Control solution. Do not ask recruiters to install one.
 The owner requires native Windows viewing/testing and has rejected WSL/Linux as a
 substitute. Signing is now the immediate priority. The zero-incremental-cost
 constraint remains; no provider has accepted the project and no trusted signing
-identity is configured. No application, identity data or artifact has been sent.
+identity is configured. The owner authorized pursuing SignPath Foundation and confirmed no existing
+signing identity. No application, identity data or artifact has been sent.
+The embedded application form is blocked by cloud proxy CONNECT HTTP 403; use
+the [copy-ready application](SignPath_Application.md) on the official provider
+page. No cloud network/environment configuration was changed.
 
 The preferred zero-cost candidate is [SignPath Foundation](https://signpath.org/apply).
 Its [published terms](https://signpath.org/terms), checked on 2026-11-14, require an
