@@ -86,3 +86,10 @@ not reset or automatically migrated. Native Windows acceptance is still separate
 Final model review added dcf-1.1 scope/date guards with explicit legacy dcf-1
 replay/label preservation. New unsupported or future-reviewed models are rejected;
 no silent evidence upgrade. 324 tests and the updated model-editor harness pass.
+
+Final independent hardening merged through PR31 (`6f8571b`) after exact-head
+Windows/security CI 43552911371 at `a0d15a5`. The clean local ZIP for that exact
+head was verified: all 301 file hashes match, 31 dependencies have copied license
+evidence, x64 SQLite is present, and no settings/database/key files were bundled.
+Original repository text/binary attributes are retained alongside the exact-byte
+notice exception. Full product acceptance remains externally gated.
