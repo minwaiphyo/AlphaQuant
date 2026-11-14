@@ -1,10 +1,6 @@
 # AlphaQuant
 
-**Continue development:** read the [approved autonomous development roadmap](docs/roadmap/Development_Plan.md), [execution runbook](docs/roadmap/Stage_Runbook.md) and [stage ledger](docs/roadmap/Stage_Ledger.json). Stage execution was approved on 2026-11-13. "Proceed with the next stage" supplies the scope and standing Git/validation policy. External accounts, rights and deployment gates still require actual evidence.
-
-**Specialized agent skills:** the [project skill library](docs/skills/Skill_Routing.md) covers SEC evidence, quantitative models, Avalonia design, data connections, research storage and stage verification. Run `powershell -File tools/Install-ProjectSkills.ps1` for local Codex discovery links, or read the canonical `SKILL.md` files directly in another agent. The stage runbook routes only the skills relevant to each package. Installing skills does not start development stages.
-
-A planned transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
+A transparent desktop screening and valuation workspace for financially knowledgeable users. It aims to turn financial filings and data into explainable, reproducible screening results through a clear GUI, so analysts can accelerate stock research without rebuilding Excel models from scratch. It is a research tool, not trading or investment advice.
 
 **Status:** Integrated Windows preview candidate. Production Compare uses comparison-1.1 peer summaries, history/TTM, source evidence and raw-value filtering/sorting. Annual test-0 filing references remain separately labelled. Browser OAuth and IEX streaming are wired with session-only tokens and explicit access tests. Reviewed valuation inputs can be loaded for the session; missing or invalid evidence remains unavailable. Live SEC reconciliation, OAuth registration/HTTPS deployment and trusted distribution are still required for a connected pilot. See the stage ledger for verified delivery status.
 
@@ -41,7 +37,7 @@ dotnet test AlphaQuant.slnx
 ```
 
 The tests use synthetic fixtures and never contact the SEC. The synthetic suite and
-headless UI checks also run in the Linux cloud environment. Native Windows trust,
+headless UI checks also run on Linux. Native Windows trust,
 scaling/accessibility and clean installation still require separate acceptance.
 There is no trusted installer or published release yet.
 
@@ -55,8 +51,8 @@ explicit choice of 2–5 members. Sets support rename, editable membership,
 recoverable deletion and verified backup/restore. See the
 [storage and recovery contract](docs/development/Research_Storage.md).
 
-Cloud synthetic tests and Linux headless rendering are verified; trusted Windows
-execution remains pending the owner's PC and signing-provider eligibility.
+Synthetic tests and Linux headless rendering are verified. Trusted Windows
+execution still requires signing-provider acceptance and local Windows validation.
 
 ## Reviewed valuation inputs
 
@@ -70,11 +66,16 @@ saved with research. Advanced JSON import remains available. See the
 
 ## Contributing
 
-Read [developer and agent guidance](docs/development/Agent_Guidance.md) for development instructions and the current continuation handoff. The proposal records the software scope, technical decisions and progress.
+The [development plan](docs/roadmap/Development_Plan.md),
+[engineering runbook](docs/roadmap/Stage_Runbook.md), and
+[stage ledger](docs/roadmap/Stage_Ledger.json) record acceptance criteria,
+verification results, and remaining release requirements.
+
+Read [developer guidance](docs/development/Development_Guidance.md) for contribution procedures and the current engineering status. The proposal records the software scope, technical decisions and progress.
 
 ## UI design collaboration
 
-Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed analyses, browser-OAuth connection flow, screens, fake-data examples and loading/error states. UI integration can use the implemented ComparisonBackend facade with synthetic data; browser OAuth is selected and comparison-1 is finalized for implementation. Live setup and external finance review remain pending. The UI teammate owns flows; coordinate shared contracts before production integration.
+Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed analyses, browser-OAuth connection flow, screens, fake-data examples and loading/error states. UI integration can use the implemented ComparisonBackend facade with synthetic data; browser OAuth is selected and comparison-1 is finalized for implementation. Live setup and external finance review remain pending. Coordinate shared UI/backend contracts before changing production integration.
 
 ## Documentation
 
@@ -83,7 +84,7 @@ Start with the [UI design brief](docs/development/UI_Design_Brief.md) for agreed
 | Product | [Project proposal](docs/product/AlphaQuant_Proposal.md) | Authoritative scope, architecture, decisions and progress |
 | Requirements | [Initial user stories](docs/requirements/User_Stories.md) | Proposed workflows and acceptance criteria |
 | Requirements | [Financial analysis features](docs/requirements/Financial_Analysis_Features.md) | Proposed analyst capabilities, dependencies and delivery stages |
-| Development | [Developer and agent guidance](docs/development/Agent_Guidance.md) | Workflow rules and current handoff; read before working |
+| Development | [Developer guidance](docs/development/Development_Guidance.md) | Contribution procedures and current engineering status |
 
 Feature catalogues and user stories are proposals until explicitly approved; the proposal records approval status.
 

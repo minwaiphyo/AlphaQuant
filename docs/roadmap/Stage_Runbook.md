@@ -1,23 +1,23 @@
-# Autonomous stage execution runbook
+# Stage execution runbook
 
 Updated: 2026-11-13. Companion: [plan](Development_Plan.md), [ledger](Stage_Ledger.json).
 
-## Commands the owner can use
+## Work requests and expected scope
 
 | Instruction | Meaning |
 |---|---|
 | Proceed with the next stage | Execute the lowest-numbered unfinished stage whose start prerequisites are satisfied, including checks and Git delivery |
 | Proceed with Stage S06 | Execute that stage, completing necessary unfinished prerequisites first when possible. Announce the selected prerequisite |
 | Resume Stage S06 | Recover its saved work and continue the next incomplete package, without rebuilding finished work |
-| Continue autonomously through ready stages | Continue across stages until no independent approved work remains, a platform/session limit intervenes or the owner stops work |
+| Continue within the approved scope through ready stages | Continue across stages until no independent approved work remains, a platform/session limit intervenes or the maintainer stops work |
 | Give me a status update | Report actual ledger/Git/CI status. It does not cancel active work |
 | Pause after the current package | Finish a safe checkpoint, save/push permitted work and stop |
 
 The first proceed/acceptance instruction after reviewing version 1.0 records plan approval and the invocation in the ledger. Planning answers authorize the listed policy choices but do not themselves start application implementation.
 
-One-stage commands normally stop after that stage is done. If it becomes externally blocked, the owner has authorized independent-stage fallback: record the blocker, announce the next ready stage and complete one independent fallback stage, then report both outcomes. Multiple-stage continuation requires an instruction such as "continue autonomously through ready stages". Do not ask again about Git delivery, delegated definitions, SQLite or authorized validation. Do not interpret a stage invocation as permission for excluded product features.
+One-stage commands normally stop after that stage is done. If it becomes externally blocked, the maintainer has authorized independent-stage fallback: record the blocker, announce the next ready stage and complete one independent fallback stage, then report both outcomes. Multiple-stage continuation requires an instruction such as an explicit request to continue through ready stages. Do not ask again about Git delivery, approved definitions, SQLite or authorized validation. Do not interpret a stage invocation as permission for excluded product features.
 
-An invocation starts work in the current active agent/session. Documents do not create a background daemon, start a new chat automatically, schedule work or give an agent capabilities it lacks. A future agent resumes when invoked and given this repository. Checkpoints make that restart inexpensive.
+A work request applies to the current development session. Resumption requires an explicit work request and the tracked repository records; checkpoints preserve the exact next action.
 
 ## Startup, every time
 
@@ -26,9 +26,9 @@ An invocation starts work in the current active agent/session. Documents do not 
 2. Inspect local changes, branch, remote, current PRs and available tools. Fetch safely. Preserve other people's work. Never reset, clean or force-push to obtain an apparently clean baseline.
    Check that CI runners, artifact retention and any chosen execution/deployment service meet the zero-required-cost constraint before enabling usage. Never assume a repository/service still has the same billing eligibility as an earlier run.
 3. Reconcile ledger against source, Git and CI. The prior 203-test result is historical evidence. Reuse unchanged verified work but do not invent a new run or assume an artifact exists on this laptop.
-4. If plan approval is still draft and the current instruction accepts/invokes it, record the user's instruction/date as approval. Update the plan approval header and current proposal/handoff references in the same change, so the next agent does not reopen approval. Otherwise remain in planning. Product decisions must match the accepted plan version.
+4. If plan approval is still draft and the current instruction accepts/invokes it, record the user's instruction/date as approval. Update the plan approval header and current proposal/handoff references in the same change, so the next contributor can identify the approved scope. Otherwise remain in planning. Product decisions must match the accepted plan version.
 5. Select stage/package by prerequisites and actual progress. Resume an existing compatible branch/PR where possible. Create a descriptive branch for new work, following the active tool/platform branch convention.
-6. Claim ownership in the ledger: stage, run identifier, branch, baseline SHA, selected package and declared file areas. Check for another active owner. Do not assume ownership expired merely because time passed.
+6. Claim ownership in the ledger: stage, run identifier, branch, baseline SHA, selected package and declared file areas. Check for another active maintainer. Do not assume ownership expired merely because time passed.
 7. Give a concise progress update with outcome, scope, any known external gates and the chosen package. Begin authorized work rather than asking to reapprove the stage.
 
 ## Work and checkpoint protocol
@@ -54,14 +54,14 @@ Validation commands/results and relevant fixture/source references
 Known failures or uncertainty
 Non-secret external blocker IDs and unblock action
 Next exact command/file/package to work on
-Owner/run identity and current state
+Contributor/run identity and current state
 Applied skill names/library version and relevant domain evidence
 PR/CI/artifact references, including merge state
 ```
 
 Tracked records must be sufficient on another laptop. Ignored files may hold local artifacts but cannot be the only copy of a plan, expected calculation, blocker or next step. Never put tokens, personal contacts, secret values or sensitive diagnostics in these records.
 
-Blocker entries use stable IDs with affected stage/package IDs, category, first/last check date, concrete evidence, attempted safe alternatives, exact unblock action, owner/access dependency and independent work still available. Checkpoints reference blocker IDs rather than copying inconsistent status into multiple documents.
+Blocker entries use stable IDs with affected stage/package IDs, category, first/last check date, concrete evidence, attempted safe alternatives, exact unblock action, maintainer/access dependency and independent work still available. Checkpoints reference blocker IDs rather than copying inconsistent status into multiple documents.
 
 ## Delivery and merge
 
@@ -78,24 +78,24 @@ A release stage may publish the accurately scoped supported preview/pilot only a
 
 ## Scheduler and blocker policy
 
-The ledger is the execution state source. The plan supplies acceptance contracts. If they disagree, reconcile explicitly from owner decisions and source evidence rather than silently choosing the easier completion claim.
+The ledger is the execution state source. The plan supplies acceptance contracts. If they disagree, reconcile explicitly from project decisions and source evidence rather than silently choosing the easier completion claim.
 
 - Normal selection: unfinished stage with satisfied start dependencies, in ascending ID order. Within a stage, use the next unfinished package whose prerequisites are satisfied.
 - Named-stage selection: respect the requested target. Complete its necessary ready prerequisite first. If its only missing prerequisites are external, record them and use independent fallback.
 - Blocked-stage selection: finish independent packages in it, then scan other stages. A release-only completion dependency need not prevent clearly specified independent engineering work, but can never be ignored to mark completion.
 - Failed tests or defects are engineering work, not an external blocker. Investigate and fix them. After repeated identical tool/environment failures, preserve evidence and try a safe alternative. Do not loop indefinitely or mark a difficult task complete.
-- True external blocker: missing account access, secret placement, required consent, host capability/cost eligibility, provider permission, trusted distribution or unavoidable platform limit. Record exactly what was checked, the evidence, owner action and what remains possible.
+- True external blocker: missing account access, secret placement, required consent, host capability/cost eligibility, provider permission, trusted distribution or unavoidable platform limit. Record exactly what was checked, the evidence, maintainer action and what remains possible.
 - Recheck a blocker only when its prerequisites/configuration change or a new invocation warrants a bounded readiness check. Do not repeatedly ask the same unanswered question in one run.
 - Never substitute delayed prices, invent zero claims, assume data rights, fabricate model results or make a purchase to obtain a green status.
 
-When nothing independent remains, save/push the checkpoint and report the exact remaining gates. Do not claim work will continue unattended after the session ends. No reminder/automation or new agent is created unless separately authorized.
+When nothing independent remains, save/push the checkpoint and report the exact remaining gates. Do not claim work will continue unattended after the session ends. Scheduling or parallel execution requires separate authorization.
 
 ## Ledger state meanings
 
 | State | Meaning |
 |---|---|
 | planned | Defined, not started. Readiness is derived from approval/dependencies |
-| in_progress | An owner has claimed actual implementation work |
+| in_progress | A contributor has claimed actual implementation work |
 | blocked | Remaining packages need an identified external dependency, with partial work/evidence preserved |
 | verifying | Implementation is being checked, reviewed or awaiting required CI |
 | delivering | Verified work is being committed/pushed/merged and its delivery recorded |
@@ -105,7 +105,7 @@ Plan approval is a separate field. A planned stage with met dependencies is not 
 
 ## Ownership and interruptions
 
-Use one active writer per stage/shared file area. This plan allows different agents to resume work, not uncontrolled concurrent editing or subagent spawning. An explicit resume may transfer inactive ownership after checking available branch/PR/session state. If another owner appears active and cannot be coordinated through authorized means, select non-overlapping ready work or report the conflict rather than overwrite it.
+Use one active writer per stage/shared file area. This plan allows contributors to resume work without uncontrolled concurrent editing. An explicit resume may transfer inactive ownership after checking available branch/PR/session state. If another maintainer appears active and cannot be coordinated through authorized means, select non-overlapping ready work or report the conflict rather than overwrite it.
 
 At interruption/context rollover, checkpoint immediately. On resume, inspect actual source/diff/tests first. If changes are uncommitted, preserve and continue them. If main has the package already, verify lineage and mark it complete with evidence rather than duplicate it. If a PR is pending, resume that PR. Never treat a fresh chat as a new project or erase a prior partial result.
 

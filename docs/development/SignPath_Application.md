@@ -1,16 +1,12 @@
 # SignPath Foundation application preparation
 
-Prepared 2026-11-14. The owner authorized pursuing SignPath Foundation and
-confirmed no existing code-signing certificate/service. **Not submitted; no
-provider acceptance or signing identity exists.**
+Prepared 2026-11-14. The maintainer reports submitting the application.
+**Provider acceptance and trusted signing access remain pending.**
+The project has no existing code-signing certificate/service.
 
-Apply at https://signpath.org/apply. The application embeds a HubSpot form; this
-cloud environment can read the SignPath page, but the form's script and public
-form endpoint return proxy CONNECT HTTP 403. The exact form fields therefore
-have not been inspected. The entries below are preparation, not an assertion of
-what the form asks. Complete required personal/account details directly with the
-provider; do not put identity documents, credentials or signing secrets in chat
-or Git.
+Application reference: https://signpath.org/apply. The project entries and
+request below document the application scope. Keep personal account details,
+identity documents, credentials and signing secrets out of Git and chat.
 
 ## Public project entries
 
@@ -53,9 +49,9 @@ whose license evidence remains unresolved.
 Share the non-secret acceptance decision, release prerequisite and technical
 integration requirements. Keep account links, identity verification and tokens
 private. If an unsigned public release is required, report that prerequisite to
-the owner before publishing anything. This application authority does not itself
+the maintainer before publishing anything. This application authority does not itself
 authorize a public release, payment, security-policy changes or acceptance of
-unknown contractual terms on the owner's behalf.
+unknown contractual terms on the maintainer's behalf.
 
 Only after acceptance/configuration: integrate supported signing, verify EXE/DLL
 signatures and trusted timestamps, regenerate hashes/archive after signing, and

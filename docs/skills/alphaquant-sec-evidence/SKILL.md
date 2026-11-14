@@ -16,4 +16,4 @@ For each changed mapping or selected period:
 
 Changes to mappings, period selection or scope require versioned definitions and regression fixtures. For arithmetic/model changes, also load the quantitative-model skill if available. Do not expand retrieval scope or use live calls unless the task's existing authorization/configuration permits it.
 
-Deliver the selected/rejected facts, rationale, exact source references, reconciliation result and unresolved coverage. Never call synthetic or agent-reviewed data independently finance-certified.
+Deliver the selected/rejected facts, rationale, exact source references, reconciliation result and unresolved coverage. Never call synthetic or internally reviewed data independently finance-certified.

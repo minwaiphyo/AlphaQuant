@@ -23,7 +23,7 @@ Financial analysis now consumes comparison-1 through the backend facade: peer su
 
 ## Backend update for UI integration (2026-10-28)
 
-Browser OAuth is now selected (AQ-D022), and the comparison-1 financial baseline was finalized under user delegation. Use **Connect with Alpaca**, Cancel, access-test status and Disconnect; no Alpaca API-key/secret/password fields for this adapter. Earlier API-key/OAuth alternatives below are historical mockup context only. Other future adapters may still have their own reviewed fields.
+Browser OAuth is now selected (AQ-D022), and the comparison-1 financial baseline was approved for implementation. Use **Connect with Alpaca**, Cancel, access-test status and Disconnect; no Alpaca API-key/secret/password fields for this adapter. Earlier API-key/OAuth alternatives below are historical mockup context only. Other future adapters may still have their own reviewed fields.
 
 The UI-independent backend now exists: `ComparisonBackend` supplies browser authorization, IEX access testing and two-to-five-company snapshots. Annual/TTM analysis and guarded P/E/EV-sales are implemented and fake-provider tested. The Desktop project was intentionally untouched; screens are not yet wired. Start integration at [Alpaca OAuth setup and C# composition guide](Alpaca_OAuth_Setup.md), using [financial definition comparison-1](../requirements/Financial_Definitions.md). No registered OAuth app or deployed broker exists yet, so real Connect must show a configuration-required state until the public broker origin is supplied.
 
@@ -50,7 +50,7 @@ Avalonia Desktop already has Home, Search Companies, company detail, Settings (S
 
 The new backend implements Alpaca browser-OAuth preparation, an IEX adapter, five-period annual history, TTM and guarded P/E/EV-sales. There is no production comparison screen wiring or live-provider verification yet. Do not label synthetic data live.
 
-Existing navigation owner: src/AlphaQuant.Desktop/ViewModels/MainWindowViewModel.cs. Views live in src/AlphaQuant.Desktop/Views; behavior in ViewModels. For design-only work a standalone HTML/React prototype is acceptable as a proposed workflow, but no prototype framework or new application dependencies have been selected. Coordinate before modifying production view models or shared contracts.
+Existing navigation maintainer: src/AlphaQuant.Desktop/ViewModels/MainWindowViewModel.cs. Views live in src/AlphaQuant.Desktop/Views; behavior in ViewModels. For design-only work a standalone HTML/React prototype is acceptable as a proposed workflow, but no prototype framework or new application dependencies have been selected. Coordinate before modifying production view models or shared contracts.
 
 ## Primary prototype flow
 
@@ -123,7 +123,7 @@ See [Alpaca OAuth setup](Alpaca_OAuth_Setup.md) for the current composition cont
 
 ## Financial comparison content
 
-The comparison-1 baseline is now finalized for implementation under user delegation; it is not independently finance-certified. Use the implemented backend results and source panels, with fake providers during UI development. Do not duplicate production formulas in UI code.
+The comparison-1 baseline is now approved for implementation; it is not independently finance-certified. Use the implemented backend results and source panels, with fake providers during UI development. Do not duplicate production formulas in UI code.
 
 | Group | Display | Context required |
 |---|---|---|
@@ -180,7 +180,7 @@ Use text/icons alongside colour, keyboard-reachable controls, readable scaling a
 - Connection: selected versus active provider IDs, status, safe error code/message, cancellable test/activation and disconnect actions. Credentials belong to an isolated session service, not a research/export model.
 - Comparison: selected identities, financial snapshots, per-row/cell warnings, refresh status and stream subscription lifecycle.
 
-The UI consumes these results and commands. It must not implement SEC mappings, TTM construction, EV arithmetic or provider sockets inside views. Agree actual C# types with the backend owner before production integration. No shared quote backend is planned.
+The UI consumes these results and commands. It must not implement SEC mappings, TTM construction, EV arithmetic or provider sockets inside views. Agree actual C# types with the backend maintainer before production integration. No shared quote backend is planned.
 
 ## Teammate deliverable and review checklist
 

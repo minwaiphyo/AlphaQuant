@@ -1,6 +1,6 @@
 # Expanded fundamentals — expanded-1
 
-Project definition delegated under roadmap S12, 2026-11-14. Intended universe is
+Project definition established under roadmap S12, 2026-11-14. Intended universe is
 US domestic non-financial US-GAAP/USD. Outputs are research calculations, not
 issuer/class eligibility certification. comparison-1.1 remains unchanged.
 

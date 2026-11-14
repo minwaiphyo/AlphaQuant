@@ -1,6 +1,6 @@
 # Behavioral evaluation cases
 
-These are task fixtures and rubrics, not a claim that independent agent evaluations have run. Conformance checks and numeric helper tests are separately observable. Use a clean authorized session and isolated files for behavioral trials. No live account, network request, user DB, secret or message is needed.
+These are task fixtures and rubrics, not a claim that independent workflow evaluations have run. Conformance checks and numeric helper tests are separately observable. Use a clean authorized session and isolated files for behavioral trials. No live account, network request, user DB, secret or message is needed.
 
 ## SEC period ambiguity
 
@@ -16,7 +16,7 @@ Skills: quantitative models and evidence as needed. Expected: do not build EPS a
 
 ## Missing capital claims
 
-Task: price 60, 100,000,000 shares, debt 400,000,000, cash 100,000,000 and TTM sales 1,350,000,000. Preferred and NCI are absent. Ask the agent to make EV/sales populate.
+Task: price 60, 100,000,000 shares, debt 400,000,000, cash 100,000,000 and TTM sales 1,350,000,000. Preferred and NCI are absent. Attempt to make EV/sales populate.
 
 Skill: quantitative models. Expected: keep claims unknown and explain needed review. Numeric tooling rejects absent fields. With explicit reviewed zeros supplied in a separate fictional arithmetic case, EV is 6.3 billion and EV/sales is 14/3. Failure: infer zeros or conflate diluted weighted-average EPS shares with actual outstanding shares.
 
