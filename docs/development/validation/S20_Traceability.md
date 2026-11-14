@@ -24,7 +24,7 @@ completion. Scope remains the approved roadmap.
 
 ## Verification and supported bounds
 
-Release suite: 324 tests, zero failed/skipped. Full Release build zero warnings/errors.
+Release suite: 325 tests, zero failed/skipped. Full Release build zero warnings/errors.
 NuGet audit of all transitive dependencies reports none vulnerable from current
 configured sources; signatures/TLS were not bypassed. PDFsharp exact package
 6.2.4 is MIT; DejaVu license retained, patched Pkcs 10.0.15 selected. Actual published
@@ -86,3 +86,13 @@ not reset or automatically migrated. Native Windows acceptance is still separate
 Final model review added dcf-1.1 scope/date guards with explicit legacy dcf-1
 replay/label preservation. New unsupported or future-reviewed models are rejected;
 no silent evidence upgrade. 324 tests and the updated model-editor harness pass.
+
+Final independent hardening merged through PR31 (`6f8571b`) after exact-head
+Windows/security CI 43552911371 at `a0d15a5`. The clean local ZIP for that exact
+head was verified: all 301 file hashes match, 31 dependencies have copied license
+evidence, x64 SQLite is present, and no settings/database/key files were bundled.
+Original repository text/binary attributes are retained alongside the exact-byte
+notice exception. Full product acceptance remains externally gated.
+
+The PDF-only script boundary is now enforced before output; unsupported Myanmar/
+CJK text leaves no partial PDF while CSV/XLSX retain its Unicode. Final suite325.

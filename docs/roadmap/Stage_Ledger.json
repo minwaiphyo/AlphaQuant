@@ -28,14 +28,14 @@
     "owner": "primary-developer-agent",
     "stage": "S20",
     "package": "final_hardening_and_gate_report",
-    "branch": "chore/release-hardening",
+    "branch": "main",
     "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
-    "phase": "independent_work_complete_external_gates_open",
+    "phase": "independent_work_delivered_external_gates_open",
     "scope": [
       "S02 remaining verification",
       "S07-S20"
     ],
-    "next_action": "Finalize normal delivery of PR31 after required checks, then resolve consolidated external gates only. No independent roadmap package remains intentionally postponed.",
+    "next_action": "Resolve the consolidated external gates in Roadmap_Blockers.md; no independent roadmap package remains intentionally postponed. All implementation PRs through PR31 are merged and verified.",
     "constraints": [
       "No purchases/accounts/vendor messages",
       "No credential extraction or secret values in chat",
@@ -983,16 +983,16 @@
       "self_review": null,
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
       "ci_runs": [
-        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43552911371"
       ],
-      "merge_commit": null,
+      "merge_commit": "6f8571b3f0f317c68d011a673d59330e4369fe64",
       "artifacts": [
         "docs/development/Windows_Distribution.md"
       ],
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+        "summary": "Independent distribution/hardening delivered through PR31 after exact-head Windows/security checks. Clean exact-commit local Windows ZIP verified: 31 dependency notice records and all 301 file hashes; x64 SQLite; no private files. Full stage acceptance still externally gated."
       }
     },
     {
@@ -1943,14 +1943,18 @@
         {
           "command": "DCF scope/date guard and legacy replay regression; final UI harness",
           "result": "324 tests pass; current model version dcf-1.1 requires explicit supported scope/date. Original dcf-1 history replays with limitation and is not auto-upgraded."
+        },
+        {
+          "command": "PDF Unicode failure safety and full suite",
+          "result": "325 tests pass. Unsupported PDF scripts fail before file creation; CSV/XLSX retain full Unicode. Original repository attributes preserved."
         }
       ],
       "self_review": "Reviewed source/definition provenance, immutable replay/restore, bounded model/solver domains, safe text exports, package exclusions/licenses and actual native startup. Fixed the native missing-data-root fallback; no known independent engineering defect left open. External release gates remain explicit.",
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
       "ci_runs": [
-        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43552911371"
       ],
-      "merge_commit": null,
+      "merge_commit": "6f8571b3f0f317c68d011a673d59330e4369fe64",
       "artifacts": [
         "docs/development/validation/S20_Traceability.md",
         "docs/development/Roadmap_Blockers.md"
@@ -1958,7 +1962,7 @@
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+        "summary": "Independent distribution/hardening delivered through PR31 after exact-head Windows/security checks. Clean exact-commit local Windows ZIP verified: 31 dependency notice records and all 301 file hashes; x64 SQLite; no private files. Full stage acceptance still externally gated."
       }
     }
   ],
@@ -2002,6 +2006,10 @@
     {
       "date": "2026-11-14",
       "event": "Final independent hardening fixed absent local-data-root fallback and added explicit dcf-1.1 supported-scope/date assertions while preserving legacy replay. Final suite 324 tests; PR31 carries final exact-head checks."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "PR31 merged at 6f8571b after exact-head CI 43552911371. Independent engineering through S20 delivered; 324 tests, clean-source artifact/hash/notice checks and native Linux inspection verified. Remaining stages require consolidated external acceptance; no release/environment publication."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

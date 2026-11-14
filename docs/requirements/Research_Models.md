@@ -126,3 +126,7 @@ Original dcf-1 saved models replay under that original definition and carry a
 legacy scope limitation in reports. Loading an old model does not auto-confirm
 new scope/date fields; the workbench requires explicit review to create a new
 dcf-1.1 revision. Stored history is not relabelled or silently recomputed.
+
+PDF script coverage is enforced before output: unsupported scripts fail with a
+safe message and a CSV/XLSX alternative, rather than silently emitting missing
+glyphs. Full Unicode remains unchanged in CSV/XLSX.

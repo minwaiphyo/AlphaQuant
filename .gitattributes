@@ -1,3 +1,9 @@
+* text=auto
+*.pdf binary
+*.png binary
+*.jpg binary
+*.ico binary
+
 # Preserve exact upstream legal-notice bytes for the SHA256 provenance manifest.
 # Upstream whitespace is intentional; source code keeps normal whitespace checks.
 tools/distribution-licenses/*.txt -text whitespace=-blank-at-eol,-blank-at-eof
