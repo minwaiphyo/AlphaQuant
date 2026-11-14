@@ -15,8 +15,8 @@ are not relicensed by the repository license.
 Owner reports Windows 11 Home on a personal PC. The block occurs during
 `dotnet run --project src/AlphaQuant.Desktop` and refers to a Desktop DLL whose
 publisher cannot be verified. Owner evidence now shows SmartAppControlState On and enforced CodeIntegrity
-event3077 when the Desktop host loads the project-owned Debug/net10.0/
-AlphaQuant.Desktop.dll, policy0283ac0f-fff1-49ae-ada1-8a933130cad6. This confirms
+event 3077 when the Desktop host loads the project-owned Debug/net10.0/
+AlphaQuant.Desktop.dll, policy ID 0283ac0f-fff1-49ae-ada1-8a933130cad6. This confirms
 a DLL code-integrity block, not the usual downloaded-EXE SmartScreen warning.
 The generic Enterprise signing-level wording does not establish corporate management.
 No personal filesystem path or whole event log is retained here.
@@ -182,7 +182,7 @@ or chat.
 >
 > Current scope is approved release signing when distribution is ready. Fresh
 > local Windows Debug signing is not an immediate requirement after the owner
-> clarified on2026-11-14 that viewing/testing progress is sufficient. A supported
+> clarified on 2026-11-14 that viewing/testing progress is sufficient. A supported
 > Linux build through WSLg can be used for development without claiming Windows
 > native acceptance. Zero incremental cost and enabled Windows security remain.
 >
@@ -331,7 +331,7 @@ whitespace from cosmetic checks. Application source retains normal checks.
 
 The owner prefers to defer distribution signing and use the app to inspect/test
 progress now. Microsoft's supported WSL2/WSLg Linux-GUI route is a candidate on
-Windows11 Home; it runs a Linux build of the same Avalonia source, does not load
+Windows 11 Home; it runs a Linux build of the same Avalonia source, does not load
 the blocked Windows DLL and does not change its Windows trust status. It is not
 a completed Windows-native test or signing fix. Keep Windows security enabled.
 
@@ -342,7 +342,7 @@ dependencies. Do not unregister distributions, discard local source work or
 blindly shut down unrelated WSL processes. Actual owner-PC WSLg operation has
 not yet been verified.
 
-Current official references checked2026-11-14:
+Current official references checked 2026-11-14:
 - https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps
 - https://learn.microsoft.com/en-us/windows/wsl/install
 
