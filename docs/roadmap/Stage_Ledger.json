@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "plan_version": "1.0",
-  "updated_on": "2026-11-13",
+  "updated_on": "2026-11-14",
   "plan_status": "approved",
   "approval": {
     "status": "approved",
@@ -9,7 +9,7 @@
     "date": "2026-11-13"
   },
   "baseline": {
-    "planning_commit": "13ec3af",
+    "planning_commit": "f335c41",
     "reported_test_count": 203,
     "verification_status": "historical_evidence_recheck_in_S01"
   },
@@ -24,31 +24,29 @@
     "automatic_subagents": false
   },
   "active_run": {
-    "run_id": "20261113-cloud-continuation",
-    "owner": "primary-cloud-agent",
-    "stage": "S06",
-    "package": "delivery",
+    "run_id": "20261114-research-delivery",
+    "owner": "primary-developer-agent",
+    "stage": "S04-S06",
+    "package": "review_and_delivery",
     "branch": "feat/reviewed-valuation-inputs",
-    "baseline_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
+    "baseline_commit": "e34e8a576d1fa7715c1dfac99bf29296c0b20cc5",
     "scope": [
-      "S03",
+      "S03 delivery reconciliation",
       "S04",
       "S05",
       "S06"
     ],
     "skills": [
       "alphaquant-stage-verification",
-      "alphaquant-avalonia-design",
-      "alphaquant-sec-evidence",
-      "alphaquant-quant-models"
+      "alphaquant-research-storage",
+      "alphaquant-avalonia-design"
     ],
-    "next_action": "Enable already-saved api.github.com domain, verify API authentication/permissions, then create/review stage PRs and run exact-head Windows CI. PR24 remains unmerged pending clarification; no further stage started.",
-    "phase": "local_verification_complete_remote_delivery_blocked",
+    "phase": "local_verified_awaiting_remote_ci",
+    "next_action": "Run cumulative local checks, inspect synthetic renders and deliver through exact-head Windows CI and normal PR merge.",
     "constraints": [
-      "No live SEC/Alpaca requests in this continuation",
+      "No live SEC/Alpaca calls",
       "No purchases or signing/financial credentials",
-      "Windows signing/owner-PC validation remain pending",
-      "Do not merge PR24 while the earlier explicit hold is unresolved"
+      "Windows signing/owner-PC acceptance remain pending"
     ]
   },
   "next_recommended_stage": "S07",
@@ -146,13 +144,14 @@
       ],
       "package_ids": [],
       "category": "E06",
-      "status": "open",
+      "status": "resolved",
       "first_checked": "2026-11-13",
-      "last_checked": "2026-11-13",
+      "last_checked": "2026-11-14",
       "evidence": [
-        "Fresh runtime status after reconnect: observations_current true, policy enforced at revision 1; api.github.com absent from effective allowlist. gh api repo metadata returned Forbidden. Native Git reads and feature-branch pushes succeeded."
+        "Fresh runtime status after reconnect: observations_current true, policy enforced at revision 1; api.github.com absent from effective allowlist. gh api repo metadata returned Forbidden. Native Git reads and feature-branch pushes succeeded.",
+        "Running policy enforces api.github.com. Repository API reads, CI dispatch and normal PR24 merge succeeded."
       ],
-      "unblock_action": "Apply the saved api.github.com environment domain addition, then verify scoped API authentication/permissions and create/review PRs with exact-head Windows CI. Do not bypass protection or extract credentials.",
+      "unblock_action": "Resolved; no credential extraction or new secret needed.",
       "independent_work": "Cloud implementation, synthetic tests, headless rendering and unsigned cross-publish completed. Windows signing/PC checks remain separately pending."
     }
   ],
@@ -170,8 +169,8 @@
       "contract": "Development_Plan.md#s01-baseline-audit-and-execution-readiness",
       "owner": "primary-developer-agent",
       "run_id": "20261113-initial-stages",
-      "branch": "codex/stage01-baseline",
-      "baseline_commit": "36f4a8a",
+      "branch": "fix/stage01-baseline",
+      "baseline_commit": "0409987",
       "work_packages": [
         {
           "id": "S01.1",
@@ -234,7 +233,7 @@
       "ci_runs": [
         "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43433331979"
       ],
-      "merge_commit": "1e3b11b53af115fb5c406889a534e88ec0b60ea8",
+      "merge_commit": "0a6b5151c609af0aea8a35b8102b6432be934ec3",
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": {
@@ -257,8 +256,8 @@
       "contract": "Development_Plan.md#s02-financial-source-validation",
       "owner": "primary-developer-agent",
       "run_id": "20261113-initial-stages",
-      "branch": "codex/stage02-financial-validation",
-      "baseline_commit": "1e3b11b",
+      "branch": "fix/stage02-financial-validation",
+      "baseline_commit": "0a6b515",
       "work_packages": [
         {
           "id": "S02.1",
@@ -310,7 +309,7 @@
       "self_review": null,
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/23",
       "ci_runs": [],
-      "merge_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
+      "merge_commit": "104ec7d2032087efbdc6432d0b13b10635fc607b",
       "artifacts": [],
       "blocker_ids": [
         "BL-001",
@@ -324,7 +323,7 @@
     {
       "id": "S03",
       "title": "One comparison workspace",
-      "status": "verifying",
+      "status": "done",
       "depends_on": [
         "S01"
       ],
@@ -336,77 +335,69 @@
       "contract": "Development_Plan.md#s03-one-comparison-workspace",
       "owner": "primary-developer-agent",
       "run_id": "20261113-initial-stages",
-      "branch": "codex/stage03-unified-comparison",
-      "baseline_commit": "f3a5149",
+      "branch": "feat/stage03-unified-comparison",
+      "baseline_commit": "104ec7d",
       "work_packages": [
         {
           "id": "S03.1",
-          "status": "verifying",
+          "status": "done",
           "external_gates": [],
           "evidence": [
             "docs/development/validation/S03_Comparison_Workspace.md"
           ],
-          "remaining_acceptance": [
-            "Exact-head CI and rendered-state inspection."
-          ]
+          "remaining_acceptance": []
         },
         {
           "id": "S03.2",
-          "status": "verifying",
+          "status": "done",
           "external_gates": [],
           "evidence": [
             "docs/development/validation/S03_Comparison_Workspace.md"
           ],
-          "remaining_acceptance": [
-            "Exact-head CI and rendered-state inspection."
-          ]
+          "remaining_acceptance": []
         },
         {
           "id": "S03.3",
-          "status": "verifying",
+          "status": "done",
           "external_gates": [],
           "evidence": [
             "docs/development/validation/S03_Comparison_Workspace.md"
           ],
-          "remaining_acceptance": [
-            "Exact-head CI and rendered-state inspection."
-          ]
+          "remaining_acceptance": []
         },
         {
           "id": "S03.4",
-          "status": "verifying",
+          "status": "done",
           "external_gates": [],
           "evidence": [
             "docs/development/validation/S03_Comparison_Workspace.md"
           ],
-          "remaining_acceptance": [
-            "Exact-head CI and rendered-state inspection."
-          ]
+          "remaining_acceptance": []
         }
       ],
-      "next_action": "Resume local verification on current cloud runtime; PR24 remains unmerged pending owner clarification and exact-head CI. S05 work is stacked on its existing code.",
+      "next_action": "S03 delivered through PR24; proceed with delivery of existing S04-S06 work.",
       "validation": [],
-      "self_review": "Reviewed raw decimal filter/sort, unavailable ordering, stable presentation identity, typed setup failures, stream close serialization and navigation. CI execution/render review still required.",
+      "self_review": "Reviewed raw decimal filtering, stable presentation, typed errors, stream close serialization and navigation; inspected exact PR-head light/dark/minimum filter and evidence renders before merge.",
       "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/24",
       "ci_runs": [
         "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43436890942",
-        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43437355616"
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43437355616",
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43536869331"
       ],
-      "merge_commit": null,
+      "merge_commit": "e34e8a576d1fa7715c1dfac99bf29296c0b20cc5",
       "artifacts": [
         "docs/development/validation/S03_Comparison_Workspace.md"
       ],
       "blocker_ids": [],
       "checkpoint": {
-        "date": "2026-11-13",
-        "summary": "Owner resumed other development on 2026-11-13. Existing PR24 code reused and regression/render checks run in the cumulative S04-S06 branch. PR24 itself is unchanged and unmerged; exact-head Windows CI and merge hold remain unresolved.",
-        "previous_stop": "Stopped at owner request. Application work is pushed in PR24 at 2ad5ab2, unmerged. First CI passed 216 tests and rendering; first PNG inspection found minimum-layout crowding. Corrected with scrollable/collapsible controls, added Core error propagation regression and EPS precision improvement. Revised exact-head run 43437355616 must be checked and revised images inspected on resume. No further development or merge authorized until resume."
+        "date": "2026-11-14",
+        "summary": "Owner lifted PR24 hold. Exact PR-head Windows job and security checks passed; local exact-head rendering/focus checks and images inspected; PR24 merged. History cleanup subsequently remapped commit IDs without changing file trees. Historical CI refers to the pre-cleanup SHA."
       }
     },
     {
       "id": "S04",
       "title": "SQLite storage and recovery",
-      "status": "verifying",
+      "status": "delivering",
       "depends_on": [
         "S01"
       ],
@@ -416,10 +407,10 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s04-sqlite-storage-and-recovery",
-      "owner": "primary-cloud-agent",
-      "run_id": "20261113-cloud-continuation",
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-research-delivery",
       "branch": "feat/research-storage",
-      "baseline_commit": "f3a5149902bcf6cc7fcb1ddb034bae699bc30dd5",
+      "baseline_commit": "104ec7d2032087efbdc6432d0b13b10635fc607b",
       "work_packages": [
         {
           "id": "S04.1",
@@ -458,19 +449,27 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Push reviewed storage branch; remote exact-head CI/PR delivery pending GitHub API access. Continue S05 on the existing S03 comparison code without merging PR24.",
+      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
       "validation": [
         {
-          "command": "dotnet test AlphaQuant.slnx -c Release --no-restore",
-          "result": "224 passed, 0 failed, 0 skipped; includes 14 isolated storage tests"
+          "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
+          "result": "274 passed, zero failed/skipped on Linux after merging current main."
         },
         {
-          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore",
-          "result": "0 warnings/errors"
+          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal -m:2",
+          "result": "All projects built; zero warnings/errors."
         },
         {
-          "command": "python tools/Validate-ProjectSkills.py",
-          "result": "passed"
+          "command": "Python skill validator and unittest; PowerShell installer tests",
+          "result": "6 skills, 20 routes, 8 resources valid; 19 Python tests; isolated installer checks passed."
+        },
+        {
+          "command": "dotnet run --project tools/AlphaQuant.UiChecks -c Release -- --output artifacts/ui-checks",
+          "result": "19 synthetic renders and keyboard/focus checks passed; saved research/recovery, review capital and offline source layouts inspected."
+        },
+        {
+          "command": "SourceCapture --preflight",
+          "result": "SEC configuration required. No requests sent."
         }
       ],
       "self_review": "Reviewed typed-only payloads, revision conflicts, online backup integrity, malformed/foreign/corrupt/future files, cancellation before commits, rollback of later migration steps, read-only and noncooperating locks. Fresh schemas are initialized directly; migrations run explicit statements inside a transaction.",
@@ -480,16 +479,14 @@
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": {
-        "date": "2026-11-13",
-        "summary": "Storage implementation verified on Linux; Windows and remote CI not yet verified. No live finance calls or market-data persistence.",
-        "followup_branch": "feat/reviewed-valuation-inputs",
-        "followup": "Final cumulative branch adds logical backup validation, session-only reviewed debt exclusion, explicit snapshot-load errors and per-company definition preservation on partial refresh."
+        "date": "2026-11-14",
+        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
       }
     },
     {
       "id": "S05",
       "title": "Saved peers, watchlists and offline research",
-      "status": "verifying",
+      "status": "delivering",
       "depends_on": [
         "S03",
         "S04"
@@ -500,10 +497,10 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s05-saved-peers-watchlists-and-offline-research",
-      "owner": "primary-cloud-agent",
-      "run_id": "20261113-cloud-continuation",
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-research-delivery",
       "branch": "feat/saved-research",
-      "baseline_commit": "dff4f1a",
+      "baseline_commit": "c0b0ec9",
       "work_packages": [
         {
           "id": "S05.1",
@@ -542,15 +539,27 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Push reviewed S05 branch. Remote PR/CI delivery blocked by API policy; continue independent S06 structured session reviews on this verified code.",
+      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
       "validation": [
         {
-          "command": "dotnet test AlphaQuant.slnx -c Release --no-restore",
-          "result": "241 passed, 0 failed/skipped"
+          "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
+          "result": "274 passed, zero failed/skipped on Linux after merging current main."
         },
         {
-          "command": "dotnet run --project tools/AlphaQuant.UiChecks -c Release -- --output artifacts/ui-stage05-final",
-          "result": "12 synthetic PNGs generated; evidence focus/Escape and saved-name focus checks passed; minimum/dark saved/member/recovery/offline evidence images inspected"
+          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal -m:2",
+          "result": "All projects built; zero warnings/errors."
+        },
+        {
+          "command": "Python skill validator and unittest; PowerShell installer tests",
+          "result": "6 skills, 20 routes, 8 resources valid; 19 Python tests; isolated installer checks passed."
+        },
+        {
+          "command": "dotnet run --project tools/AlphaQuant.UiChecks -c Release -- --output artifacts/ui-checks",
+          "result": "19 synthetic renders and keyboard/focus checks passed; saved research/recovery, review capital and offline source layouts inspected."
+        },
+        {
+          "command": "SourceCapture --preflight",
+          "result": "SEC configuration required. No requests sent."
         }
       ],
       "self_review": "Reviewed immutable typed snapshots, no quote/session-error serialization, schema2 migration backup, original source dates/unknown definitions, revision checks, selection races and offline Settings return.",
@@ -560,16 +569,14 @@
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": {
-        "date": "2026-11-13",
-        "summary": "S05 implementation verified; stacked on PR24 without merging it. No current prices stored; native Windows and remote exact-head CI pending.",
-        "followup_branch": "feat/reviewed-valuation-inputs",
-        "followup": "Final cumulative branch adds logical backup validation, session-only reviewed debt exclusion, explicit snapshot-load errors and per-company definition preservation on partial refresh."
+        "date": "2026-11-14",
+        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
       }
     },
     {
       "id": "S06",
       "title": "Reviewed valuation inputs without JSON editing",
-      "status": "verifying",
+      "status": "delivering",
       "depends_on": [
         "S03"
       ],
@@ -579,10 +586,10 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s06-reviewed-valuation-inputs-without-json-editing",
-      "owner": "primary-cloud-agent",
-      "run_id": "20261113-cloud-continuation",
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-research-delivery",
       "branch": "feat/reviewed-valuation-inputs",
-      "baseline_commit": "9ef4962",
+      "baseline_commit": "3661e51",
       "work_packages": [
         {
           "id": "S06.1",
@@ -625,27 +632,27 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Commit/push S06 checkpoint. Remote PR creation and required exact-head CI blocked by API egress policy; no stage delivery/merge completion claimed.",
+      "next_action": "Complete cumulative S04-S06 PR review, exact-head Windows CI and normal merge; preserve live and Windows trust gates.",
       "validation": [
         {
-          "command": "dotnet test AlphaQuant.slnx -c Release --no-restore",
-          "result": "274 passed, 0 failed/skipped"
+          "command": "dotnet test AlphaQuant.slnx -c Release --verbosity minimal",
+          "result": "274 passed, zero failed/skipped on Linux after merging current main."
         },
         {
-          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore",
-          "result": "0 warnings/errors, all seven projects"
+          "command": "dotnet build AlphaQuant.slnx -c Release --no-restore --verbosity minimal -m:2",
+          "result": "All projects built; zero warnings/errors."
         },
         {
-          "command": "dotnet run --project tools/AlphaQuant.UiChecks -c Release --no-build -- --output artifacts/ui-stages04-06-final",
-          "result": "19 synthetic PNG states; evidence Escape/focus and input focus checks passed; relevant light/dark/minimum, capital, zero-claim, recovery and offline/source/mixed-definition states inspected"
+          "command": "Python skill validator and unittest; PowerShell installer tests",
+          "result": "6 skills, 20 routes, 8 resources valid; 19 Python tests; isolated installer checks passed."
         },
         {
-          "command": "Python skill validation and reference tests",
-          "result": "six skills, 20 stage routes, 8 resources valid; 19 reference tests passed"
+          "command": "dotnet run --project tools/AlphaQuant.UiChecks -c Release -- --output artifacts/ui-checks",
+          "result": "19 synthetic renders and keyboard/focus checks passed; saved research/recovery, review capital and offline source layouts inspected."
         },
         {
-          "command": "Windows cross-publish/ZIP inspection",
-          "result": "Unsigned ZIP checksum/provider/native x64 SQLite checked; no contact/research/key files bundled. Not executed on Windows."
+          "command": "SourceCapture --preflight",
+          "result": "SEC configuration required. No requests sent."
         }
       ],
       "self_review": "Reviewed explicit zeros/scope/date/source assertions, independent baseline examples, atomic company replacement, session clear, per-issuer legacy/mixed definition provenance, staged logical restore validation and exclusion of reviewed-debt values/notes from snapshots. Current payload schema2 requires per-issuer versions; schema1 retains original outer provenance. Restores validate staged logical payloads, and snapshot-load failures cannot be overwritten by success status.",
@@ -655,8 +662,8 @@
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": {
-        "date": "2026-11-13",
-        "summary": "S04-S06 implementations verified in cloud, stacked on existing S03 code without merging PR24. Final delivery remains pending API access, required CI and normal review."
+        "date": "2026-11-14",
+        "summary": "Cumulative local checks passed on 2026-11-14 after merging current main; 274 tests, zero-warning build, 19 Python tests, skill/installer checks and 19 synthetic UI renders. Review found no blocking defect. Await exact-head Windows CI and normal merge."
       }
     },
     {
@@ -1538,18 +1545,22 @@
     },
     {
       "date": "2026-11-13",
-      "event": "Owner accepted roadmap and authorized autonomous execution of next stages. S01 claimed on codex/stage01-baseline."
+      "event": "Owner accepted roadmap and authorized autonomous execution of next stages. S01 claimed on fix/stage01-baseline."
     },
     {
       "date": "2026-11-13",
       "event": "Owner kept Windows signing/PC validation pending and resumed a few stages. Cloud S04-S06 implementation/recovery/offline/review checks passed; branches prepared separately. No PR24 merge, live financial request, purchase or release publication."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner requested continued development after PR24 merge and history cleanup. Reconciled delivered S03 and resolved API blocker; resumed existing cumulative S04-S06 for review and delivery before new stages."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
   "quality_skill_routing": "../skills/Skill_Routing.md",
   "distribution_pending": {
     "branch": "chore/windows-distribution",
-    "commit": "f841108",
+    "commit": "7059b3a",
     "status": "pending_owner_pc_and_provider",
     "instruction": "Owner on 2026-11-13 resumed other development; keep Windows signing/validation pending. No purchases, live finance calls or signing configuration."
   }

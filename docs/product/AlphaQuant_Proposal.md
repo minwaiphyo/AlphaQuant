@@ -343,6 +343,15 @@ This proposal records software requirements, product ideas and decisions, archit
 
 ## 17 Current state and next action
 
+Delivery resumption, 2026-11-14: PR24 is merged and GitHub API access is working.
+The owner resumed development after the history cleanup. S04–S06 remain on the
+cumulative `feat/reviewed-valuation-inputs` branch; finish their review, exact-head
+Windows CI and normal delivery before starting new stages. History cleanup changed
+commit IDs while preserving file trees; old dated verification records retain their
+historical context. Live SEC/Alpaca, provider registration, Windows signing and
+owner-PC acceptance remain pending. No live requests or spending are authorized
+by this delivery continuation.
+
 Cloud continuation, 2026-11-13 (AQ-D029): owner resumed a few stages while Windows
 trust work remains pending. S04 implements SQLite schema/migration, verified
 backups, revision handling and recovery. S05 adds named peers/watchlists, presets
@@ -413,6 +422,10 @@ Remaining deployment gates: user/operator must register the Alpaca application a
 Decision records include status, rationale, affected software scope and references to superseded decisions.
 
 ## 19 Work log and release record
+
+2026-11-14: PR24 merged after exact-head Windows job/security checks and local
+render inspection. API policy blocker resolved. Resumed cumulative S04–S06 review
+and delivery; see the ledger for current checks and PR state.
 
 | Date | Work and verification | Remaining |
 |---|---|---|
