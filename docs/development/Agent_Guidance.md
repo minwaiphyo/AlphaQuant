@@ -84,6 +84,8 @@ Use standard purpose-based branch prefixes such as `feat/`, `fix/`, `docs/`, `pe
 
 ## Current handoff
 
+- 2026-11-14 current priority: owner cannot execute local `dotnet run --project src/AlphaQuant.Desktop` on personal Windows 11 Home because Windows Security reports a Desktop DLL publisher cannot be verified. Diagnose the exact policy/file using read-only local evidence before signing work; release signing is not automatically local Debug signing. Live Microsoft guidance now supports trusted RSA and ECC certificates. Keep security enabled; no purchases/provider submissions/publication are authorized by this triage.
+
 - 2026-11-14 through-S20 checkpoint: owner requested completion of all independent work and one consolidated blocker report. PR27–PR30 delivered broker audit, diagnostics, expanded metrics and the integrated research/models/reports/manual-monitoring workbench. S13–S18 done; S02/S07/S08/S09/S11/S12/S19/S20 retain explicit external gates. Final hardening/distribution record in progress; see Roadmap_Blockers.md and S20_Traceability.md. Do not restart stages or claim full release/live/Windows acceptance. No remaining independent stage is intentionally postponed.
 
 - 2026-11-14: owner authorized all independent work through S20 and requested one consolidated blocker report afterward. S07 audit/process smoke passed; container image and current host/provider research blocked by egress (BL-004). Continue independent S10/research stages; use dated ledger evidence, preserve all external release gates. No subagent authority added.

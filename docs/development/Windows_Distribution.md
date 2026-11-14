@@ -10,6 +10,33 @@ confirmed contributor permission, and requires zero incremental cost. See
 `LICENSE` and `THIRD-PARTY-NOTICES.md`; third-party materials and financial data
 are not relicensed by the repository license.
 
+## Current local-development diagnosis (2026-11-14)
+
+Owner reports Windows 11 Home on a personal PC. The block occurs during
+`dotnet run --project src/AlphaQuant.Desktop` and refers to a Desktop DLL whose
+publisher cannot be verified. Exact dialog, blocked path and enforcing policy
+have not yet been captured. This suggests application-control enforcement, but
+Smart App Control attribution still requires evidence; do not treat it as a
+SmartScreen EXE warning or claim a diagnosis from memory alone.
+
+Reproduce once, then collect the read-only SmartAppControlState and relevant
+CodeIntegrity event 3077. Identify the named blocked DLL and its signature status
+before choosing a remedy. A signed CI/release executable does not establish that
+fresh local Debug assemblies will be permitted. The exact local command remains
+the target; no security controls, file trust markers or trust stores are changed.
+
+Live Microsoft/SignPath documentation is now reachable. Checked on 2026-11-14:
+Microsoft currently states Smart App Control supports BOTH RSA and ECC trusted
+code-signing certificates, superseding the older pinned RSA-only source below.
+SignPath Foundation still requires a released, maintained OSI-licensed project,
+verifiable artifact origin, review/manual signing approval and project acceptance.
+The repository currently has only a draft prerelease; no public-release eligibility
+or permission to sign arbitrary fresh local Debug builds is established.
+Microsoft's current Store onboarding page describes free individual enrollment,
+subject to identity verification/eligibility. Store delivery does not provide a
+certificate for arbitrary `dotnet run` output. No account/application was submitted,
+certificate obtained, service purchased or release/environment published.
+
 ## Code signing policy
 
 No signing service or certificate is active. Only unsigned development artifacts
@@ -79,7 +106,7 @@ project, and no signing capability has been configured.
 | --- | --- | --- |
 | SignPath Foundation | Official site source at commit `df7801c96a1c6a498add70bb0827baa07eb8f820`, `docs/terms.md`, requires an OSI license, active maintenance, an existing release, no proprietary components except system libraries, MFA, documented roles/policy, verifiable binary origin and manual release approval. Certificate publisher is SignPath Foundation. The source labels its code of conduct **draft**. | Candidate for release signing only, subject to provider confirmation/acceptance and technical validation. No entitlement or permission to sign arbitrary local builds is established. Do not sign upstream binaries with the project identity. |
 | Microsoft Store | Official Microsoft source `open-a-developer-account.md`, revision date 2025-09-17, describes zero registration fees through the new `storedeveloper.microsoft.com` flow and individual identity verification using ID/selfie. Legacy entry points may differ. | A zero-cost enrollment candidate, subject to actual owner eligibility and account verification. ZIP publication does not itself meet Store packaging/submission requirements. Store enrollment does not provide a certificate for local builds. No account was created. |
-| Smart App Control requirement | Official Microsoft source says RSA-based certificates issued by trusted providers are supported and ECC signatures are not currently supported. | Verify the chosen certificate/profile against current guidance and actual blocked files. This is not a promise that Defender or every Windows policy accepts a signed build. |
+| Smart App Control requirement | Live Microsoft guidance checked 2026-11-14 says both RSA and ECC certificates from trusted providers are supported; this supersedes the older pinned RSA-only text. | Verify the chosen certificate/profile against current guidance and actual blocked files. This is not a promise that Defender or every Windows policy accepts a signed build. |
 
 Pinned sources inspected (2026-11-13):
 
@@ -103,8 +130,7 @@ eligibility or redistribution rights from Avalonia's license; verify this Debug
 dependency separately before requesting Foundation signing for development builds.
 Do not remove developer tooling or re-sign third-party DLLs to bypass this gate.
 
-After live-documentation access is applied, cross-check these source findings and
-complete the remaining provider-specific requirements:
+Live Microsoft/SignPath pages were rechecked on 2026-11-14. Complete the remaining provider-specific requirements after local policy diagnosis:
 
 - [Microsoft Smart App Control signing guidance](https://learn.microsoft.com/en-us/windows/apps/develop/smart-app-control/code-signing-for-smart-app-control).
 - [SignPath open-source offering](https://about.signpath.io/product/open-source) and
@@ -143,8 +169,8 @@ or chat.
 > review before an application can be assessed. Third-party terms are retained
 > separately, and release license clearance is not yet complete.
 >
-> Existing Windows CI builds/tests a self-contained Windows x64 ZIP. Cloud
-> validation passed 210 synthetic .NET tests. No signed release or public-release
+> Existing Windows CI builds/tests a self-contained Windows x64 ZIP. Current
+> validation passed 325 synthetic .NET tests. No signed release or public-release
 > eligibility is claimed. Application-owned artifacts include the Desktop app
 > host and the Desktop, Core and Infrastructure assemblies; the bundle also
 > contains upstream Avalonia/native and Microsoft runtime files. We will not

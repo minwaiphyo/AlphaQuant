@@ -24,23 +24,21 @@
     "automatic_subagents": false
   },
   "active_run": {
-    "run_id": "20261114-through-S20",
+    "run_id": "20261114-windows-publisher-triage",
     "owner": "primary-developer-agent",
-    "stage": "S20",
-    "package": "final_hardening_and_gate_report",
-    "branch": "main",
-    "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
-    "phase": "independent_work_delivered_external_gates_open",
+    "stage": "S09",
+    "package": "S09.4",
+    "branch": "docs/windows-publisher-triage",
+    "phase": "awaiting_affected_pc_evidence",
     "scope": [
-      "S02 remaining verification",
-      "S07-S20"
+      "Diagnose publisher/DLL block on personal Windows 11 Home",
+      "Resolve exact local dotnet run workflow using supported trust/signing route"
     ],
-    "next_action": "Resolve the consolidated external gates in Roadmap_Blockers.md; no independent roadmap package remains intentionally postponed. All implementation PRs through PR31 are merged and verified.",
+    "next_action": "Obtain exact block text, SmartAppControlState and relevant CodeIntegrity 3077 on affected PC; identify every blocked artifact before selecting signing integration.",
     "constraints": [
-      "No purchases/accounts/vendor messages",
-      "No credential extraction or secret values in chat",
-      "No weakening OS trust",
-      "Live account acceptance requires explicit user connection"
+      "Keep Smart App Control and Defender enabled",
+      "No exclusions, trust-marker removal or self-signed trust-root workaround",
+      "No purchase, vendor submission, release or environment publication without authorization"
     ]
   },
   "next_recommended_stage": "S07",
@@ -2010,6 +2008,10 @@
     {
       "date": "2026-11-14",
       "event": "PR31 merged at 6f8571b after exact-head CI 43552911371. Independent engineering through S20 delivered; 324 tests, clean-source artifact/hash/notice checks and native Linux inspection verified. Remaining stages require consolidated external acceptance; no release/environment publication."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner prioritized Windows publisher block over SEC configuration. Reports personal Windows 11 Home and Desktop DLL block during dotnet run. Requested read-only local evidence. Current live Microsoft guidance supports both RSA/ECC; provider signing eligibility and actual enforcement remain unverified."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
