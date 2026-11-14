@@ -24,23 +24,21 @@
     "automatic_subagents": false
   },
   "active_run": {
-    "run_id": "20261114-through-S20",
+    "run_id": "20261114-windows-publisher-triage",
     "owner": "primary-developer-agent",
-    "stage": "S20",
-    "package": "final_hardening_and_gate_report",
-    "branch": "main",
-    "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
-    "phase": "independent_work_delivered_external_gates_open",
+    "stage": "S09",
+    "package": "S09.4",
+    "branch": "docs/windows-publisher-triage",
+    "phase": "signpath_application_owner_handoff",
     "scope": [
-      "S02 remaining verification",
-      "S07-S20"
+      "Resolve native Windows DLL publisher block with supported trusted signing",
+      "Prepare reviewed Windows preview package signing; no WSL/Linux substitute"
     ],
-    "next_action": "Resolve the consolidated external gates in Roadmap_Blockers.md; no independent roadmap package remains intentionally postponed. All implementation PRs through PR31 are merged and verified.",
+    "next_action": "Owner completes SignPath Foundation application using prepared SignPath_Application.md; embedded provider form is blocked by cloud proxy CONNECT HTTP 403. Await non-secret eligibility/integration reply. No application submitted, public release or signing identity configured.",
     "constraints": [
-      "No purchases/accounts/vendor messages",
-      "No credential extraction or secret values in chat",
-      "No weakening OS trust",
-      "Live account acceptance requires explicit user connection"
+      "Keep Smart App Control and Defender enabled",
+      "No exclusions, trust-marker removal or self-signed trust-root workaround",
+      "No purchase, vendor submission, release or environment publication without authorization"
     ]
   },
   "next_recommended_stage": "S07",
@@ -2010,6 +2008,22 @@
     {
       "date": "2026-11-14",
       "event": "PR31 merged at 6f8571b after exact-head CI 43552911371. Independent engineering through S20 delivered; 324 tests, clean-source artifact/hash/notice checks and native Linux inspection verified. Remaining stages require consolidated external acceptance; no release/environment publication."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner prioritized Windows publisher block over SEC configuration. Reports personal Windows 11 Home and Desktop DLL block during dotnet run. Requested read-only local evidence. Current live Microsoft guidance supports both RSA/ECC; provider signing eligibility and actual enforcement remain unverified."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner supplied SAC On and CodeIntegrity3077 blocking project Desktop Debug DLL. Owner only needs local development viewing/testing and defers signing/distribution. Investigate supported WSL2/WSLg Linux GUI workflow; no security changes or Windows-native acceptance inferred."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner rejected Linux/WSL viewing and requested native Windows signing now. Prepared updated provider brief and retained zero-cost/security constraints. Existing public release and provider acceptance remain unresolved; no submission/publication or signed Windows validation claimed."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Owner confirmed no signing service/certificate and authorized SignPath candidate. Prepared copy-ready application. SignPath page reachable; embedded HubSpot form/script and public form endpoint blocked by proxy CONNECT 403. No form submission, signing or release publication occurred."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

@@ -476,6 +476,14 @@ Decision records include status, rationale, affected software scope and referenc
 
 ## 19 Work log and release record
 
+2026-11-14 native Windows testing decision: owner rejected WSL/Linux viewing and
+requested Windows signing now. Confirmed Smart App Control On and enforced
+Code Integrity event 3077 for the project Desktop DLL. Prepared a zero-cost
+provider application brief; provider acceptance and a trusted signing identity
+remain missing. No signed artifact, security change or native execution success
+is claimed. Next: resolve trusted signing access, then sign/verify a reviewed
+Windows preview package and test it on the affected PC.
+
 2026-11-14 through-S20 work: PR27 broker audit/native smoke; PR28 safe diagnostics;
 PR29 expanded metrics; PR30 research workbench/models/reports/manual monitoring
 merged after exact-head Windows checks. 319 synthetic tests, zero-warning build,
