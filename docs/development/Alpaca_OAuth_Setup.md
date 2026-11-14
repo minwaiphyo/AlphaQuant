@@ -72,11 +72,11 @@ docker build -f src/AlphaQuant.OAuthBroker/Dockerfile -t alphaquant-oauth .
 
 Docker build/deployment has not been run in this environment. The Docker context excludes local/private files and build artifacts. Configure secrets at runtime, not through build arguments.
 
-## Contract for the UI owner
+## Contract for the UI maintainer
 
 Do not add an Alpaca API-key or password field for the chosen flow. Show **Connect with Alpaca**, Cancel, connection/access status and Disconnect. Keep the SEC contact input independent. One active market provider, no paid-feed fallback. Other provider choices remain planned.
 
-Conceptual composition (the UI owner supplies lifetime/cancellation and configuration):
+Conceptual composition (the UI maintainer supplies lifetime/cancellation and configuration):
 
 ```csharp
 // Reuse the app's shared SecClient as ICompanyFactsSource.

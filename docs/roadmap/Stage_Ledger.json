@@ -5,7 +5,7 @@
   "plan_status": "approved",
   "approval": {
     "status": "approved",
-    "instruction_reference": "Owner: Proceed with next few stages and continue developing autonomously.",
+    "instruction_reference": "Approved continuation of development through the staged roadmap.",
     "date": "2026-11-13"
   },
   "baseline": {
@@ -25,16 +25,16 @@
   },
   "active_run": {
     "run_id": "20261114-windows-publisher-triage",
-    "owner": "primary-developer-agent",
+    "owner": "Maintainer",
     "stage": "S09",
     "package": "S09.4",
-    "branch": "docs/windows-publisher-triage",
-    "phase": "signpath_application_owner_handoff",
+    "branch": "docs/project-documentation",
+    "phase": "documentation_delivery",
     "scope": [
-      "Resolve native Windows DLL publisher block with supported trusted signing",
-      "Prepare reviewed Windows preview package signing; no WSL/Linux substitute"
+      "Revise public documentation using neutral product and engineering terminology",
+      "Preserve verified evidence and unresolved Windows/live-provider release requirements"
     ],
-    "next_action": "Owner completes SignPath Foundation application using prepared SignPath_Application.md; embedded provider form is blocked by cloud proxy CONNECT HTTP 403. Await non-secret eligibility/integration reply. No application submitted, public release or signing identity configured.",
+    "next_action": "Deliver documentation after required CI. Then await SignPath eligibility/signing access or local WSL launch evidence; native Windows trust and live Alpaca setup remain open. No further feature implementation requested.",
     "constraints": [
       "Keep Smart App Control and Defender enabled",
       "No exclusions, trust-marker removal or self-signed trust-root workaround",
@@ -78,7 +78,7 @@
       "name": "Historical point-in-time data completeness and rights",
       "status": "not_verified",
       "evidence": [],
-      "owner_action": "Supply suitable no-required-cost data/rights evidence if available. The agent may research permitted alternatives without purchasing."
+      "owner_action": "Supply suitable no-required-cost data/rights evidence if available. Contributors may research permitted alternatives without purchasing."
     },
     {
       "id": "E06",
@@ -202,7 +202,7 @@
         "max": 2
       },
       "contract": "Development_Plan.md#s01-baseline-audit-and-execution-readiness",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261113-initial-stages",
       "branch": "fix/stage01-baseline",
       "baseline_commit": "0409987",
@@ -289,7 +289,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s02-financial-source-validation",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261113-initial-stages",
       "branch": "fix/stage02-financial-validation",
       "baseline_commit": "0a6b515",
@@ -368,7 +368,7 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s03-one-comparison-workspace",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261113-initial-stages",
       "branch": "feat/stage03-unified-comparison",
       "baseline_commit": "104ec7d",
@@ -426,7 +426,7 @@
       "blocker_ids": [],
       "checkpoint": {
         "date": "2026-11-14",
-        "summary": "Owner lifted PR24 hold. Exact PR-head Windows job and security checks passed; local exact-head rendering/focus checks and images inspected; PR24 merged. History cleanup subsequently remapped commit IDs without changing file trees. Historical CI refers to the pre-cleanup SHA."
+        "summary": "Maintainer lifted PR24 hold. Exact PR-head Windows job and security checks passed; local exact-head rendering/focus checks and images inspected; PR24 merged. History cleanup subsequently remapped commit IDs without changing file trees. Historical CI refers to the pre-cleanup SHA."
       }
     },
     {
@@ -442,7 +442,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s04-sqlite-storage-and-recovery",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-research-delivery",
       "branch": "feat/research-storage",
       "baseline_commit": "104ec7d2032087efbdc6432d0b13b10635fc607b",
@@ -541,7 +541,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s05-saved-peers-watchlists-and-offline-research",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-research-delivery",
       "branch": "feat/saved-research",
       "baseline_commit": "c0b0ec9",
@@ -639,7 +639,7 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s06-reviewed-valuation-inputs-without-json-editing",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-research-delivery",
       "branch": "feat/reviewed-valuation-inputs",
       "baseline_commit": "3661e51",
@@ -741,7 +741,7 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s07-oauth-broker-operational-readiness",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/broker-operations",
       "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
@@ -915,7 +915,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s09-windows-usability-upgrade-and-trusted-distribution",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "chore/release-hardening",
       "baseline_commit": null,
@@ -967,7 +967,7 @@
           ]
         }
       ],
-      "next_action": "Complete actual clean Windows trust/install/upgrade/accessibility/owner-PC matrix; unsigned package preparation passed.",
+      "next_action": "Complete actual clean Windows trust/install/upgrade/accessibility/local Windows PC matrix; unsigned package preparation passed.",
       "validation": [
         {
           "command": "Python distribution tests and PowerShell distribution guards",
@@ -1008,7 +1008,7 @@
         "max": 3
       },
       "contract": "Development_Plan.md#s10-pilot-usability-diagnostics-and-feedback",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/safe-diagnostics",
       "baseline_commit": null,
@@ -1176,7 +1176,7 @@
         "max": 6
       },
       "contract": "Development_Plan.md#s12-expanded-fundamentals-and-efficiency-metrics",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/expanded-fundamentals",
       "baseline_commit": null,
@@ -1251,7 +1251,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s13-quality-flags-and-explainable-screening",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1335,7 +1335,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s14-versioned-investment-thesis-workspace",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1420,7 +1420,7 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s15-spreadsheet-csv-and-pdf-reports",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1504,7 +1504,7 @@
         "max": 5
       },
       "contract": "Development_Plan.md#s16-user-controlled-forecasts",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1588,7 +1588,7 @@
         "max": 7
       },
       "contract": "Development_Plan.md#s17-discounted-cash-flow-valuation",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1680,7 +1680,7 @@
         "max": 6
       },
       "contract": "Development_Plan.md#s18-scenarios-sensitivity-and-reverse-dcf",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1774,7 +1774,7 @@
         "max": 6
       },
       "contract": "Development_Plan.md#s19-monitoring-and-historical-comparisons",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "feat/research-workbench",
       "baseline_commit": null,
@@ -1875,7 +1875,7 @@
         "max": 5
       },
       "contract": "Development_Plan.md#s20-full-product-hardening-and-release",
-      "owner": "primary-developer-agent",
+      "owner": "development",
       "run_id": "20261114-through-S20",
       "branch": "chore/release-hardening",
       "baseline_commit": null,
@@ -1967,19 +1967,19 @@
   "history": [
     {
       "date": "2026-11-13",
-      "event": "Draft roadmap created after owner selected full-product scope, automatic Git delivery, independent blocker fallback, delegated finance definitions, SQLite and bounded configured live validation. No application stage has started."
+      "event": "Draft roadmap created after maintainer selected full-product scope, automatic Git delivery, independent blocker fallback, approved finance definitions, SQLite and bounded configured live validation. No application stage has started."
     },
     {
       "date": "2026-11-13",
-      "event": "Owner accepted roadmap and authorized autonomous execution of next stages. S01 claimed on fix/stage01-baseline."
+      "event": "Maintainer accepted roadmap and authorized staged execution of next stages. S01 claimed on fix/stage01-baseline."
     },
     {
       "date": "2026-11-13",
-      "event": "Owner kept Windows signing/PC validation pending and resumed a few stages. Cloud S04-S06 implementation/recovery/offline/review checks passed; branches prepared separately. No PR24 merge, live financial request, purchase or release publication."
+      "event": "Maintainer kept Windows signing/PC validation pending and resumed a few stages. Cloud S04-S06 implementation/recovery/offline/review checks passed; branches prepared separately. No PR24 merge, live financial request, purchase or release publication."
     },
     {
       "date": "2026-11-14",
-      "event": "Owner requested continued development after PR24 merge and history cleanup. Reconciled delivered S03 and resolved API blocker; resumed existing cumulative S04-S06 for review and delivery before new stages."
+      "event": "Maintainer requested continued development after PR24 merge and history cleanup. Reconciled delivered S03 and resolved API blocker; resumed existing cumulative S04-S06 for review and delivery before new stages."
     },
     {
       "date": "2026-11-14",
@@ -1987,7 +1987,7 @@
     },
     {
       "date": "2026-11-14",
-      "event": "Owner requested completion through S20 with consolidated blockers afterward. Start S07 audit; continue all independent work without fabricating external acceptance."
+      "event": "Maintainer requested completion through S20 with consolidated blockers afterward. Start S07 audit; continue all independent work without fabricating external acceptance."
     },
     {
       "date": "2026-11-14",
@@ -2011,19 +2011,23 @@
     },
     {
       "date": "2026-11-14",
-      "event": "Owner prioritized Windows publisher block over SEC configuration. Reports personal Windows 11 Home and Desktop DLL block during dotnet run. Requested read-only local evidence. Current live Microsoft guidance supports both RSA/ECC; provider signing eligibility and actual enforcement remain unverified."
+      "event": "Maintainer prioritized Windows publisher block over SEC configuration. Reports personal Windows 11 Home and Desktop DLL block during dotnet run. Requested read-only local evidence. Current live Microsoft guidance supports both RSA/ECC; provider signing eligibility and actual enforcement remain unverified."
     },
     {
       "date": "2026-11-14",
-      "event": "Owner supplied SAC On and CodeIntegrity3077 blocking project Desktop Debug DLL. Owner only needs local development viewing/testing and defers signing/distribution. Investigate supported WSL2/WSLg Linux GUI workflow; no security changes or Windows-native acceptance inferred."
+      "event": "Maintainer supplied SAC On and CodeIntegrity3077 blocking project Desktop Debug DLL. maintainer only needs local development viewing/testing and defers signing/distribution. Investigate supported WSL2/WSLg Linux GUI workflow; no security changes or Windows-native acceptance inferred."
     },
     {
       "date": "2026-11-14",
-      "event": "Owner rejected Linux/WSL viewing and requested native Windows signing now. Prepared updated provider brief and retained zero-cost/security constraints. Existing public release and provider acceptance remain unresolved; no submission/publication or signed Windows validation claimed."
+      "event": "Maintainer rejected Linux/WSL viewing and requested native Windows signing now. Prepared updated provider brief and retained zero-cost/security constraints. Existing public release and provider acceptance remain unresolved; no submission/publication or signed Windows validation claimed."
     },
     {
       "date": "2026-11-14",
-      "event": "Owner confirmed no signing service/certificate and authorized SignPath candidate. Prepared copy-ready application. SignPath page reachable; embedded HubSpot form/script and public form endpoint blocked by proxy CONNECT 403. No form submission, signing or release publication occurred."
+      "event": "Maintainer confirmed no signing service/certificate and authorized SignPath candidate. Prepared copy-ready application. SignPath page reachable; embedded HubSpot form/script and public form endpoint blocked by proxy CONNECT 403. No form submission, signing or release publication occurred."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Maintainer reports SignPath application submitted and begins temporary WSL development setup. Requested neutral public documentation terminology. Editorial changes preserve actual validation evidence and unresolved release gates; no authorship claim or application behavior change."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",
@@ -2032,6 +2036,6 @@
     "branch": "chore/windows-distribution",
     "commit": "7059b3a",
     "status": "pending_owner_pc_and_provider",
-    "instruction": "Owner on 2026-11-13 resumed other development; keep Windows signing/validation pending. No purchases, live finance calls or signing configuration."
+    "instruction": "Maintainer on 2026-11-13 resumed other development; keep Windows signing/validation pending. No purchases, live finance calls or signing configuration."
   }
 }

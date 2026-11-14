@@ -11,7 +11,7 @@ completion. Scope remains the approved roadmap.
 | US-03/04 growth/source inspection | SourceReconciliationTests, ExpandedFundamentalsTests, evidence rendering/focus | Real filing coverage/reconciliation |
 | US-05/06 comparison/filter/sort | ResearchUiIntegrationTests, SavedResearchTests; raw decimals, missing-last, selection/stream lifecycle | Native Windows scaling/accessibility |
 | US-07/08 net margin/current ratio | expanded-1 source/version policy and independent worked tests | Per-issuer real source reconciliation, supported-scope review |
-| US-09/10 watchlists/offline | ResearchStorageTests, SavedResearchTests; immutable snapshot restart, recovery and definitions | Owner-PC upgrade/restore acceptance |
+| US-09/10 watchlists/offline | ResearchStorageTests, SavedResearchTests; immutable snapshot restart, recovery and definitions | Local Windows PC upgrade/restore acceptance |
 | US-11/12 accessibility/install/upgrade | Real Avalonia focus/minimum light/dark renders; distribution guards, dependency manifest/hash, backup/migration tests | Clean supported Windows install/upgrade/failure/rollback, signing/trust and native accessibility |
 | US-13 feedback | SafeDiagnosticsTests; preview/export/help and user-submitted draft | Actual external usability participants not fabricated |
 | FA-01 comparable company analysis | comparison-1.1 + expanded-1, scoped reviews and source inputs | Live finance/issuer verification |

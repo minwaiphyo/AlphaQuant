@@ -18,4 +18,4 @@ Use deterministic default tests. Keep live validation separate, bounded, configu
 
 Before marking done, inspect the final diff for unintended schema/definition changes, hidden arithmetic in views, stale/mixed prices, token persistence, lost cancellation and research data loss. Resolve demonstrated defects. Do not add tests that only match implementation text or repeatedly rerun unchanged suites without reason.
 
-The stage ledger stores package completion, partial work, blockers, validation, self-review and delivery links. Populate evidence with actual outcomes, not planned commands. If verification could not run, keep the affected acceptance open. Preserving this evidence is what enables a different agent to continue safely.
+The stage ledger stores package completion, partial work, blockers, validation, self-review and delivery links. Populate evidence with actual outcomes, not planned commands. If verification could not run, keep the affected acceptance open. Preserving this evidence is what enables another contributor to continue safely.

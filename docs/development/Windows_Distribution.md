@@ -3,18 +3,18 @@
 Status: partial infrastructure implemented; trusted Windows development and
 recruiter distribution remain **blocked**. No signing identity is configured.
 No purchase, security-policy change, live financial request, or release publication
-is authorized by this workflow. The owner resumed independent development through S20; PR24 is merged. These trust gates remain open.
+is authorized by this workflow. The maintainer resumed independent development through S20; PR24 is merged. These trust gates remain open.
 
-The owner approved MIT licensing for all project contributions on 2026-11-13,
+The maintainer approved MIT licensing for all project contributions on 2026-11-13,
 confirmed contributor permission, and requires zero incremental cost. See
 `LICENSE` and `THIRD-PARTY-NOTICES.md`; third-party materials and financial data
 are not relicensed by the repository license.
 
 ## Current local-development diagnosis (2026-11-14)
 
-Owner reports Windows 11 Home on a personal PC. The block occurs during
+maintainer reports Windows 11 Home on a personal PC. The block occurs during
 `dotnet run --project src/AlphaQuant.Desktop` and refers to a Desktop DLL whose
-publisher cannot be verified. Owner evidence now shows SmartAppControlState On and enforced CodeIntegrity
+publisher cannot be verified. maintainer evidence now shows SmartAppControlState On and enforced CodeIntegrity
 event 3077 when the Desktop host loads the project-owned Debug/net10.0/
 AlphaQuant.Desktop.dll, policy ID 0283ac0f-fff1-49ae-ada1-8a933130cad6. This confirms
 a DLL code-integrity block, not the usual downloaded-EXE SmartScreen warning.
@@ -24,8 +24,8 @@ No personal filesystem path or whole event log is retained here.
 Reproduce once, then collect the read-only SmartAppControlState and relevant
 CodeIntegrity event 3077. Identify the named blocked DLL and its signature status
 before choosing a remedy. A signed CI/release executable does not establish that
-fresh local Debug assemblies will be permitted. The owner subsequently confirmed native Windows viewing/testing is required and
-authorized addressing Windows signing now. WSL/Linux viewing was rejected. A
+fresh local Debug assemblies will be permitted. Native Windows viewing/testing is the target, and trusted signing is being pursued.
+WSL2/WSLg is being prepared as a temporary Linux development-viewing option. A
 trusted Windows development package can serve that goal; support for signing
 arbitrary fresh local Debug output is a separate provider capability. No security controls, file trust markers or trust
 stores are changed.
@@ -52,10 +52,10 @@ enforce release approval. Do not advertise free signing as already provided.
 
 ## Diagnose the affected Windows PC
 
-The owner reports Smart App Control on a personal PC. Earlier repository evidence
+The maintainer reports Smart App Control on a personal PC. Earlier repository evidence
 records project DLL loads blocked with `0x800711C7`. This cloud instance is Linux;
 it cannot identify the exact blocking policy, affected DLL set, or Defender state
-on the owner PC. This is not yet a completed diagnosis.
+on the local Windows PC. This is not yet a completed diagnosis.
 
 Immediately after the existing failed run, open PowerShell at the checkout root:
 
@@ -110,7 +110,7 @@ project, and no signing capability has been configured.
 | Candidate | Verified source evidence | Decision / unresolved gate |
 | --- | --- | --- |
 | SignPath Foundation | Official site source at commit `df7801c96a1c6a498add70bb0827baa07eb8f820`, `docs/terms.md`, requires an OSI license, active maintenance, an existing release, no proprietary components except system libraries, MFA, documented roles/policy, verifiable binary origin and manual release approval. Certificate publisher is SignPath Foundation. The source labels its code of conduct **draft**. | Candidate for release signing only, subject to provider confirmation/acceptance and technical validation. No entitlement or permission to sign arbitrary local builds is established. Do not sign upstream binaries with the project identity. |
-| Microsoft Store | Official Microsoft source `open-a-developer-account.md`, revision date 2025-09-17, describes zero registration fees through the new `storedeveloper.microsoft.com` flow and individual identity verification using ID/selfie. Legacy entry points may differ. | A zero-cost enrollment candidate, subject to actual owner eligibility and account verification. ZIP publication does not itself meet Store packaging/submission requirements. Store enrollment does not provide a certificate for local builds. No account was created. |
+| Microsoft Store | Official Microsoft source `open-a-developer-account.md`, revision date 2025-09-17, describes zero registration fees through the new `storedeveloper.microsoft.com` flow and individual identity verification using ID/selfie. Legacy entry points may differ. | A zero-cost enrollment candidate, subject to actual maintainer eligibility and account verification. ZIP publication does not itself meet Store packaging/submission requirements. Store enrollment does not provide a certificate for local builds. No account was created. |
 | Smart App Control requirement | Live Microsoft guidance checked 2026-11-14 says both RSA and ECC certificates from trusted providers are supported; this supersedes the older pinned RSA-only text. | Verify the chosen certificate/profile against current guidance and actual blocked files. This is not a promise that Defender or every Windows policy accepts a signed build. |
 
 Pinned sources inspected (2026-11-13):
@@ -120,12 +120,12 @@ Pinned sources inspected (2026-11-13):
 - [Microsoft Store onboarding source](https://github.com/MicrosoftDocs/windows-dev-docs/blob/a3812316d9d6678be4e526ffb4b1c4f3958d956d/hub/apps/publish/partner-center/open-a-developer-account.md).
 
 The preferred first release-signing inquiry is SignPath Foundation. It requires
-owner application/acceptance and confirmation of profile compatibility, artifact
+maintainer application/acceptance and confirmation of profile compatibility, artifact
 types, timestamping, quotas and the exact permitted build origins. Arbitrary local
 development signing is **unverified**, not approved by inference from release
 signing. If that requirement cannot be met at zero cost, report it blocked as
 requested. Retain Store as a separate distribution candidate; no MSIX identity or
-submission workflow is invented before owner enrollment and packaging eligibility.
+submission workflow is invented before maintainer enrollment and packaging eligibility.
 
 The default `dotnet run` builds **Debug**, whose graph differs from the audited
 Release ZIP. In particular, `AvaloniaUI.DiagnosticsSupport/2.2.3` is referenced in
@@ -139,7 +139,7 @@ Live Microsoft/SignPath pages were rechecked on 2026-11-14. Complete the remaini
 
 - [Microsoft Smart App Control signing guidance](https://learn.microsoft.com/en-us/windows/apps/develop/smart-app-control/code-signing-for-smart-app-control).
 - [SignPath open-source offering](https://about.signpath.io/product/open-source) and
-  [SignPath Foundation](https://signpath.org/): eligibility, owner/contributor
+  [SignPath Foundation](https://signpath.org/): eligibility, maintainer/contributor
   identity, eligible license/project hosting, fees, certificate compatibility,
   timestamping, quotas, artifact types, CI provenance and signing approval rules.
   Specifically verify whether reviewed CI-built Windows **preview packages** may
@@ -159,11 +159,12 @@ not a reliable Smart App Control solution. Do not ask recruiters to install one.
 
 ### Native Windows signing application brief (2026-11-14)
 
-The owner requires native Windows viewing/testing and has rejected WSL/Linux as a
+The maintainer requires native Windows viewing/testing and has rejected WSL/Linux as a
 substitute. Signing is now the immediate priority. The zero-incremental-cost
 constraint remains; no provider has accepted the project and no trusted signing
-identity is configured. The owner authorized pursuing SignPath Foundation and confirmed no existing
-signing identity. No application, identity data or artifact has been sent.
+identity is configured. The maintainer authorized pursuing SignPath Foundation and confirmed no existing
+signing identity. The maintainer subsequently reported submitting the application. Provider
+acceptance and signing access are still pending; no signed package is available.
 The embedded application form is blocked by cloud proxy CONNECT HTTP 403; use
 the [copy-ready application](SignPath_Application.md) on the official provider
 page. No cloud network/environment configuration was changed.
@@ -175,7 +176,7 @@ has only a draft prerelease. Do not claim eligibility or publish it merely to
 satisfy that condition. Ask whether the existing draft/CI Windows package can be
 reviewed and what public-release prerequisite applies.
 
-Ready-to-review project brief for the owner to use with the provider:
+Project brief prepared for the provider application:
 
 > AlphaQuant: https://github.com/minwaiphyo/AlphaQuant
 >
@@ -274,7 +275,7 @@ minimize identity/token permissions, verify provenance, sign after all binary
 modifications, verify chains and trusted timestamps, then ZIP and hash. Retain
 exact source, SDK, per-file signature results and archive checksums. Do not
 re-sign vendor files blindly. Require license clearance and Windows acceptance
-before enabling recruiter mode. Owner approval is still required to publish.
+before enabling recruiter mode. Maintainer approval is still required to publish.
 
 ## Acceptance and operational handoff
 
@@ -314,7 +315,7 @@ have not run for this change; signed tamper/chain/timestamp tests remain pending
 No paid fallback is authorized. No Windows acceptance or signed release has yet
 been verified. Current next action: use the confirmed DLL enforcement evidence and obtain
 trusted signing access/provider eligibility before implementing integration.
-Do not reconfigure the cloud environment to address this owner-PC signing gate.
+Do not reconfigure the cloud environment to address this local Windows PC signing gate.
 
 ## Current upgrade and rollback procedure (2026-11-14)
 
@@ -344,10 +345,10 @@ Upstream notice bytes are retained exactly and SHA256-verified; .gitattributes
 prevents checkout newline conversion and exempts only their upstream trailing
 whitespace from cosmetic checks. Application source retains normal checks.
 
-## Native Windows testing is required
+## Windows target and temporary development viewing
 
-The owner rejected the proposed WSL/Linux viewing route on 2026-11-14 and asked
-to address Windows signing now. Do not request WSL setup or present Linux GUI
-execution as satisfying this requirement. Native Windows signing and owner-PC
-acceptance remain open at S09/S11/S20. The next dependency is an existing trusted
-signing identity or provider acceptance under the zero-cost constraint.
+Windows remains the intended platform. The SignPath Foundation application has
+been submitted; acceptance and trusted signing access remain pending. WSL2/WSLg
+is being prepared as a temporary way to view the Linux build without changing
+Windows security settings. Linux execution does not resolve the Windows DLL
+trust block or satisfy native clean-PC acceptance at S09/S11/S20.

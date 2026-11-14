@@ -47,6 +47,6 @@ No native Windows user acceptance or trusted signing is implied.
 ## Remaining gates
 
 No live SEC/Alpaca reconciliation, OAuth registration/deployment, provider rights,
-Windows signing, native Windows accessibility/scaling or owner-PC acceptance is
+Windows signing, native Windows accessibility/scaling or local Windows PC acceptance is
 claimed. These remain separate gates. Linux and CI checks cannot close them.
 No release or environment publication is part of this delivery.

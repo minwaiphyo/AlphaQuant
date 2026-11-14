@@ -1,6 +1,6 @@
 # Financial Analysis Features
 
-Current scope: SEC plus per-user Alpaca IEX, zero required pilot cost, replaceable adapter and browser OAuth with session-only tokens. Comparison-1 is the implemented project baseline under AQ-D022, with explicit review guards for complex/unverifiable valuation. Native UI and backend are integrated. Live setup/acceptance and trusted distribution remain pending. No trading. The [full-product stage plan](../roadmap/Development_Plan.md) now maps these feature candidates to S01-S20, including later definitions delegated by the owner for versioned implementation. The plan remains draft until acceptance/stage invocation. Older undecided-authentication, SEC-only, phase and unimplemented-spike statements below are historical catalogue context, not current status.
+Current scope: SEC plus per-user Alpaca IEX, zero required pilot cost, replaceable adapter and browser OAuth with session-only tokens. Comparison-1 is the implemented project baseline under AQ-D022, with explicit review guards for complex/unverifiable valuation. Native UI and backend are integrated. Live setup/acceptance and trusted distribution remain pending. No trading. The [full-product stage plan](../roadmap/Development_Plan.md) now maps these feature candidates to S01-S20, including later versioned definitions approved for implementation for versioned implementation. The plan remains draft until acceptance/stage invocation. Older undecided-authentication, SEC-only, phase and unimplemented-spike statements below are historical catalogue context, not current status.
 
 Updated: 2026-11-13
 
@@ -131,7 +131,7 @@ Use synthetic, clearly labelled values for UI prototypes. Include loading, empty
 4. Define additional data, provider terms and point-in-time requirements before price-aware features.
 5. Agree persistence/recovery and monitoring behavior before implementing saved research.
 
-Follow the planning gate in [developer guidance](../development/Agent_Guidance.md) before implementing substantial or financially consequential changes.
+Follow the planning gate in [developer guidance](../development/Development_Guidance.md) before implementing substantial or financially consequential changes.
 
 ## Reference
 

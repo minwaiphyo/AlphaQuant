@@ -1,9 +1,9 @@
-# AlphaQuant autonomous development plan
+# AlphaQuant development plan
 
 Version: 1.0 approved for stage execution on 2026-11-13
 Updated: 2026-11-13 Asia/Singapore
 
-The owner approved execution on 2026-11-13 with "Proceed with next few stages and continue developing autonomously." Current work, evidence and blockers are recorded in the stage ledger.
+Execution was approved on 2026-11-13. Current work, evidence and blockers are recorded in the stage ledger.
 
 The standing stage policies below are approved. Routine implementation, checks and Git delivery within these contracts do not need repeated approval. External access and release gates still require actual evidence.
 
@@ -14,16 +14,16 @@ The standing stage policies below are approved. Routine implementation, checks a
 - This document defines outcomes, work packages and acceptance criteria.
 - [Project proposal](../product/AlphaQuant_Proposal.md) owns product decisions. [Financial definitions](../requirements/Financial_Definitions.md) owns comparison-1. New definitions get versioned companion documents rather than silently changing existing results.
 
-Agents read tracked records rather than depend on previous chats, ignored files or one laptop.
+Contributors read tracked records rather than depend on previous chats, ignored files or one laptop.
 
 ## Confirmed standing decisions
 
-The owner selected these during planning on 2026-11-13:
+The following decisions were approved during planning on 2026-11-13:
 
 1. Cover the full proposed product through DCF, scenarios and the research workflow.
 2. A proceed instruction authorizes implementation, appropriate dependency changes, checks, docs, commit, push, PR and automatic merge after self-review and passing required checks. Do not ask again for these routine actions.
 3. Record exact external blockers and continue independent ready work. Never alter financial rules or introduce a paid fallback to force completion.
-4. Delegate documented, versioned financial definitions/defaults to the executing agent within this scope, backed by worked examples and regression checks. This is project implementation authority, not independent financial certification.
+4. Implement documented, versioned financial definitions/defaults within the approved scope, backed by worked examples and regression checks. This is project implementation authority, not independent financial certification.
 5. Use local SQLite for durable research, with migrations, backup and recovery. Keep credentials/tokens out of research storage, backups, exports and diagnostics.
 6. Allow bounded SEC validation using the configured contact email in the SEC identification header, and Alpaca market data after explicit user connection of an eligible account. Never commit contact details/secrets. No automated login, account creation, vendor messages or credential extraction.
 
@@ -63,7 +63,7 @@ The research/model branch can advance while the pilot waits on external access. 
 
 ## Planning timeline
 
-Effort ranges are initial estimates, not deadlines. One developer-day means about six focused engineering hours including verification/review. Agent wall time varies. Account, rights and signing waits are excluded.
+Effort ranges are initial estimates, not deadlines. One developer-day means about six focused engineering hours including verification/review. Actual implementation time varies. Account, rights and signing waits are excluded.
 
 | Workstream | Stages | Initial focused effort |
 |---|---|---|
@@ -74,7 +74,7 @@ Effort ranges are initial estimates, not deadlines. One developer-day means abou
 | Forecasts, DCF and scenarios | S16-S18 | 10-18 developer-days |
 | Monitoring and full-product hardening | S19-S20 | 6-11 developer-days plus conditional data waits |
 
-Envelope: roughly 44-81 focused developer-days, around 9-17 working weeks at one full-time developer's capacity. S01 revises estimates from concrete tasks. Parallel developers require compatible contracts and agreed file ownership. This plan does not authorize spawning subagents.
+Envelope: roughly 44-81 focused developer-days, around 9-17 working weeks at one full-time developer's capacity. S01 revises estimates from concrete tasks. Parallel developers require compatible contracts and agreed file ownership. Parallel execution requires separate authorization.
 
 Prefer numerical order but schedule by ledger dependencies. A blocked live stage must not freeze unrelated UI/storage/model work. S12-S18 can be engineered without a live pilot release, while their release claims remain subject to validation.
 
@@ -91,7 +91,7 @@ Dependencies: none. Areas: docs, solution configuration, test inventory and exis
 - S01.3 Reconcile stale context and story/feature status, inventory definitions/fixtures and refine estimates and release blockers.
 - S01.4 Fix baseline blockers needed for execution and leave the next package unambiguous. Put unrelated enhancements in their owning stages.
 
-Acceptance: a fresh agent can build/test/resume from tracked records. Critical known regressions are fixed or prevent dependent work explicitly. Matching an old test count is insufficient.
+Acceptance: a new contributor can build/test/resume from tracked records. Critical known regressions are fixed or prevent dependent work explicitly. Matching an old test count is insufficient.
 
 ### S02 Financial source validation
 
@@ -100,7 +100,7 @@ Dependencies: S01. Areas: Core analysis, SEC parser, source-backed fixtures and 
 - S02.1 Define a bounded matrix for up to five intended-universe candidates such as MSFT, AAPL, COST, KO and AMZN, subject to verified scope. Include annual/quarterly periods, YTD bridge, restatement and unsupported/missing cases.
 - S02.2 With approved configuration, retrieve only needed SEC facts through the paced client, honoring current access rules. Record accession, period, retrieval time and source URLs. Commit minimal public-fact fixtures, never the configured contact/header.
 - S02.3 Recompute representative growth, margin, OCF, TTM EPS and valuation independently of production arithmetic. Freeze expectations and fix mismatches with versioned changes where needed.
-- S02.4 Publish case-by-case reconciliation and coverage gaps. Agent reconciliation is not independent professional review.
+- S02.4 Publish case-by-case reconciliation and coverage gaps. Internal reconciliation is not independent professional review.
 
 Acceptance: source and worked results agree within documented precision. Conflicts/amendments/future facts remain explicit. Live evidence exists. Without E01, complete independent packages and block live validation rather than invent results.
 
@@ -212,7 +212,7 @@ Dependencies: S03, S04. Areas: versioned finance definitions, SEC mappings, UI e
 - S12.3 Implement source-traceable typed calculations and versioned stored results, without overlapping tag sums or UI formulas. Give the test-0 net-margin/current-ratio stories explicitly supported replacement definitions.
 - S12.4 Independently recompute examples and reconcile real sources when configured. Test missing/conflicting facts, fiscal mismatches, negative equity/invested capital, tag changes and overflow.
 
-Acceptance: named measures have implemented/versioned behavior and evidence, including explicit per-issuer unsupported-data reasons where applicable. An unfinished metric implementation stays open, not disguised as unsupported data. Deferring an entire required metric needs an explicit owner scope decision before claiming full-stage completion. Each delivered metric has scope, mappings, edge policies and reproducible expectations. Unsupported values cannot pass filters. Delegation is not professional certification.
+Acceptance: named measures have implemented/versioned behavior and evidence, including explicit per-issuer unsupported-data reasons where applicable. An unfinished metric implementation stays open, not disguised as unsupported data. Deferring an entire required metric needs an explicit project scope decision before claiming full-stage completion. Each delivered metric has scope, mappings, edge policies and reproducible expectations. Unsupported values cannot pass filters. Project approval is not professional certification.
 
 ### S13 Quality flags and explainable screening
 
@@ -307,7 +307,7 @@ Acceptance: a supported user can install/upgrade, research, recover, compare/mod
 
 ## External gates
 
-| Gate | Closure evidence | Agent preparation | If unavailable |
+| Gate | Closure evidence | Engineering preparation | If unavailable |
 |---|---|---|---|
 | E01 SEC configuration | Valid approved local contact and standing bounded-call authorization | Matrix, harness, fixtures/report | Block live package, continue independent work |
 | E02 OAuth app/account | Actual registration and explicit user connection of an eligible account | Callback guide and unconfigured states | No automated login/account creation or token extraction |
@@ -348,11 +348,11 @@ This maps delivery, not completed requirements. S20 reconciles it to actual evid
 - Initial issuer scope remains US domestic non-financial US-GAAP/USD. Banks, insurers, REITs, complex classes and FX need separate models. Fact availability is not scope certification.
 - Version definitions and stored results. Require source-backed worked examples and independent recomputation. User controls assumptions/conclusions. No paid forecasts or automatic recommendations.
 - SQLite holds research, not secrets. Backup/recovery precedes more persistence. Market-data retention needs actual rights.
-- Historical valuation is conditional. No portfolio advice, LLM research agent, auto-sent reports/alerts or multi-user cloud collaboration is implicitly approved.
+- Historical valuation is conditional. No portfolio advice, automated research assistant, auto-sent reports/alerts or multi-user cloud collaboration is implicitly approved.
 
 ## Universal completion evidence
 
-Use the [specialized skill library](../skills/Skill_Routing.md) to apply domain methods instead of treating stage work as a generic prompt. Its catalog maps stage hints, while the actual changed package decides what to load. SEC selection, numerical verification, UI behavior, connections and storage have distinct evidence requirements. Skill structure/helper checks are not proof of agent compliance or independent professional certification. Preserve the actual results in the stage checkpoint.
+Use the [specialized skill library](../skills/Skill_Routing.md) to apply domain methods for consistent engineering and review practices. Its catalog maps stage hints, while the actual changed package decides what to load. SEC selection, numerical verification, UI behavior, connections and storage have distinct evidence requirements. Skill structure/helper checks are not proof of workflow compliance or independent professional certification. Preserve the actual results in the stage checkpoint.
 
 Record deliverables/files, actual validation commands/results, financial specs/worked fixtures, UI checks, dependency rationale and migration/provider evidence as applicable. Self-review does not pretend to be an independent second reviewer. Required checks pass for the exact PR head before normal merge, without force-push or bypassing protection. Reconcile concurrent main and recheck affected behavior. Update ledger, proposal, handoff and user docs with the next ready package.
 

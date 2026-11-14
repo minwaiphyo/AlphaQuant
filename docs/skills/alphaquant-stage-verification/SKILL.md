@@ -11,6 +11,6 @@ Define the acceptance evidence before writing code. Use [the evidence contract](
 
 Inspect actual changes, run proportional checks and self-review the diff. Preserve unrelated work. For formulas require independent expectations, for UI actual relevant state/layout evidence, for persistence migration/recovery, and for connections negative/lifecycle cases. Do not demand every domain skill or every suite for a wording-only edit.
 
-Record actual commands/results, source/model/fixture versions, what was not verified and exact next action. Required checks must pass on the final PR head before normal merge under standing stage authorization. Self-review is not a separate reviewer and no subagent is implied.
+Record actual commands/results, source/model/fixture versions, what was not verified and exact next action. Required checks must pass on the final PR head before normal merge under standing stage authorization. Self-review is not a separate reviewer and no parallel work is implied.
 
-If blocked externally, retain partial progress and use the runbook's independent fallback. Do not substitute fake evidence or waive a release gate. Update the ledger/handoff so another agent resumes from the current package instead of repeating finished work.
+If blocked externally, retain partial progress and use the runbook's independent fallback. Do not substitute fake evidence or waive a release gate. Update the ledger/handoff so another contributor resumes from the current package instead of repeating finished work.

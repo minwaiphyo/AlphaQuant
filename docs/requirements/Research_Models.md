@@ -1,6 +1,6 @@
 # Research rules and models — version 1
 
-Definitions delegated by the approved S13–S19 contracts, 2026-11-14. Nominal USD,
+Definitions established by the approved S13–S19 contracts, 2026-11-14. Nominal USD,
 end-year timing, decimals until display. User assumptions and conclusions are not
 reported facts, investment advice or independently certified estimates.
 
