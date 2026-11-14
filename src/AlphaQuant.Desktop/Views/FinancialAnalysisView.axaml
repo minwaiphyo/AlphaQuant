@@ -1,16 +1,32 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:AlphaQuant.Desktop.ViewModels" x:Class="AlphaQuant.Desktop.Views.FinancialAnalysisView" x:DataType="vm:FinancialAnalysisViewModel" KeyDown="OnKeyDown">
   <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
     <StackPanel Spacing="8">
-      <TextBlock Text="Financial analysis · comparison-1" Classes="h1" TextWrapping="Wrap"/>
+      <TextBlock Text="{Binding Title}" Classes="h1" TextWrapping="Wrap"/>
       <WrapPanel>
-        <Button Content="← Peer workspace / refresh" Command="{Binding BackCommand}" Margin="0,0,8,8"/>
+        <Button x:Name="EditCompaniesButton" Content="← Edit companies" Command="{Binding BackCommand}" Margin="0,0,8,8"/>
+        <Button Content="Refresh" Command="{Binding RefreshCommand}" Margin="0,0,8,8"/>
         <Button Content="Data connections" Command="{Binding SettingsCommand}" Margin="0,0,8,8"/>
         <Button Content="Stop updates" Command="{Binding StopCommand}" IsEnabled="{Binding Running}" Margin="0,0,8,8"/>
       </WrapPanel>
       <TextBlock Text="{Binding Status}" Classes="muted"/>
-      <TextBlock Text="US domestic non-financial US-GAAP/USD research. Scope/class/split reviews are not automated; unsupported valuation stays unavailable. IEX is not the consolidated US market." Classes="warning small"/>
     </StackPanel>
-    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="16">      <TextBlock Text="Peer summary · latest annual and TTM periods" Classes="h2"/>
+    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="16">
+      <TextBlock Text="US domestic non-financial US-GAAP/USD research. Scope/class/split reviews are not automated; unsupported valuation stays unavailable. IEX is not the consolidated US market." Classes="warning small"/>
+      <Expander Header="Filter and sort · expand to edit" HorizontalAlignment="Stretch"><StackPanel Spacing="8">
+      <WrapPanel>
+        <StackPanel Margin="0,0,8,8"><TextBlock Text="Sort / filter metric"/><ComboBox ItemsSource="{Binding MetricChoices}" SelectedItem="{Binding SelectedMetric}" MinWidth="220"/></StackPanel>
+        <StackPanel Margin="0,0,8,8"><TextBlock Text="Operator"/><ComboBox ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator}" MinWidth="70"/></StackPanel>
+        <StackPanel Margin="0,0,8,8"><TextBlock Text="Threshold in cell units"/><TextBox Text="{Binding Threshold}" PlaceholderText="e.g. 20" Width="150"/></StackPanel>
+        <Button Content="Apply filter" Command="{Binding ApplyFilterCommand}" VerticalAlignment="Bottom" Margin="0,0,8,8"/>
+        <Button Content="Clear filter" Command="{Binding ClearFilterCommand}" VerticalAlignment="Bottom" Margin="0,0,8,8"/>
+        <CheckBox Content="Sort descending" IsChecked="{Binding Descending}" VerticalAlignment="Bottom" Margin="0,0,8,8"/>
+      </WrapPanel>
+      <TextBlock Text="{Binding FilterError}" Classes="warning small"/>
+      </StackPanel></Expander>
+      <TextBlock Text="{Binding FilterDescription}" Classes="muted small"/>
+      <TextBlock Text="{Binding ResultsText}" Classes="muted small"/>
+      <TextBlock Text="No matching results. Clear the filter or edit companies. Missing values do not satisfy numeric filters." IsVisible="{Binding NoResults}" TextWrapping="Wrap"/>
+      <TextBlock Text="Peer summary · latest annual and TTM periods" Classes="h2"/>
       <ItemsControl ItemsSource="{Binding Companies}">
         <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>

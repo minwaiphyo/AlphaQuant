@@ -12,13 +12,45 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AlphaQuant.Desktop.ViewModels;
 
-public sealed record ResearchMetric(string Name, string Value, string Period, string Reason, IRelayCommand InspectCommand);
-public sealed record ResearchCompany(string Name, string Status, string Price, string Warnings, IReadOnlyList<ResearchMetric> Metrics)
+public partial class ResearchMetric : ObservableObject
 {
+    public ResearchMetric(string name, string value, string period, string reason, IRelayCommand inspectCommand, decimal? numericValue = null)
+    { Name = name; Value = value; Period = period; Reason = reason; InspectCommand = inspectCommand; NumericValue = numericValue; }
+    public string Name { get; }
+    public string Period { get; }
+    public decimal? NumericValue { get; private set; }
+    [ObservableProperty] private string _value;
+    [ObservableProperty] private string _reason;
+    [ObservableProperty] private IRelayCommand _inspectCommand;
+    public void Update(ResearchMetric next)
+    { Value = next.Value; Reason = next.Reason; InspectCommand = next.InspectCommand; NumericValue = next.NumericValue; }
+}
+public partial class ResearchCompany : ObservableObject
+{
+    public ResearchCompany(string name, string status, string price, string warnings, IReadOnlyList<ResearchMetric> metrics)
+    { Name = name; Status = status; Price = price; Warnings = warnings; foreach (var metric in metrics) Metrics.Add(metric); }
+    public string Name { get; }
+    [ObservableProperty] private string _status;
+    [ObservableProperty] private string _price;
+    [ObservableProperty] private string _warnings;
+    public ObservableCollection<ResearchMetric> Metrics { get; } = [];
     public IReadOnlyList<ResearchMetric> Summary => Metrics.Where(m => m.Period.StartsWith("Annual", StringComparison.Ordinal)).Take(4)
         .Concat(Metrics.Where(m => m.Period.StartsWith("TTM", StringComparison.Ordinal)
         || m.Period == "Current valuation" || m.Period.StartsWith("Balance sheet", StringComparison.Ordinal)
         || m.Period.StartsWith("Reviewed balance sheet", StringComparison.Ordinal))).ToArray();
+    public void Update(ResearchCompany next)
+    {
+        Status = next.Status; Price = next.Price; Warnings = next.Warnings;
+        var desired = next.Metrics.Select(m =>
+        {
+            var old = Metrics.FirstOrDefault(x => x.Name == m.Name && x.Period == m.Period);
+            if (old is null) return m;
+            old.Update(m); return old;
+        }).ToArray();
+        var summaryChanged = !Metrics.SequenceEqual(desired);
+        FinancialAnalysisViewModel.Synchronize(Metrics, desired);
+        if (summaryChanged) OnPropertyChanged(nameof(Summary));
+    }
 }
 
 public partial class FinancialAnalysisViewModel : ObservableObject
@@ -28,14 +60,58 @@ public partial class FinancialAnalysisViewModel : ObservableObject
     private CancellationTokenSource? _watch;
     private int _generation;
     private ComparisonSnapshot? _snapshot;
-    public FinancialAnalysisViewModel(IResearchBackend backend, ILinkOpener links, Action back, Action settings)
+    private Task _activeLoad = Task.CompletedTask;
+    private readonly TimeSpan _closeTimeout;
+    private readonly Dictionary<long, ResearchCompany> _companies = [];
+    private IReadOnlyList<CompanyRef> _selected = [];
+    private IReadOnlyList<ResearchCompany> _rendered = [];
+    public IReadOnlyList<string> MetricChoices { get; } = ["Annual revenue", "Annual revenue growth", "Annual operating margin", "Annual operating cash flow", "TTM revenue", "TTM operating margin", "TTM operating cash flow", "TTM diluted EPS", "Cash and cash equivalents", "Reviewed interest-bearing debt", "Trailing P/E", "EV / TTM sales"];
+    public IReadOnlyList<string> Operators { get; } = [">=", "<=", ">", "<"];
+    [ObservableProperty] private string _selectedMetric = "Annual revenue";
+    [ObservableProperty] private string _selectedOperator = ">=";
+    [ObservableProperty] private string _threshold = string.Empty;
+    [ObservableProperty] private string _filterError = string.Empty;
+    [ObservableProperty] private string _filterDescription = "No numeric filter. Values use the units displayed in each cell.";
+    [ObservableProperty] private bool _descending;
+    private (string Metric, string Operator, decimal Threshold)? _filter;
+    public string ResultsText => $"{Companies.Count} of {_rendered.Count} companies · annual metrics use the latest available annual period; TTM is separate.";
+    public bool NoResults => Companies.Count == 0;
+    partial void OnSelectedMetricChanged(string value) => ApplyView();
+    partial void OnDescendingChanged(bool value) => ApplyView();
+    [RelayCommand] private void ApplyFilter()
+    {
+        if (!decimal.TryParse(Threshold, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var threshold))
+        { FilterError = "Enter a number using a decimal point, without separators or a unit."; return; }
+        if (!MetricChoices.Contains(SelectedMetric) || !Operators.Contains(SelectedOperator)) return;
+        _filter = (SelectedMetric, SelectedOperator, threshold);
+        FilterDescription = $"{SelectedMetric} {SelectedOperator} {threshold.ToString(CultureInfo.InvariantCulture)} in the cell's displayed unit. Unavailable values are excluded.";
+        FilterError = string.Empty; ApplyView();
+    }
+    [RelayCommand] private void ClearFilter()
+    { _filter = null; FilterError = string.Empty; FilterDescription = "No numeric filter. Values use the units displayed in each cell."; ApplyView(); }
+    private void ApplyView()
+    {
+        decimal? Value(ResearchCompany company, string metric) => company.Metrics.FirstOrDefault(m => m.Name == metric)?.NumericValue;
+        var rows = _rendered.Where(c => _filter is not { } f || Value(c, f.Metric) is { } n && (f.Operator switch
+        { ">=" => n >= f.Threshold, "<=" => n <= f.Threshold, ">" => n > f.Threshold, "<" => n < f.Threshold, _ => false }));
+        // Missing values always sort last. Comparisons use raw decimals, never the rounded display text.
+        var sorted = rows.OrderBy(c => Value(c, SelectedMetric) is null);
+        var ordered = Descending ? sorted.ThenByDescending(c => Value(c, SelectedMetric)) : sorted.ThenBy(c => Value(c, SelectedMetric));
+        Synchronize(Companies, ordered.ThenBy(c => c.Name, StringComparer.Ordinal).ToArray());
+        OnPropertyChanged(nameof(ResultsText)); OnPropertyChanged(nameof(NoResults));
+    }
+    public FinancialAnalysisViewModel(IResearchBackend backend, ILinkOpener links, Action back, Action settings, TimeSpan? closeTimeout = null)
     {
         _backend = backend; _links = links;
+        _closeTimeout = closeTimeout ?? TimeSpan.FromSeconds(3);
         BackCommand = new RelayCommand(back); SettingsCommand = new RelayCommand(settings);
     }
     public IRelayCommand BackCommand { get; }
     public IRelayCommand SettingsCommand { get; }
     public ObservableCollection<ResearchCompany> Companies { get; } = [];
+    public string Title => "Company comparison · " + ComparisonAnalyzer.DefinitionVersion;
+    [ObservableProperty] private bool _hasSetupIssue;
+    [RelayCommand] private void Refresh() => _ = LoadAsync(_selected);
     [ObservableProperty] private bool _running;
     [ObservableProperty] private string _status = "Choose two to five companies in the peer workspace.";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(HasEvidence))] private CellEvidence? _evidence;
@@ -56,15 +132,35 @@ public partial class FinancialAnalysisViewModel : ObservableObject
         Status = "Updates stopped. Financial snapshots retained; reopen analysis to refresh and subscribe.";
     }
 
-    public async Task LoadAsync(IReadOnlyList<CompanyRef> selected)
+    public Task LoadAsync(IReadOnlyList<CompanyRef> selected)
     {
         StopWatching();
-        if (selected.Count is < 2 or > 5) { Companies.Clear(); Status = "Select two to five distinct companies first."; return; }
+        _selected = selected.ToArray();
+        if (selected.Count is < 2 or > 5 || selected.Select(c => c.Cik).Distinct().Count() != selected.Count
+            || selected.Select(c => c.Ticker).Distinct(StringComparer.OrdinalIgnoreCase).Count() != selected.Count)
+        { _rendered = []; ApplyView(); _snapshot = null; Status = "Select two to five distinct companies first."; return Task.CompletedTask; }
         var retained = _snapshot?.Rows.Where(r => selected.Any(c => c == r.Company)).ToArray();
-        if (retained is { Length: > 0 }) Render(new(retained)); else Companies.Clear();
+        if (retained is { Length: > 0 }) Render(new(retained)); else { _rendered = []; ApplyView(); }
         _snapshot = retained is { Length: > 0 } ? new(retained) : null;
         var generation = ++_generation;
+        var previous = _activeLoad;
+        var operation = LoadCoreAsync(previous, selected.ToArray(), generation);
+        // Keep the original close pending even if this attempt times out. A retry must
+        // not treat a timed-out wait as proof that the old enumerator was disposed.
+        _activeLoad = previous.IsCompletedSuccessfully ? operation : Task.WhenAll(previous, operation);
+        return operation;
+    }
+    private async Task LoadCoreAsync(Task previous, IReadOnlyList<CompanyRef> selected, int generation)
+    {
+        try { await previous.WaitAsync(_closeTimeout); }
+        catch (TimeoutException)
+        {
+            if (generation == _generation) Status = "Previous update is still closing. Retry refresh shortly; no second subscription was started.";
+            return;
+        }
+        if (generation != _generation) return;
         using var cts = new CancellationTokenSource(); _watch = cts; Running = true;
+        HasSetupIssue = false;
         Status = "Loading filing evidence. Previous snapshots remain visible until new results arrive.";
         try
         {
@@ -78,7 +174,11 @@ public partial class FinancialAnalysisViewModel : ObservableObject
                         FactsStale = true, Error = "Refresh failed. Previous financial snapshot retained. " + row.Error }
                     : row).ToArray();
                 _snapshot = new(merged); Render(_snapshot);
-                Status = _backend.Authorized ? "IEX limited-venue feed · test access for the selected symbols in Data connections before streaming. Inspect connection, timestamps and age below; market session unknown."
+                HasSetupIssue = merged.Any(r => r.FinancialErrorKind == DataSourceErrorKind.ContactMissing);
+                Status = HasSetupIssue ? "SEC contact required. Configure it in Data connections, then refresh. Previous snapshots may be retained."
+                    : merged.Length == 0 || merged.All(r => r.Error is not null) ? "Financial refresh failed. Inspect each company for its reason; any retained snapshot is marked stale."
+                    : merged.Any(r => r.Error is not null) ? "Some financial results failed. Inspect each company; retained snapshots are marked stale."
+                    : _backend.Authorized ? "IEX limited-venue feed · test access for the selected symbols in Data connections before streaming. Inspect connection, timestamps and age below; market session unknown."
                     : "Fundamentals loaded. Connect Alpaca in Data connections for prices; reviewed equity/capital evidence is required for valuation.";
             }
         }
@@ -89,7 +189,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
 
     private void Render(ComparisonSnapshot snapshot)
     {
-        Companies.Clear();
+        var desired = new List<ResearchCompany>();
         foreach (var row in snapshot.Rows)
         {
             var metrics = new List<ResearchMetric>();
@@ -98,7 +198,7 @@ public partial class FinancialAnalysisViewModel : ObservableObject
                 var period = value.End is null ? basis : value.Start is null ? $"{basis} · at {value.End:yyyy-MM-dd}"
                     : $"{basis} · {value.Start:yyyy-MM-dd} to {value.End:yyyy-MM-dd}";
                 metrics.Add(new(value.Name, Format(value), period, value.Reason ?? string.Empty,
-                    new RelayCommand(() => Inspect(row, value, period))));
+                    new RelayCommand(() => Inspect(row, value, period)), value.Available ? value.Value : null));
             }
             var f = row.Fundamentals;
             if (f is not null)
@@ -117,18 +217,33 @@ public partial class FinancialAnalysisViewModel : ObservableObject
             var age = quote is null ? 0 : Math.Max(0, (DateTimeOffset.UtcNow - quote.EventAt).TotalSeconds);
             var price = quote is null ? "Price unavailable · connect Alpaca and await an eligible IEX trade."
                 : $"{quote.Symbol} · {quote.Price.ToString("N2", CultureInfo.InvariantCulture)} {quote.Currency} · {quote.ProviderId}/{quote.Feed}\nEvent {quote.EventAt:yyyy-MM-dd HH:mm:ss} UTC · received {quote.ReceivedAt:HH:mm:ss} UTC · age {age:F0}s · {(age > 60 ? "Stale" : "Check connection and valuation validity")} · session unknown";
-            Companies.Add(new($"{row.Company.Name} · {row.Company.Ticker}",
+            var next = new ResearchCompany($"{row.Company.Name} · {row.Company.Ticker}",
                 $"{row.Connection} · Retrieved {row.FactsRetrievedAt:yyyy-MM-dd HH:mm} UTC{(row.FactsStale ? " · stale/retained financial snapshot" : "")}\n{row.Error}", price,
-                string.Join("\n", f?.Warnings ?? []), metrics));
+                string.Join("\n", f?.Warnings ?? []), metrics);
+            if (_companies.TryGetValue(row.Company.Cik, out var existing)) existing.Update(next);
+            else _companies[row.Company.Cik] = existing = next;
+            desired.Add(existing);
         }
+        foreach (var key in _companies.Keys.Where(k => !snapshot.Rows.Any(r => r.Company.Cik == k)).ToArray()) _companies.Remove(key);
+        _rendered = desired; ApplyView();
+    }
+    internal static void Synchronize<T>(ObservableCollection<T> target, IReadOnlyList<T> desired) where T : class
+    {
+        for (var i = 0; i < desired.Count; i++)
+        {
+            if (i < target.Count && ReferenceEquals(target[i], desired[i])) continue;
+            var old = target.IndexOf(desired[i]);
+            if (old >= 0) target.Move(old, i); else target.Insert(i, desired[i]);
+        }
+        while (target.Count > desired.Count) target.RemoveAt(target.Count - 1);
     }
     private static string Format(FinancialValue value) => value.Available
-        ? $"{value.Value!.Value.ToString("N2", CultureInfo.InvariantCulture)} {value.Unit}" : "Unavailable";
+        ? $"{value.Value!.Value.ToString(value.Unit == "USD/shares" ? "0.########" : "N2", CultureInfo.InvariantCulture)} {value.Unit}" : "Unavailable";
     private void Inspect(AlphaQuant.Core.ComparisonRow row, FinancialValue value, string period)
     {
         Evidence = new()
         {
-            Company = row.Company.Name, Title = value.Name, Value = Format(value),
+            Company = row.Company.Name, Title = value.Name, Value = value.Available ? Display.FactValue(value.Value!.Value, value.Unit) : "Unavailable",
             Formula = ComparisonAnalyzer.DefinitionVersion + " · " + (value.Name == "Trailing P/E" ? "Current eligible price / positive compatible TTM diluted EPS."
                 : value.Name == "EV / TTM sales" ? "(Price × actual outstanding shares + debt + preferred equity + non-controlling interests − cash) / TTM revenue."
                 : value.Name.Contains("margin", StringComparison.OrdinalIgnoreCase)
