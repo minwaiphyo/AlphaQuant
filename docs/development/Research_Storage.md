@@ -141,3 +141,8 @@ forecast-1/dcf-1. Manual condition reviews retain their snapshot/time/rule evide
 Current backups validate revision continuity, payload shape, models and links.
 Supported schema 1–3 migrations create verified backups and run transactionally.
 See Research_Workbench.md and the versioned research-model contract.
+
+Default settings/cache/research paths require an absolute OS local-data root, even
+when it does not yet exist. They never silently fall back to the current checkout.
+If a previous Linux run created a relative AlphaQuant directory, preserve it and
+inspect/backup it before any explicit migration; do not delete or auto-merge files.

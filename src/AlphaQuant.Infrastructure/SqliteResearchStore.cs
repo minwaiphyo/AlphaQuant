@@ -35,7 +35,7 @@ public sealed partial class SqliteResearchStore : IResearchStore
         _path = Path.GetFullPath(path);
         _readOnly = readOnly;
     }
-    public static string DefaultPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AlphaQuant", "research", "research.db");
+    public static string DefaultPath => Path.Combine(LocalDataPaths.ApplicationRoot, "research", "research.db");
     public string FilePath => _path;
 
     public Task InitializeAsync(CancellationToken token = default) => AccessAsync<object?>(() =>

@@ -12,3 +12,18 @@ docs/local
 **/*.pfx
 **/*.pem
 **/*.key
+# Local artifacts, diagnostics and private user state must not enter build contexts.
+artifacts
+TestResults
+.agents
+.codex
+.aws
+.azure
+data
+cache
+logs
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/*.log
+**/*.p12

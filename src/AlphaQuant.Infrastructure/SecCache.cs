@@ -28,8 +28,7 @@ public sealed partial class FileCache : ISecCache
     }
 
     public static string DefaultRoot { get; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "AlphaQuant",
+        LocalDataPaths.ApplicationRoot,
         "cache",
         "sec");
 

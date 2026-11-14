@@ -46,3 +46,8 @@ rendered with pdftoppm and inspected. Unicode alpha and source links retained.
 Current transitive NuGet audit reports no vulnerabilities after pinning patched
 Pkcs 10.0.15. Native Windows, provider/live finance and historical-rights gates
 remain external; no release, deployment or independent professional review claimed.
+
+New per-share models use dcf-1.1: explicitly confirm supported simple domestic
+non-financial USD scope and complete claims, and enter the reviewed actual-share/
+capital date. Legacy dcf-1 revisions remain readable/replayable with a scope warning;
+loading them does not silently confirm new evidence. The final suite has 324 tests.

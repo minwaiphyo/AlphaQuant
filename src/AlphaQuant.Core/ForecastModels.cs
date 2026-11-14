@@ -2,7 +2,7 @@ namespace AlphaQuant.Core;
 public sealed record ForecastYearAssumption(decimal RevenueGrowth,decimal OperatingMargin,decimal TaxRate,decimal DepreciationRate,decimal CapexRate,decimal WorkingCapitalRate);
 public sealed record ForecastInput(string Version,decimal BaseRevenue,decimal BaseWorkingCapital,IReadOnlyList<ForecastYearAssumption> Years,string BasisNote);
 public sealed record ForecastYear(int Year,decimal Revenue,decimal Ebit,decimal Tax,decimal Nopat,decimal Depreciation,decimal Capex,decimal WorkingCapital,decimal ChangeWorkingCapital,decimal Fcff);
-public sealed record CapitalBridge(decimal ExcessCash,decimal OtherAssets,decimal Debt,decimal Preferred,decimal Nci,decimal ActualShares,string ReviewNote);
+public sealed record CapitalBridge(decimal ExcessCash,decimal OtherAssets,decimal Debt,decimal Preferred,decimal Nci,decimal ActualShares,string ReviewNote,bool SupportedSimpleDomesticNonFinancialUsd=false,DateOnly? ReviewedAsOf=null);
 public sealed record DcfAssumptions(string Version,decimal Wacc,decimal TerminalGrowth,decimal NextFcff,string TerminalPolicy,CapitalBridge Capital);
 public sealed record DiscountedYear(ForecastYear Forecast,decimal DiscountFactor,decimal PresentValue);
 public sealed record DcfResult(string Version,IReadOnlyList<DiscountedYear> Years,decimal TerminalValue,decimal TerminalPresentValue,decimal EnterpriseValue,decimal EquityValue,decimal PerShare,decimal? TerminalContribution);
@@ -46,20 +46,22 @@ public static class ForecastEngine
 }
 public static class DcfEngine
 {
-    public const string Version="dcf-1";
+    public const string Version="dcf-1.1";
+    public const string LegacyVersion="dcf-1";
     public static DcfResult Calculate(ForecastInput forecast,DcfAssumptions input,CancellationToken token=default)=>Discount(ForecastEngine.Calculate(forecast,token),input,token);
     public static DcfResult Discount(IReadOnlyList<ForecastYear> forecast,DcfAssumptions input,CancellationToken token=default)
     {
         ArgumentNullException.ThrowIfNull(input); ArgumentNullException.ThrowIfNull(forecast);
         var c=input.Capital;
-        if(input.Version!=Version||input.Wacc is <=0 or >1||input.TerminalGrowth<=-1||input.Wacc-input.TerminalGrowth<.005m||string.IsNullOrWhiteSpace(input.TerminalPolicy)||input.TerminalPolicy.Length>2000||c is null||new[]{c.ExcessCash,c.OtherAssets,c.Debt,c.Preferred,c.Nci}.Any(v=>v<0)||c.ActualShares<=0||string.IsNullOrWhiteSpace(c.ReviewNote)||c.ReviewNote.Length>2000||forecast.Count is <1 or >10)throw new ArgumentException("Explicit dcf-1 assumptions, sustainable terminal policy, valid discount/growth gap and reviewed nonnegative capital/positive actual shares are required.");
+        if((input.Version!=Version&&input.Version!=LegacyVersion)||input.Wacc is <=0 or >1||input.TerminalGrowth<=-1||input.Wacc-input.TerminalGrowth<.005m||string.IsNullOrWhiteSpace(input.TerminalPolicy)||input.TerminalPolicy.Length>2000||c is null||new[]{c.ExcessCash,c.OtherAssets,c.Debt,c.Preferred,c.Nci}.Any(v=>v<0)||c.ActualShares<=0||string.IsNullOrWhiteSpace(c.ReviewNote)||c.ReviewNote.Length>2000||forecast.Count is <1 or >10)throw new ArgumentException("Explicit dcf-1 assumptions, sustainable terminal policy, valid discount/growth gap and reviewed nonnegative capital/positive actual shares are required.");
+        if(input.Version==Version&&(!c.SupportedSimpleDomesticNonFinancialUsd||c.ReviewedAsOf is null||c.ReviewedAsOf>DateOnly.FromDateTime(DateTime.UtcNow)))throw new ArgumentException("Explicit supported simple USD/non-financial scope and a non-future actual-share/capital review date are required for dcf-1.1.");
         var years=new List<DiscountedYear>();var factor=1m;
         for(var i=0;i<forecast.Count;i++)
         {
             token.ThrowIfCancellationRequested();if(forecast[i].Year!=i+1)throw new ArgumentException("Use sequential end-year cash flows.");factor/=1+input.Wacc;years.Add(new(forecast[i],factor,forecast[i].Fcff*factor));
         }
         var terminal=input.NextFcff/(input.Wacc-input.TerminalGrowth);var pv=terminal*factor;var ev=years.Sum(y=>y.PresentValue)+pv;var equity=ev+c.ExcessCash+c.OtherAssets-c.Debt-c.Preferred-c.Nci;
-        return new(Version,years,terminal,pv,ev,equity,equity/c.ActualShares,ev==0?null:pv/ev*100);
+        return new(input.Version,years,terminal,pv,ev,equity,equity/c.ActualShares,ev==0?null:pv/ev*100);
     }
     public static IReadOnlyList<SensitivityCell> Sensitivity(ResearchModel model,IReadOnlyList<decimal> wacc,IReadOnlyList<decimal> growth,CancellationToken token=default)
     {

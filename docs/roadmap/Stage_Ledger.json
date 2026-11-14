@@ -26,16 +26,16 @@
   "active_run": {
     "run_id": "20261114-through-S20",
     "owner": "primary-developer-agent",
-    "stage": "S13-S19",
-    "package": "integrated_verification",
-    "branch": "feat/research-workbench",
+    "stage": "S20",
+    "package": "final_hardening_and_gate_report",
+    "branch": "chore/release-hardening",
     "baseline_commit": "575448d9d8d8c5dfd35d5296a44984ec15667096",
-    "phase": "in_progress",
+    "phase": "independent_work_complete_external_gates_open",
     "scope": [
       "S02 remaining verification",
       "S07-S20"
     ],
-    "next_action": "Finish integrated CI/delivery, bring forward S09 distribution safeguards and consolidate S20 hardening/external blockers.",
+    "next_action": "Finalize normal delivery of PR31 after required checks, then resolve consolidated external gates only. No independent roadmap package remains intentionally postponed.",
     "constraints": [
       "No purchases/accounts/vendor messages",
       "No credential extraction or secret values in chat",
@@ -169,6 +169,27 @@
       ],
       "unblock_action": "Permit required registry/documentation destinations and retry verified build/current free-tier/provider review; then supply approved hosting and registration through secure settings.",
       "independent_work": "S10 and offline research/modeling work."
+    },
+    {
+      "id": "BL-005",
+      "stage_ids": [
+        "S08",
+        "S09",
+        "S11",
+        "S12",
+        "S19",
+        "S20"
+      ],
+      "package_ids": [],
+      "category": "E01-E05",
+      "status": "open",
+      "first_checked": "2026-11-14",
+      "last_checked": "2026-11-14",
+      "evidence": [
+        "Current SourceCapture preflight: SEC configuration required; no requests sent. No registered/connected provider account, approved zero-cost host, trusted clean Windows acceptance or licensed point-in-time historical series is available. Independent offline implementation and tests are delivered."
+      ],
+      "unblock_action": "Complete the gate-specific actions in docs/development/Roadmap_Blockers.md using secure settings and supported provider/Windows flows. No secrets in chat, purchases or security bypass.",
+      "independent_work": "Engineering through S20 prepared/delivered; final CI and consolidated evidence in progress."
     }
   ],
   "stages": [
@@ -808,40 +829,68 @@
       "work_packages": [
         {
           "id": "S08.1",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         },
         {
           "id": "S08.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "tests/AlphaQuant.Tests/MarketAdapterTests.cs",
+            "tests/AlphaQuant.Tests/ResearchUiIntegrationTests.cs",
+            "tests/AlphaQuant.Tests/ComparisonBackendEndToEndTests.cs",
+            "docs/development/Roadmap_Blockers.md"
+          ],
+          "remaining_acceptance": [
+            "Actual eligible connected account/provider/host observations remain unavailable. Existing synthetic handshake, conditions/correction/stale/limits/disposal/late-selection and fake end-to-end tests passed; no live substitution."
+          ]
         }
       ],
       "next_action": "Registration, permitted host and explicit eligible account connection unavailable (E02/E03). Existing synthetic lifecycle tests are not live acceptance.",
@@ -857,7 +906,7 @@
     {
       "id": "S09",
       "title": "Windows usability, upgrade and trusted distribution",
-      "status": "planned",
+      "status": "blocked",
       "depends_on": [
         "S03",
         "S04"
@@ -868,53 +917,83 @@
         "max": 4
       },
       "contract": "Development_Plan.md#s09-windows-usability-upgrade-and-trusted-distribution",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-through-S20",
+      "branch": "chore/release-hardening",
       "baseline_commit": null,
       "work_packages": [
         {
           "id": "S09.1",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Windows_Distribution.md"
+          ],
+          "remaining_acceptance": [
+            "Actual clean supported Windows execution/scaling/trust/install/upgrade/rollback required (E04)."
+          ]
         },
         {
           "id": "S09.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/Windows_Distribution.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S09.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Windows_Distribution.md"
+          ],
+          "remaining_acceptance": [
+            "Actual clean supported Windows execution/scaling/trust/install/upgrade/rollback required (E04)."
+          ]
         },
         {
           "id": "S09.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Windows_Distribution.md"
+          ],
+          "remaining_acceptance": [
+            "Actual clean supported Windows execution/scaling/trust/install/upgrade/rollback required (E04)."
+          ]
         }
       ],
-      "next_action": "Read the S09 contract, verify prerequisites and start S09.1 after plan acceptance.",
-      "validation": [],
+      "next_action": "Complete actual clean Windows trust/install/upgrade/accessibility/owner-PC matrix; unsigned package preparation passed.",
+      "validation": [
+        {
+          "command": "Python distribution tests and PowerShell distribution guards",
+          "result": "5 Python tests and 4 PowerShell checks passed."
+        },
+        {
+          "command": "Windows cross-publish and ZIP/native inspection",
+          "result": "31 dependency records, package SHA256 verified, x64 native SQLite present; no settings/database/key files. Not executed on Windows."
+        }
+      ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+      ],
       "merge_commit": null,
-      "artifacts": [],
+      "artifacts": [
+        "docs/development/Windows_Distribution.md"
+      ],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-14",
+        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+      }
     },
     {
       "id": "S10",
@@ -1020,39 +1099,59 @@
       "work_packages": [
         {
           "id": "S11.1",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03",
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.2",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.3",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03",
             "E04"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         },
         {
           "id": "S11.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/Roadmap_Blockers.md",
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot requires actual SEC/provider/trusted Windows acceptance. Engineering CI/ZIP evidence is separate; no connected release publication."
+          ]
         }
       ],
       "next_action": "Connected pilot awaits live SEC/provider acceptance and trusted Windows installation; no release publication.",
@@ -1135,7 +1234,7 @@
       "ci_runs": [
         "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43542599734"
       ],
-      "merge_commit": null,
+      "merge_commit": "b7690808747ca383de9a10deb7563bc67052bbdf",
       "artifacts": [],
       "blocker_ids": [],
       "checkpoint": null
@@ -1143,7 +1242,7 @@
     {
       "id": "S13",
       "title": "Quality flags and explainable screening",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S05",
         "S12"
@@ -1196,7 +1295,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1212,9 +1311,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1225,7 +1326,7 @@
     {
       "id": "S14",
       "title": "Versioned investment-thesis workspace",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S04",
         "S05"
@@ -1278,7 +1379,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1294,9 +1395,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1307,7 +1410,7 @@
     {
       "id": "S15",
       "title": "Spreadsheet, CSV and PDF reports",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S05",
         "S12",
@@ -1361,7 +1464,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1377,9 +1480,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1390,7 +1495,7 @@
     {
       "id": "S16",
       "title": "User-controlled forecasts",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S12",
         "S14"
@@ -1443,7 +1548,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1459,9 +1564,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1472,7 +1579,7 @@
     {
       "id": "S17",
       "title": "Discounted cash flow valuation",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S06",
         "S16"
@@ -1534,7 +1641,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1550,9 +1657,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1563,7 +1672,7 @@
     {
       "id": "S18",
       "title": "Scenarios, sensitivity and reverse DCF",
-      "status": "delivering",
+      "status": "done",
       "depends_on": [
         "S17"
       ],
@@ -1624,7 +1733,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Delivered through PR30. Continue independent S20 hardening; external release gates remain open.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1640,9 +1749,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1720,7 +1831,7 @@
           "remaining_acceptance": []
         }
       ],
-      "next_action": "Complete integrated workbench exact-head CI and normal merge; historical valuation remains externally blocked.",
+      "next_action": "Independent engineering delivered. Historical valuation remains blocked on E05; see consolidated gate report.",
       "validation": [
         {
           "command": "Release solution tests and build",
@@ -1736,9 +1847,11 @@
         }
       ],
       "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
-      "merge_commit": null,
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/30",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/actions/runs/43545201564"
+      ],
+      "merge_commit": "2389e889c6417cc63bdfa942530a755bdf3d0c86",
       "artifacts": [
         "docs/requirements/Research_Models.md",
         "docs/development/Research_Workbench.md"
@@ -1749,7 +1862,7 @@
     {
       "id": "S20",
       "title": "Full-product hardening and release",
-      "status": "planned",
+      "status": "blocked",
       "depends_on": [
         "S13",
         "S15",
@@ -1764,54 +1877,89 @@
         "max": 5
       },
       "contract": "Development_Plan.md#s20-full-product-hardening-and-release",
-      "owner": null,
-      "run_id": null,
-      "branch": null,
+      "owner": "primary-developer-agent",
+      "run_id": "20261114-through-S20",
+      "branch": "chore/release-hardening",
       "baseline_commit": null,
       "work_packages": [
         {
           "id": "S20.1",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S20_Traceability.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S20.2",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S20_Traceability.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S20.3",
-          "status": "planned",
+          "status": "done",
           "external_gates": [],
-          "evidence": [],
+          "evidence": [
+            "docs/development/validation/S20_Traceability.md"
+          ],
           "remaining_acceptance": []
         },
         {
           "id": "S20.4",
-          "status": "planned",
+          "status": "blocked",
           "external_gates": [
             "E02",
             "E03",
             "E04",
             "E05"
           ],
-          "evidence": [],
-          "remaining_acceptance": []
+          "evidence": [
+            "docs/development/validation/S20_Traceability.md"
+          ],
+          "remaining_acceptance": [
+            "Connected pilot, clean trusted Windows install/upgrade and historical valuation gates remain open."
+          ]
         }
       ],
-      "next_action": "Read the S20 contract, verify prerequisites and start S20.1 after plan acceptance.",
-      "validation": [],
-      "self_review": null,
-      "pr_url": null,
-      "ci_runs": [],
+      "next_action": "Resolve consolidated external gates; exact-head checks and delivery status are recorded in PR31. Full-product release cannot be marked complete.",
+      "validation": [
+        {
+          "command": "Full Release tests/build and NuGet audit",
+          "result": "319 tests pass, zero-warning/error build; no vulnerable transitive packages from current sources."
+        },
+        {
+          "command": "Replay/recovery/export/render/package checks",
+          "result": "Independent models, 100 revisions, corrupt backup preservation, safe diagnostics, 29 UI PNG states, PDF/CSV/XLSX and unsigned Windows package inspected."
+        },
+        {
+          "command": "Final suite/build and isolated native Linux startup",
+          "result": "323 tests pass; zero warnings/errors. New XDG data root remains absolute; native workbench loaded/rendered; no checkout-relative data or source request."
+        },
+        {
+          "command": "DCF scope/date guard and legacy replay regression; final UI harness",
+          "result": "324 tests pass; current model version dcf-1.1 requires explicit supported scope/date. Original dcf-1 history replays with limitation and is not auto-upgraded."
+        }
+      ],
+      "self_review": "Reviewed source/definition provenance, immutable replay/restore, bounded model/solver domains, safe text exports, package exclusions/licenses and actual native startup. Fixed the native missing-data-root fallback; no known independent engineering defect left open. External release gates remain explicit.",
+      "pr_url": "https://github.com/minwaiphyo/AlphaQuant/pull/31",
+      "ci_runs": [
+        "https://github.com/minwaiphyo/AlphaQuant/pull/31/checks"
+      ],
       "merge_commit": null,
-      "artifacts": [],
+      "artifacts": [
+        "docs/development/validation/S20_Traceability.md",
+        "docs/development/Roadmap_Blockers.md"
+      ],
       "blocker_ids": [],
-      "checkpoint": null
+      "checkpoint": {
+        "date": "2026-11-14",
+        "summary": "Independent implementation/hardening complete; PR31 submitted for required exact-head checks and normal merge. Authoritative final check/merge status is linked in PR31. External release gates remain open."
+      }
     }
   ],
   "history": [
@@ -1842,6 +1990,18 @@
     {
       "date": "2026-11-14",
       "event": "S07 audit and native broker smoke passed; container and current host/provider evidence blocked by egress. Continue independent work through S20."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "S13-S18 independent research/model engineering and S19 manual monitoring delivered through PR30 after exact-head Windows CI. S09 unsigned distribution and S20 independent hardening prepared; live/provider/trusted Windows/historical release gates remain open."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Independent engineering through S20 completed/prepared under PR31; remaining S02/S07/S08/S09/S11/S12/S19/S20 acceptance is explicitly externally gated. No full release or fabricated live/Windows/historical acceptance."
+    },
+    {
+      "date": "2026-11-14",
+      "event": "Final independent hardening fixed absent local-data-root fallback and added explicit dcf-1.1 supported-scope/date assertions while preserving legacy replay. Final suite 324 tests; PR31 carries final exact-head checks."
     }
   ],
   "quality_skill_catalog": "../skills/skill_catalog.json",

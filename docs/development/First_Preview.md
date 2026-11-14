@@ -1,3 +1,20 @@
+# Current engineering preview update (2026-11-14)
+
+The current build adds expanded source-traceable metrics and **Research and models**:
+immutable thesis/scenario revisions, explicit forecasts/DCF, bounded sensitivity/
+reverse models, frozen CSV/XLSX/PDF exports and manual snapshot/condition reviews.
+Read Research_Workbench.md and the included model/metric definitions. Save before
+closing; no autosave, background monitoring, automatic sharing or recommendations.
+
+This is an unsigned development build. Real SEC reconciliation, eligible IEX/OAuth
+acceptance, zero-cost host permission, clean Windows signing/trust/install/upgrade
+and historical valuation rights remain open. Keep Smart App Control and Defender
+enabled. No general supported/full-product release is claimed. Existing user data
+stays separate from binaries; preserve verified backups before schema upgrades.
+
+The earlier preview notes below are historical background; the stage ledger and
+current workbench/distribution guides govern the new engineering capabilities.
+
 # AlphaQuant first preview
 
 This Windows x64 preview supports company selection, SEC annual comparisons, and comparison-1 financial research. It is a research tool; it does not trade or produce buy/sell recommendations.

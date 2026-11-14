@@ -33,8 +33,7 @@ public sealed class ContactSettings
     }
 
     public static string DefaultPath { get; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "AlphaQuant",
+        LocalDataPaths.ApplicationRoot,
         "settings.json");
 
     public string FilePath => _path;
